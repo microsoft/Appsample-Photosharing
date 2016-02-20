@@ -1,0 +1,563 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{DB2DBC6A-D86A-4D5E-871D-29951C2A603D}</ProjectGuid>
+    <OutputType>AppContainerExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PhotoSharingApp.Universal</RootNamespace>
+    <AssemblyName>PhotoSharingApp.Universal</AssemblyName>
+    <DefaultLanguage>en</DefaultLanguage>
+    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
+    <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
+    <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
+    <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ApplicationInsightsResourceId>/subscriptions/9511ce72-2392-443c-a383-5d93f4fc1bc7/resourcegroups/Default-ApplicationInsights-CentralUS/providers/microsoft.insights/components/Canary.Universal</ApplicationInsightsResourceId>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\AnyCPU\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\AnyCPU\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;DUMMY_SERVICE</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;DUMMY_SERVICE</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;DUMMY_SERVICE;</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Content Include="Assets\LockScreenLogo.scale-200.png" />
+    <Content Include="Assets\Square150x150Logo.scale-400.png" />
+    <Content Include="Assets\Square44x44Logo.scale-400.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-256_altform-unplated.png" />
+    <Content Include="Assets\Welcome\CategoriesPreview.jpg" />
+    <Content Include="Assets\Welcome\GiveGold.jpg" />
+    <Content Include="Assets\Welcome\GoldBalance.jpg" />
+    <Content Include="Assets\Welcome\gradient-white.png" />
+    <Content Include="Assets\Welcome\SignIn.jpg" />
+    <Content Include="Assets\Welcome\Logo.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-400.png" />
+    <Content Include="Store\Simulation\app-listing.xml" />
+    <None Include="project.json" />
+    <None Include="Service References\Application Insights\ConnectedService.json" />
+    <PRIResource Include="Strings\en\Resources.resw" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Actions\OpenMenuFlyoutAction.cs" />
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AppShareTarget.cs" />
+    <Compile Include="Camera\AspectRatio.cs" />
+    <Compile Include="Camera\CameraEngine.cs" />
+    <Compile Include="Camera\CameraNotFoundException.cs" />
+    <Compile Include="Camera\ICameraEngine.cs" />
+    <Compile Include="Commands\BaseCommand.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="ComponentModel\IncrementalLoadingCollection.cs" />
+    <Compile Include="ComponentModel\ObservableObjectBase.cs" />
+    <Compile Include="ContractModelConverterExtensions\AnnotationConverter.cs" />
+    <Compile Include="Controls\AnimatedImage.xaml.cs">
+      <DependentUpon>AnimatedImage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CropControl.cs" />
+    <Compile Include="Controls\GoldButton.cs" />
+    <Compile Include="Controls\GoldPurchasePromptControl.xaml.cs">
+      <DependentUpon>GoldPurchasePromptControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\HeroImageControl.xaml.cs">
+      <DependentUpon>HeroImageControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\LeaderboardsUserControl.xaml.cs">
+      <DependentUpon>LeaderboardsUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\LeaderboardsPhotoControl.xaml.cs">
+      <DependentUpon>LeaderboardsPhotoControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\LeaderboardsCategoryControl.xaml.cs">
+      <DependentUpon>LeaderboardsCategoryControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MyControl.xaml.cs">
+      <DependentUpon>MyControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NavMenuListView.cs" />
+    <Compile Include="Controls\PageHeader.xaml.cs">
+      <DependentUpon>PageHeader.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SignInPromptControl.xaml.cs">
+      <DependentUpon>SignInPromptControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\UploadPhotoControl.xaml.cs">
+      <DependentUpon>UploadPhotoControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\UserProfilePictureControl.xaml.cs">
+      <DependentUpon>UserProfilePictureControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ContractModelConverterExtensions\CategoryConverter.cs" />
+    <Compile Include="ContractModelConverterExtensions\CategoryPreviewConverter.cs" />
+    <Compile Include="ContractModelConverterExtensions\ConfigConverter.cs" />
+    <Compile Include="ContractModelConverterExtensions\LeaderboardConverter.cs" />
+    <Compile Include="ContractModelConverterExtensions\LeaderboardEntryConverter.cs" />
+    <Compile Include="ContractModelConverterExtensions\PhotoConverter.cs" />
+    <Compile Include="Extensions\CategoryExtensions.cs" />
+    <Compile Include="Extensions\CategoryPreviewExtensions.cs" />
+    <Compile Include="Extensions\PhotoListExtensions.cs" />
+    <Compile Include="ServiceEnvironments\ServiceEnvironment.cs" />
+    <Compile Include="ServiceEnvironments\ServiceEnvironmentBase.cs" />
+    <Compile Include="Services\InsufficientBalanceException.cs" />
+    <Compile Include="Services\SignInCompletionSource.cs" />
+    <Compile Include="StateTriggers\DeviceFamilyTrigger.cs" />
+    <Compile Include="Storage\InvalidImageDimensionsException.cs" />
+    <Compile Include="Store\Simulation\CurrentAppSimulatorHelper.cs" />
+    <Compile Include="ValueConverters\GoldValueToGaveGoldStringConverter.cs" />
+    <Compile Include="ValueConverters\PhotoStatusToStringConverter.cs" />
+    <Compile Include="ContractModelConverterExtensions\PhotoThumbnailConverter.cs" />
+    <Compile Include="ContractModelConverterExtensions\UserConverter.cs" />
+    <Compile Include="Editing\BitmapTools.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Extensions\BoolExtensions.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Extensions\DeviceFamilyStringExtensions.cs" />
+    <Compile Include="Extensions\DisplayOrientationsExtensions.cs" />
+    <Compile Include="Extensions\PackageVersionExtensions.cs" />
+    <Compile Include="Extensions\PhotoStatusExtensions.cs" />
+    <Compile Include="Extensions\PhotoExtensions.cs" />
+    <Compile Include="Extensions\TelemetryClientExtensions.cs" />
+    <Compile Include="Facades\ILicensingFacade.cs" />
+    <Compile Include="Facades\LicensingFacade.cs" />
+    <Compile Include="Lifecycle\AppLaunchCounter.cs" />
+    <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\CategoryMatchedException.cs" />
+    <Compile Include="Models\CategoryMatchFinder.cs" />
+    <Compile Include="Models\DeviceFamily.cs" />
+    <Compile Include="Models\CategoryRequiredException.cs" />
+    <Compile Include="Models\EditingMode.cs" />
+    <Compile Include="Models\IAppEnvironment.cs" />
+    <Compile Include="Models\InstructionItem.cs" />
+    <Compile Include="Models\LeaderboardEntry.cs" />
+    <Compile Include="Models\Leaderboard.cs" />
+    <Compile Include="NavigationBar\LeaderboardNavigationBarMenuItem.cs" />
+    <Compile Include="NavigationBar\ProfileNavigationBarMenuItem.cs" />
+    <Compile Include="NavigationBar\WelcomeNavigationBarMenuItem.cs" />
+    <Compile Include="Services\AuthEnforcementHandler.cs" />
+    <Compile Include="Services\AuthenticationCancelledException.cs" />
+    <Compile Include="Services\AuthenticationException.cs" />
+    <Compile Include="Services\IAuthEnforcementHandler.cs" />
+    <Compile Include="Services\IAuthenticationHandler.cs" />
+    <Compile Include="Services\NotificationRegistrationClient.cs" />
+    <Compile Include="Services\SignInRequiredException.cs" />
+    <Compile Include="Services\UnauthorizedException.cs" />
+    <Compile Include="Store\CurrentAppProxy.cs" />
+    <Compile Include="Store\InAppPurchaseException.cs" />
+    <Compile Include="Store\InAppPurchases.cs" />
+    <Compile Include="Telemetry\TelemetryEvents.cs" />
+    <Compile Include="Telemetry\TelemetryProperties.cs" />
+    <Compile Include="Unity\ServiceLocatorExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\VideoEncodingPropertiesExtensions.cs" />
+    <Compile Include="Extensions\VisualTreeHelperExtensions.cs" />
+    <Compile Include="Extensions\WriteableBitmapExtensions.cs" />
+    <Compile Include="Facades\INavigationFacade.cs" />
+    <Compile Include="Facades\NavigationFacade.cs" />
+    <Compile Include="Lifecycle\AppInitialization.cs" />
+    <Compile Include="Models\AppEnvironment.cs" />
+    <Compile Include="Models\CategoryPreview.cs" />
+    <Compile Include="Models\Annotation.cs" />
+    <Compile Include="Models\Config.cs" />
+    <Compile Include="Models\DefaultConfig.cs" />
+    <Compile Include="Models\Photo.cs" />
+    <Compile Include="Models\PhotoStream.cs" />
+    <Compile Include="Models\PhotoStreamLayoutType.cs" />
+    <Compile Include="Models\PhotoThumbnail.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="NavigationBar\CameraNavigationBarMenuItem.cs" />
+    <Compile Include="NavigationBar\DebugNavigationBarMenuItem.cs" />
+    <Compile Include="NavigationBar\NavigationBarItemPosition.cs" />
+    <Compile Include="NavigationBar\NavigationBarMenuItemBase.cs" />
+    <Compile Include="NavigationBar\CategoriesNavigationBarMenuItem.cs" />
+    <Compile Include="NavigationBar\SettingsNavigationBarMenuItem.cs" />
+    <Compile Include="NavigationBar\INavigationBarMenuItem.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Registries\IRegistry.cs" />
+    <Compile Include="Registries\NavigationBarRegistry.cs" />
+    <Compile Include="Registries\RegistryBase.cs" />
+    <Compile Include="Registries\ServicesRegistry.cs" />
+    <Compile Include="Registries\ViewModelRegistry.cs" />
+    <Compile Include="Registries\ViewRegistry.cs" />
+    <Compile Include="Serialization\SerializationHelper.cs" />
+    <Compile Include="Services\AuthenticationHandler.cs" />
+    <Compile Include="Services\IPhotoService.cs" />
+    <Compile Include="Services\AzureAppService.cs" />
+    <Compile Include="Services\PhotoDummyService.cs" />
+    <Compile Include="Services\ServiceClient.cs" />
+    <Compile Include="Services\ServiceException.cs" />
+    <Compile Include="Storage\FilePickerHelper.cs" />
+    <Compile Include="Unity\UnityBootstrapper.cs" />
+    <Compile Include="Unity\UnityExtensions.cs" />
+    <Compile Include="ValueConverters\EnumDisplayNameToStringConverter.cs" />
+    <Compile Include="ValueConverters\AuthProviderToStringConverter.cs" />
+    <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="ValueConverters\NullToBoolConverter.cs" />
+    <Compile Include="ValueConverters\RankConverter.cs" />
+    <Compile Include="ViewModels\CreateCategoryViewModel.cs" />
+    <Compile Include="ValueConverters\InverseBooleanConverter.cs" />
+    <Compile Include="ValueConverters\NullToVisibilityConverter.cs" />
+    <Compile Include="ValueConverters\RelativeTimeConverter.cs" />
+    <Compile Include="ValueConverters\SelectedLegendItemToColorConverter.cs" />
+    <Compile Include="ViewModels\AboutViewModel.cs" />
+    <Compile Include="ViewModels\AppShellViewModel.cs" />
+    <Compile Include="ViewModels\CameraViewModel.cs" />
+    <Compile Include="ViewModels\CameraViewModelArgs.cs" />
+    <Compile Include="ViewModels\DefaultUploadFinishedHandler.cs" />
+    <Compile Include="ViewModels\Design\LeaderboardDesignViewModel.cs" />
+    <Compile Include="ViewModels\Design\ProfileDesignViewModel.cs" />
+    <Compile Include="ViewModels\Design\WelcomeDesignViewModel.cs" />
+    <Compile Include="ViewModels\GiveGoldViewModel.cs" />
+    <Compile Include="ViewModels\CategoriesViewModel.cs" />
+    <Compile Include="ViewModels\CategoriesChooserViewModel.cs" />
+    <Compile Include="ViewModels\CropViewModel.cs" />
+    <Compile Include="ViewModels\CropViewModelArgs.cs" />
+    <Compile Include="ViewModels\DebugViewModel.cs" />
+    <Compile Include="ViewModels\Design\AppShellDesignViewModel.cs" />
+    <Compile Include="ViewModels\Design\CategoriesChooserDesignViewModel.cs" />
+    <Compile Include="ViewModels\Design\CategoriesDesignViewModel.cs" />
+    <Compile Include="ViewModels\Design\PhotoDetailsDesignViewModel.cs" />
+    <Compile Include="ViewModels\Design\SignInDesignViewModel.cs" />
+    <Compile Include="ViewModels\Design\StreamDesignViewModel.cs" />
+    <Compile Include="ViewModels\Design\UploadDesignViewModel.cs" />
+    <Compile Include="ViewModels\GoldPurchasePromptViewModel.cs" />
+    <Compile Include="ViewModels\IUploadFinishedHandler.cs" />
+    <Compile Include="ViewModels\LeaderboardViewModel.cs" />
+    <Compile Include="ViewModels\PageHeaderViewModel.cs" />
+    <Compile Include="ViewModels\PhotoDetailsViewModel.cs" />
+    <Compile Include="ViewModels\PhotoDetailsViewModelArgs.cs" />
+    <Compile Include="ViewModels\PhotoDetailsViewModelPhotoIdArgs.cs" />
+    <Compile Include="ViewModels\ProfileViewModel.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\ShareTargetUploadFinishedHandler.cs" />
+    <Compile Include="ViewModels\SignInPromptViewModel.cs" />
+    <Compile Include="ViewModels\SignInViewModel.cs" />
+    <Compile Include="ViewModels\StreamViewModel.cs" />
+    <Compile Include="ViewModels\StreamViewModelArgs.cs" />
+    <Compile Include="ViewModels\StreamViewModelThumbnailArgs.cs" />
+    <Compile Include="ViewModels\UploadPhotoControlViewModel.cs" />
+    <Compile Include="ViewModels\UploadViewModel.cs" />
+    <Compile Include="ViewModels\UploadViewModelArgs.cs" />
+    <Compile Include="ViewModels\UploadViewModelEditPhotoArgs.cs" />
+    <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="ViewModels\WelcomeViewModel.cs" />
+    <Compile Include="Views\AboutPage.xaml.cs">
+      <DependentUpon>AboutPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AnimationHelper.cs" />
+    <Compile Include="Views\AppShell.xaml.cs">
+      <DependentUpon>AppShell.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BasePage.cs" />
+    <Compile Include="Views\CameraPage.xaml.cs">
+      <DependentUpon>CameraPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CategoriesChooserDialog.xaml.cs">
+      <DependentUpon>CategoriesChooserDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CategoriesPage.xaml.cs">
+      <DependentUpon>CategoriesPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CreateCategoryDialog.xaml.cs">
+      <DependentUpon>CreateCategoryDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CropPage.xaml.cs">
+      <DependentUpon>CropPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DebugPage.xaml.cs">
+      <DependentUpon>DebugPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GiveGoldDialog.xaml.cs">
+      <DependentUpon>GiveGoldDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ICameraView.cs" />
+    <Compile Include="Views\ICropControl.cs" />
+    <Compile Include="Views\IDialogService.cs" />
+    <Compile Include="Views\MessageDialogService.cs" />
+    <Compile Include="Views\PhotoDetailsPage.xaml.cs">
+      <DependentUpon>PhotoDetailsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LeaderboardsPage.xaml.cs">
+      <DependentUpon>LeaderboardsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProfilePage.xaml.cs">
+      <DependentUpon>ProfilePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SelectedRegion.cs" />
+    <Compile Include="Views\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SignInPage.xaml.cs">
+      <DependentUpon>SignInPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StreamPage.xaml.cs">
+      <DependentUpon>StreamPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UploadPage.xaml.cs">
+      <DependentUpon>UploadPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WelcomePage.xaml.cs">
+      <DependentUpon>WelcomePage.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\PlaceHolder.jpg" />
+    <Content Include="Properties\Default.rd.xml" />
+    <Content Include="Assets\SplashScreen.scale-200.png" />
+    <Content Include="Assets\Square150x150Logo.scale-200.png" />
+    <Content Include="Assets\Square44x44Logo.scale-200.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
+    <Content Include="Assets\StoreLogo.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="Controls\AnimatedImage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\GoldPurchasePromptControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\HeroImageControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\LeaderboardsUserControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\LeaderboardsPhotoControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\LeaderboardsCategoryControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MyControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PageHeader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SignInPromptControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\UploadPhotoControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\UserProfilePictureControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Views\AboutPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AppShell.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CameraPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CategoriesChooserDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CategoriesPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CreateCategoryDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CropPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DebugPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GiveGoldDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LeaderboardsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ProfilePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PhotoDetailsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SignInPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\StreamPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UploadPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WelcomePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
+      <Name>Behaviors SDK %28XAML%29</Name>
+    </SDKReference>
+    <SDKReference Include="WindowsMobile, Version=10.0.10586.0">
+      <Name>Windows Mobile Extensions for the UWP</Name>
+    </SDKReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PhotoSharingApp.Portable\PhotoSharingApp.Portable.csproj">
+      <Project>{f2be2125-5344-4f5c-bf06-87e0455c5af9}</Project>
+      <Name>PhotoSharingApp.Portable</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
+    <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

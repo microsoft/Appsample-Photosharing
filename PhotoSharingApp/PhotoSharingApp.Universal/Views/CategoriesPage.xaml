@@ -1,0 +1,327 @@
+﻿<!--  
+//  Copyright (c) Microsoft Corporation.  All rights reserved.
+// 
+//  The MIT License (MIT)
+// 
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+// 
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+// 
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE. -->
+<local:BasePage
+    x:Class="PhotoSharingApp.Universal.Views.CategoriesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PhotoSharingApp.Universal.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:design="using:PhotoSharingApp.Universal.ViewModels.Design"
+    xmlns:valueConverters="using:PhotoSharingApp.Universal.ValueConverters"
+    xmlns:controls="using:PhotoSharingApp.Universal.Controls"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:stateTriggers="using:PhotoSharingApp.Universal.StateTriggers"
+    mc:Ignorable="d"
+    x:Name="pageRoot"
+    d:DataContext="{d:DesignInstance design:CategoriesDesignViewModel, IsDesignTimeCreatable=True}">
+
+    <Page.Resources>
+        <valueConverters:SelectedLegendItemToColorConverter x:Key="SelectedHeroImageToColorConverter" />
+        <valueConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <DataTemplate x:Key="CategoryListItemTemplate">
+            <Grid Margin="0,0,0,6">
+                <Grid.Transitions>
+                    <TransitionCollection>
+                        <AddDeleteThemeTransition/>
+                    </TransitionCollection>
+                </Grid.Transitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <controls:MyControl />
+
+                    <TextBlock Foreground="{StaticResource AppAccentForegroundColorBrush}" FontSize="16" FontWeight="Normal"
+                               Grid.Column="1" Margin="6,0,0,0" VerticalAlignment="Center" Text="{Binding Name}" TextWrapping="NoWrap"
+                               Style="{ThemeResource SubheaderTextBlockStyle}" />
+
+                    <Button Grid.Column="2"
+                            Style="{ThemeResource TextBlockButtonStyle}"
+                            Command="{Binding DataContext.CategorySelectedCommand, ElementName=LayoutRoot}"
+                            CommandParameter="{Binding}">
+                        <TextBlock 
+                               Foreground="{StaticResource AppAccentForegroundColorBrush}" FontSize="16"
+                               Text="Show all"
+                               Style="{ThemeResource SubheaderTextBlockStyle}" />
+                    </Button>
+                </Grid>
+
+                <ScrollViewer HorizontalScrollMode="Disabled"
+                              HorizontalScrollBarVisibility="Hidden"
+                              VerticalScrollMode="Disabled"
+                              VerticalScrollBarVisibility="Hidden"
+                              Grid.Row="1"
+                              Margin="0,6,0,0">
+                    <ItemsControl ItemsSource="{Binding PhotoThumbnails}" IsTabStop="False">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Background="White" Padding="0" 
+                                        Margin="0,0,8,4" 
+                                        Command="{Binding DataContext.PhotoThumbnailSelectedCommand, ElementName=LayoutRoot}" 
+                                        CommandParameter="{Binding}">
+                                    <Image Width="{Binding ThumbnailImageSideLength, ElementName=pageRoot}"
+                                           Height="{Binding ThumbnailImageSideLength, ElementName=pageRoot}" Margin="0" Source="{Binding ImageUrl}" />
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </DataTemplate>
+        <Style x:Key="ListViewItemContainerStyle" TargetType="ListViewItem">
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
+            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
+            <Setter Property="IsHoldingEnabled" Value="True" />
+            <Setter Property="Padding" Value="12,0,12,0" />
+            <Setter Property="Margin" Value="0,12,0,0" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="MinWidth" Value="{ThemeResource ListViewItemMinWidth}" />
+            <Setter Property="MinHeight" Value="{ThemeResource ListViewItemMinHeight}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <ListViewItemPresenter CheckBrush="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
+                                               ContentMargin="{TemplateBinding Padding}" CheckMode="Inline"
+                                               ContentTransitions="{TemplateBinding ContentTransitions}"
+                                               CheckBoxBrush="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
+                                               DragForeground="{ThemeResource ListViewItemDragForegroundThemeBrush}"
+                                               DragOpacity="{ThemeResource ListViewItemDragThemeOpacity}"
+                                               DragBackground="{ThemeResource ListViewItemDragBackgroundThemeBrush}"
+                                               DisabledOpacity="{ThemeResource ListViewItemDisabledThemeOpacity}"
+                                               FocusBorderBrush="{ThemeResource SystemControlForegroundAltHighBrush}"
+                                               FocusSecondaryBorderBrush="{ThemeResource SystemControlForegroundBaseHighBrush}"
+                                               HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                               PointerOverForeground="{ThemeResource SystemControlHighlightAltBaseHighBrush}"
+                                               PressedBackground="Transparent"
+                                               PlaceholderBackground="{ThemeResource ListViewItemPlaceholderBackgroundThemeBrush}"
+                                               PointerOverBackground="Transparent"
+                                               ReorderHintOffset="{ThemeResource ListViewItemReorderHintThemeOffset}"
+                                               SelectedPressedBackground="{ThemeResource SystemControlHighlightListAccentHighBrush}"
+                                               SelectionCheckMarkVisualEnabled="True"
+                                               SelectedForeground="{ThemeResource SystemControlHighlightAltBaseHighBrush}"
+                                               SelectedPointerOverBackground="{ThemeResource SystemControlHighlightListAccentMediumBrush}"
+                                               SelectedBackground="{ThemeResource SystemControlHighlightListAccentLowBrush}"
+                                               VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="HeroImagesLegendItemContainerStyle" TargetType="GridViewItem">
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
+            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
+            <Setter Property="IsHoldingEnabled" Value="True" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0,0,4,4" />
+            <Setter Property="MinWidth" Value="15" />
+            <Setter Property="MinHeight" Value="{ThemeResource GridViewItemMinHeight}" />
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="GridViewItem">
+                        <Grid>
+                            <!--We add the actual control in the container because we need the selection state to change
+                            the control's color.-->
+                            <Ellipse Width="5" Height="5"
+                                     Fill="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent},
+                                Converter={StaticResource SelectedHeroImageToColorConverter}}" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <controls:PageHeader>
+            <controls:PageHeader.HeaderContent>
+                <TextBlock Text="Categories" Style="{ThemeResource PageTitleTextBlockStyle}" />
+            </controls:PageHeader.HeaderContent>
+        </controls:PageHeader>
+
+        <ScrollViewer Grid.Row="2" x:Name="mainScrollViewer" IsTabStop="False">
+            <RelativePanel>
+                <Grid x:Name="heroImages" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="4*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"
+                          x:Name="heroImageExpansionContainer">
+                        <Border Padding="36">
+                            <Grid VerticalAlignment="Center">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="Featured" Foreground="Black"
+                                       FontWeight="Light" HorizontalAlignment="Center"
+                                       FontSize="32" />
+
+                                <controls:UserProfilePictureControl
+                                    Width="130" Height="130" Grid.Row="1" Margin="24"
+                                    Source="{Binding Path=SelectedHeroImage.User.ProfilePictureUrl}" />
+
+                                <TextBlock MaxLines="2" x:Name="caption" HorizontalAlignment="Center" 
+                                           Text="{Binding SelectedHeroImage.Caption}" Grid.Row="2" 
+                                           FontWeight="Thin" FontSize="20" TextTrimming="WordEllipsis" 
+                                           Foreground="{ThemeResource SystemControlHighlightBaseMediumHighBrush}" />
+                            </Grid>
+                        </Border>
+                    </Grid>
+
+                    <FlipView VerticalAlignment="Top" MaxHeight="400" Grid.Column="1"
+                              ItemsSource="{Binding HeroImages}" SelectedItem="{Binding SelectedHeroImage, Mode=TwoWay}"
+                              Style="{StaticResource HeroFlipViewStyle}" x:Name="heroImagesFlipView">
+                        <FlipView.ItemTemplate>
+                            <DataTemplate>
+                                <!--Using a UserControl here to make adaptive triggers work-->
+                                <controls:HeroImageControl>
+                                    <interactivity:Interaction.Behaviors>
+                                        <core:EventTriggerBehavior EventName="Tapped">
+                                            <core:InvokeCommandAction
+                                            Command="{Binding DataContext.HeroImageSelectedCommand, ElementName=LayoutRoot}"
+                                            CommandParameter="{Binding}" />
+                                        </core:EventTriggerBehavior>
+                                    </interactivity:Interaction.Behaviors>
+                                </controls:HeroImageControl>
+                            </DataTemplate>
+                        </FlipView.ItemTemplate>
+                    </FlipView>
+
+                    <Viewbox Width="50" Grid.Column="1" HorizontalAlignment="Right"
+                             VerticalAlignment="Bottom" Margin="48,24" x:Name="goldButtonContainer">
+                        <controls:GoldButton Content="{Binding SelectedHeroImage.GoldCount}"
+                                             Command="{Binding GiveGoldCommand}"
+                                             IsEnabled="{Binding SelectedHeroImage.CanGiveGold}"
+                                             CommandParameter="{Binding SelectedHeroImage}" />
+                    </Viewbox>
+                </Grid>
+
+                <GridView x:Name="heroImagesStateIndicator" ItemsSource="{Binding HeroImages}"
+                          RelativePanel.Below="heroImages"
+                          RelativePanel.AlignHorizontalCenterWithPanel="True"
+                          SelectedItem="{Binding SelectedHeroImage, Mode=TwoWay}"
+                          ItemContainerStyle="{StaticResource HeroImagesLegendItemContainerStyle}" />
+
+                <ListView ItemsSource="{Binding TopCategories}" RelativePanel.Below="heroImagesStateIndicator"
+                          IsItemClickEnabled="True" SelectionMode="None"
+                          Margin="12,0"
+                          ItemTemplate="{StaticResource CategoryListItemTemplate}"
+                          ItemContainerStyle="{StaticResource ListViewItemContainerStyle}"
+                          x:Name="categoriesList" RelativePanel.AlignLeftWithPanel="True"
+                          RelativePanel.AlignRightWithPanel="True"
+                          IsTabStop="False" />
+
+                <Grid RelativePanel.Below="categoriesList" RelativePanel.AlignLeftWithPanel="True"
+                      RelativePanel.AlignRightWithPanel="True" x:Name="goldPurchaseSignInPrompt">
+
+                    <controls:GoldPurchasePromptControl
+                        Visibility="{Binding DataContext.IsUserSignedIn, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=LayoutRoot}" />
+                    <controls:SignInPromptControl
+                        Visibility="{Binding DataContext.IsUserSignedIn, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=True, ElementName=LayoutRoot}" />
+                </Grid>
+
+                <controls:UploadPhotoControl RelativePanel.Below="goldPurchaseSignInPrompt"
+                                             RelativePanel.AlignLeftWithPanel="True"
+                                             RelativePanel.AlignRightWithPanel="True"
+                                             x:Name="uploadPhotoControl" />
+            </RelativePanel>
+        </ScrollViewer>
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <stateTriggers:DeviceFamilyTrigger DeviceFamily="Windows.Mobile" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="categoriesList.Margin" Value="0" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="heroImageExpansionContainer.Visibility" Value="Collapsed" />
+                        <Setter Target="goldButtonContainer.Visibility" Value="Collapsed" />
+                        <Setter Target="heroImages.ColumnDefinitions[0].Width" Value="Auto" />
+                        <Setter Target="heroImagesFlipView.MaxHeight" Value="360" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="900" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="heroImageExpansionContainer.Visibility" Value="Visible" />
+                        <Setter Target="goldButtonContainer.Visibility" Value="Visible" />
+                        <Setter Target="heroImagesFlipView.MaxHeight" Value="400" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1300" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="heroImageExpansionContainer.Visibility" Value="Visible" />
+                        <Setter Target="heroImagesFlipView.MaxHeight" Value="500" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+    </Grid>
+</local:BasePage>

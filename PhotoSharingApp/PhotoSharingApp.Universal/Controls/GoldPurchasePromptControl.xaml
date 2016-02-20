@@ -1,0 +1,70 @@
+﻿<!--  
+//  Copyright (c) Microsoft Corporation.  All rights reserved.
+// 
+//  The MIT License (MIT)
+// 
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+// 
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+// 
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE. -->
+<UserControl
+    x:Class="PhotoSharingApp.Universal.Controls.GoldPurchasePromptControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PhotoSharingApp.Universal.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:stateTriggers="using:PhotoSharingApp.Universal.StateTriggers"
+    mc:Ignorable="d"
+    d:DesignHeight="200"
+    d:DesignWidth="400">
+
+    <Grid>
+        <Border Margin="20" Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}" Padding="20">
+            <RelativePanel>
+                <StackPanel Orientation="Horizontal" x:Name="stackPanel">
+                    <TextBlock Text="Gold Balance: " x:Name="balanceText" VerticalAlignment="Center" />
+                    <local:GoldButton Content="{Binding CurrentUser.GoldBalance}" x:Name="goldButton" Margin="12,0,0,0" IsTabStop="False"/>
+                </StackPanel>
+                <Button Command="{Binding BuyGoldCommand}" x:Name="buyGoldButton">Buy Gold!</Button>
+            </RelativePanel>
+        </Border>
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="buyGoldButton.(RelativePanel.Below)" Value="stackPanel" />
+                        <Setter Target="buyGoldButton.Margin" Value="0,6,0,0" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="700" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="buyGoldButton.(RelativePanel.RightOf)" Value="stackPanel" />
+                        <Setter Target="buyGoldButton.(RelativePanel.AlignVerticalCenterWith)" Value="stackPanel" />
+                        <Setter Target="buyGoldButton.Margin" Value="12,0,0,0" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+    </Grid>
+</UserControl>

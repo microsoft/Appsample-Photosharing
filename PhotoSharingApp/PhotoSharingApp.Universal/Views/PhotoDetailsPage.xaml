@@ -1,0 +1,232 @@
+﻿<!--  
+//  Copyright (c) Microsoft Corporation.  All rights reserved.
+// 
+//  The MIT License (MIT)
+// 
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+// 
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+// 
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE. -->
+<Page
+    x:Class="PhotoSharingApp.Universal.Views.PhotoDetailsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PhotoSharingApp.Universal.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:design="using:PhotoSharingApp.Universal.ViewModels.Design"
+    xmlns:controls="using:PhotoSharingApp.Universal.Controls"
+    xmlns:valueConverters="using:PhotoSharingApp.Universal.ValueConverters"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance design:PhotoDetailsDesignViewModel, IsDesignTimeCreatable=True}">
+
+    <Page.Resources>
+        <valueConverters:GoldValueToGaveGoldStringConverter x:Key="GoldValueToGaveGoldStringConverter" />
+        <valueConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <valueConverters:RelativeTimeConverter x:Key="RelativeTimeConverter" />
+        <valueConverters:EnumDisplayNameToStringConverter x:Key="EnumDisplayNameToStringConverter" />
+        <Style x:Key="AnnotationItemContainerStyle" TargetType="ListViewItem">
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
+            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
+            <Setter Property="TabNavigation" Value="Local" />
+            <Setter Property="IsHoldingEnabled" Value="True" />
+            <Setter Property="Padding" Value="12,0,12,0" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="MinWidth" Value="{ThemeResource ListViewItemMinWidth}" />
+            <Setter Property="MinHeight" Value="{ThemeResource ListViewItemMinHeight}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <ListViewItemPresenter CheckBrush="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
+                                               ContentMargin="{TemplateBinding Padding}" CheckMode="Inline"
+                                               ContentTransitions="{TemplateBinding ContentTransitions}"
+                                               CheckBoxBrush="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
+                                               DragForeground="{ThemeResource ListViewItemDragForegroundThemeBrush}"
+                                               DragOpacity="{ThemeResource ListViewItemDragThemeOpacity}"
+                                               DragBackground="{ThemeResource ListViewItemDragBackgroundThemeBrush}"
+                                               DisabledOpacity="{ThemeResource ListViewItemDisabledThemeOpacity}"
+                                               FocusBorderBrush="{ThemeResource SystemControlForegroundAltHighBrush}"
+                                               FocusSecondaryBorderBrush="{ThemeResource SystemControlForegroundBaseHighBrush}"
+                                               HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                               PointerOverForeground="{ThemeResource SystemControlHighlightAltBaseHighBrush}"
+                                               PressedBackground="Transparent"
+                                               PlaceholderBackground="{ThemeResource ListViewItemPlaceholderBackgroundThemeBrush}"
+                                               PointerOverBackground="Transparent"
+                                               ReorderHintOffset="{ThemeResource ListViewItemReorderHintThemeOffset}"
+                                               SelectedPressedBackground="{ThemeResource SystemControlHighlightListAccentHighBrush}"
+                                               SelectionCheckMarkVisualEnabled="True"
+                                               SelectedForeground="{ThemeResource SystemControlHighlightAltBaseHighBrush}"
+                                               SelectedPointerOverBackground="{StaticResource AppAccentLightColorBrush}"
+                                               SelectedBackground="{StaticResource AppAccentColorBrush}"
+                                               VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <controls:PageHeader>
+            <controls:PageHeader.HeaderContent>
+                <TextBlock Text="{Binding Category.Name}" Style="{ThemeResource PageTitleTextBlockStyle}" />
+            </controls:PageHeader.HeaderContent>
+        </controls:PageHeader>
+        <ScrollViewer Grid.Row="1">
+            <RelativePanel HorizontalAlignment="Center" MaxWidth="700">
+
+                <Image HorizontalAlignment="Left"
+                       VerticalAlignment="Stretch"
+                       x:Name="imageRoot"
+                       Source="{Binding Photo.ImageUrl}"
+                       MaxHeight="{StaticResource HighResolutionImageSideLength}"
+                       MaxWidth="{StaticResource HighResolutionImageSideLength}" />
+                <Grid Margin="12,0,12,12" x:Name="photoDetails"
+                      RelativePanel.Below="{Binding ElementName=imageRoot}"
+                      RelativePanel.AlignRightWithPanel="True"
+                      RelativePanel.AlignLeftWithPanel="True">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Border Margin="0,-65,9.5,0">
+                        <Border.Transitions>
+                            <TransitionCollection>
+                                <PopupThemeTransition />
+                            </TransitionCollection>
+                        </Border.Transitions>
+                        <controls:UserProfilePictureControl Width="130" Height="130"
+                                                            ShowBorder="true"
+                                                            Source="{Binding Photo.User.ProfilePictureUrl}" />
+                    </Border>
+
+                    <controls:GoldButton Margin="0,-35,0,0"
+                                         Command="{Binding GiveGoldCommand}"
+                                         IsEnabled="{Binding Photo.CanGiveGold}"
+                                         Grid.Column="2" Content="{Binding Photo.GoldCount}"
+                                         VerticalAlignment="Top" />
+
+                    <TextBlock Grid.Row="1" Margin="0,12" Grid.ColumnSpan="3" Text="{Binding Photo.Caption}"
+                               TextWrapping="WrapWholeWords" />
+
+                    <Grid Grid.Row="2" Grid.ColumnSpan="3" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock FontSize="14" FontWeight="Normal"
+                                   Text="{Binding Photo.CreatedAt, Converter={StaticResource RelativeTimeConverter}}"
+                                   Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}"
+                                   Margin="0,0,0,12"
+                                   TextWrapping="WrapWholeWords" />
+                    </Grid>
+                </Grid>
+                <Grid RelativePanel.Below="photoDetails"
+                      RelativePanel.AlignLeftWithPanel="True"
+                      RelativePanel.AlignRightWithPanel="True"
+                      x:Name="commentsGrid">
+                    <ListView ItemsSource="{Binding Annotations}"
+                              ItemContainerStyle="{StaticResource AnnotationItemContainerStyle}"
+                              SelectedItem="{Binding SelectedAnnotation, Mode=TwoWay}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,6,6,6">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <controls:UserProfilePictureControl Margin="0,0,6,0"
+                                                                        Grid.RowSpan="2" Width="50" Height="50"
+                                                                        Grid.Column="0"
+                                                                        Source="{Binding From.ProfilePictureUrl}" />
+                                    <TextBlock Margin="0,0,0,0" FontWeight="SemiBold" FontSize="14" Grid.Row="0"
+                                               Grid.Column="1" Text="{Binding GoldCount, Converter={StaticResource GoldValueToGaveGoldStringConverter}}"
+                                               VerticalAlignment="Bottom" />
+                                    <TextBlock
+                                        Text="{Binding CreatedTime, Converter={StaticResource RelativeTimeConverter}}"
+                                        Grid.Column="2" Grid.Row="0" HorizontalAlignment="Right" FontSize="12"
+                                        VerticalAlignment="Bottom"
+                                        Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}" />
+
+                                    <TextBlock Margin="0,0,0,0" Grid.Row="1" Text="{Binding Text}" Grid.Column="1"
+                                               TextWrapping="WrapWholeWords" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </RelativePanel>
+        </ScrollViewer>
+        <CommandBar Opacity="1" Grid.Row="2" ClosedDisplayMode="Minimal">
+            <AppBarButton Icon="Delete" 
+                          Visibility="{Binding IsUserAbleToDeleteAnnotation, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                          Label="Delete" Command="{Binding DeleteAnnotationCommand}" />
+            <AppBarButton Icon="ReportHacked"
+                          Visibility="{Binding IsUserAbleToReportAnnotation, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                          Label="Report Annotation" Command="{Binding ReportAnnotationCommand}" />
+            <AppBarButton Icon="ReportHacked"
+                          Label="Report Photo">
+                <AppBarButton.Flyout>
+                    <Flyout>
+                        <ListView x:Name="reportPhotoRoot" ItemsSource="{Binding ReportReasons}" SelectionMode="None">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid x:Name="root">
+                                        <interactivity:Interaction.Behaviors>
+                                            <core:EventTriggerBehavior EventName="Tapped">
+                                                <core:InvokeCommandAction
+                                                    Command="{Binding DataContext.ReportPhotoCommand, ElementName=reportPhotoRoot}"
+                                                    CommandParameter="{Binding}" />
+                                            </core:EventTriggerBehavior>
+                                        </interactivity:Interaction.Behaviors>
+                                        <TextBlock
+                                            Text="{Binding Converter={StaticResource EnumDisplayNameToStringConverter}}"
+                                            VerticalAlignment="Bottom" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Flyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+            <AppBarButton Icon="Edit"
+                          Label="Edit Photo"
+                          Command="{Binding EditPhotoCommand}"
+                          Visibility="{Binding IsUserAbleToUpdatePhoto, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        </CommandBar>
+    </Grid>
+</Page>

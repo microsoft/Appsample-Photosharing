@@ -1,0 +1,166 @@
+﻿<!--  
+//  Copyright (c) Microsoft Corporation.  All rights reserved.
+// 
+//  The MIT License (MIT)
+// 
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+// 
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+// 
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE. -->
+<Page
+    x:Class="PhotoSharingApp.Universal.Views.WelcomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PhotoSharingApp.Universal.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:valueConverters="using:PhotoSharingApp.Universal.ValueConverters"
+    xmlns:design="using:PhotoSharingApp.Universal.ViewModels.Design"
+    xmlns:controls="using:PhotoSharingApp.Universal.Controls"
+    mc:Ignorable="d"
+    x:Name="pageRoot"
+    d:DataContext="{d:DesignInstance design:WelcomeDesignViewModel, IsDesignTimeCreatable=True}">
+
+    <Page.Resources>
+        <Style TargetType="TextBlock" x:Key="TextHeaderStyle">
+            <Setter Property="Foreground" Value="#FF363636" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Bottom" />
+            <Setter Property="FontSize" Value="32" />
+            <Setter Property="FontWeight" Value="ExtraLight" />
+            <Setter Property="Margin" Value="0,18" />
+        </Style>
+        <Style TargetType="Grid" x:Key="TextGridStyle">
+            <Setter Property="Margin" Value="18" />
+        </Style>
+        <GridLength x:Key="FirstRowHeight">5*</GridLength>
+        <GridLength x:Key="SecondRowHeight">4*</GridLength>
+        <Style TargetType="TextBlock" x:Key="EnumerationContentStyle">
+            <Setter Property="FontSize" Value="{ThemeResource ContentControlFontSize}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style TargetType="TextBlock" x:Key="TextContentStyle" BasedOn="{StaticResource EnumerationContentStyle}">
+            <Setter Property="Margin" Value="0,24,0,12" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="FontWeight" Value="Light" />
+            <Setter Property="MaxWidth" Value="500" />
+        </Style>
+        <valueConverters:SelectedLegendItemToColorConverter x:Key="SelectedLegendItemToColorConverter" />
+        <valueConverters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+        <Style x:Key="LegendItemContainerStyle" TargetType="GridViewItem">
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
+            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
+            <Setter Property="TabNavigation" Value="Local" />
+            <Setter Property="IsHoldingEnabled" Value="True" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0,0,4,4" />
+            <Setter Property="MinWidth" Value="15" />
+            <Setter Property="MinHeight" Value="{ThemeResource GridViewItemMinHeight}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="GridViewItem">
+                        <Grid>
+                            <!--We add the actual control in the container because we need the selection state to change
+                            the control's color.-->
+                            <Ellipse Width="5" Height="5"
+                                     Fill="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent},
+                                Converter={StaticResource SelectedLegendItemToColorConverter}}" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <FlipView x:Name="flipView" SelectedItem="{Binding SelectedInstructionItem, Mode=TwoWay}"
+                  Background="{StaticResource AppAccentBackgroundColorBrush}" ItemsSource="{Binding InstructionItems}">
+            <FlipView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="{StaticResource FirstRowHeight}" />
+                            <RowDefinition Height="{StaticResource SecondRowHeight}" />
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0" VerticalAlignment="Bottom">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ChildrenTransitions>
+                                <TransitionCollection>
+                                    <EdgeUIThemeTransition Edge="Left" />
+                                </TransitionCollection>
+                            </Grid.ChildrenTransitions>
+
+                            <TextBlock Text="{Binding HeaderText}"
+                                       Style="{StaticResource TextHeaderStyle}" />
+
+                            <Image Stretch="Uniform" MaxWidth="335" Grid.Row="1"
+                                   Source="{Binding Image}" Margin="36,0"
+                                   Visibility="{Binding Image, Converter={StaticResource NullToVisibilityConverter}}" />
+
+                            <Button Content="Get Started" HorizontalAlignment="Center"
+                                    Grid.Row="1"
+                                    Visibility="{Binding TargetPage, Converter={StaticResource NullToVisibilityConverter}}"
+                                    VerticalAlignment="Bottom" Margin="0,32"
+                                    Style="{StaticResource ColoredButtonStyle}"
+                                    Command="{Binding DataContext.NavigateToTargetPageCommand,
+                                        ElementName=pageRoot}"
+                                    CommandParameter="{Binding}" />
+                        </Grid>
+
+                        <Image Grid.Row="0" Source="/Assets/Welcome/gradient-white.png"
+                               Height="26" MaxWidth="500" Stretch="Fill"
+                               VerticalAlignment="Bottom" Margin="0,0,0,-10" />
+
+                        <Grid Grid.Row="1" Background="White">
+                            <Grid Style="{StaticResource TextGridStyle}">
+                                <StackPanel>
+                                    <StackPanel.ChildrenTransitions>
+                                        <TransitionCollection>
+                                            <EdgeUIThemeTransition Edge="Bottom" />
+                                        </TransitionCollection>
+                                    </StackPanel.ChildrenTransitions>
+                                    <TextBlock Style="{StaticResource TextContentStyle}"
+                                               Text="{Binding ContentText}" />
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+
+                    </Grid>
+                </DataTemplate>
+            </FlipView.ItemTemplate>
+        </FlipView>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="{StaticResource FirstRowHeight}" />
+                <RowDefinition Height="{StaticResource SecondRowHeight}" />
+            </Grid.RowDefinitions>
+
+            <GridView Grid.Row="1" HorizontalAlignment="Center"
+                      SelectedItem="{Binding SelectedInstructionItem, Mode=TwoWay}"
+                      ItemsSource="{Binding InstructionItems}"
+                      ItemContainerStyle="{StaticResource LegendItemContainerStyle}" />
+        </Grid>
+    </Grid>
+</Page>

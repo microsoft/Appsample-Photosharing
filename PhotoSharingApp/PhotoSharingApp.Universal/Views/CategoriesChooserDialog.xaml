@@ -1,0 +1,90 @@
+﻿<!--  
+//  Copyright (c) Microsoft Corporation.  All rights reserved.
+// 
+//  The MIT License (MIT)
+// 
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+// 
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+// 
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE. -->
+<ContentDialog
+    x:Class="PhotoSharingApp.Universal.Views.CategoriesChooserDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PhotoSharingApp.Universal.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:design="using:PhotoSharingApp.Universal.ViewModels.Design"
+    xmlns:valueConverters="using:PhotoSharingApp.Universal.ValueConverters"
+    xmlns:controls="using:PhotoSharingApp.Universal.Controls"
+    mc:Ignorable="d"
+    Title="Choose Category"
+    PrimaryButtonText="ok"
+    PrimaryButtonClick="OkButtonClick"
+    SecondaryButtonText="cancel"
+    SecondaryButtonClick="CancelButtonClick"
+    d:DataContext="{d:DesignInstance design:CategoriesChooserDesignViewModel, IsDesignTimeCreatable=True}"
+    FullSizeDesired="True"
+    Template="{StaticResource ListContentDialogTemplate}"
+    Background="White">
+    <ContentDialog.Resources>
+        <valueConverters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+        <valueConverters:NullToBoolConverter x:Key="NullToBoolConverter" />
+        <valueConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </ContentDialog.Resources>
+    <ContentDialog.IsPrimaryButtonEnabled>
+        <Binding Path="SelectedCategory" Converter="{StaticResource NullToBoolConverter}" />
+    </ContentDialog.IsPrimaryButtonEnabled>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid Margin="0,6,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="1" Command="{Binding AddCategoryCommand}">
+                <SymbolIcon Symbol="Add" />
+            </Button>
+
+            <TextBox x:Name="searchTextBox" PlaceholderText="Search"
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                     IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"
+                     Margin="0,0,12,0" />
+        </Grid>
+
+        <Grid Row="1">
+            <ListView ItemsSource="{Binding FilteredCategories}"
+                      SelectedItem="{Binding SelectedCategory, Mode=TwoWay}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <controls:MyControl Margin="0,0,6,0" />
+                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+        <Grid Background="{StaticResource BusyIndicatorBackgroundColorBrush}" Grid.Row="1"
+              Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <ProgressRing IsActive="{Binding IsBusy}" />
+        </Grid>
+    </Grid>
+</ContentDialog>

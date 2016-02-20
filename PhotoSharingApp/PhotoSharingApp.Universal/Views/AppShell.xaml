@@ -1,0 +1,164 @@
+﻿<!--  
+//  Copyright (c) Microsoft Corporation.  All rights reserved.
+// 
+//  The MIT License (MIT)
+// 
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+// 
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+// 
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE. -->
+<Page
+    x:Class="PhotoSharingApp.Universal.Views.AppShell"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PhotoSharingApp.Universal"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:PhotoSharingApp.Universal.Models"
+    xmlns:navigationBar="using:PhotoSharingApp.Universal.NavigationBar"
+    xmlns:controls="using:PhotoSharingApp.Universal.Controls"
+    xmlns:system="using:System"
+    xmlns:design="using:PhotoSharingApp.Universal.ViewModels.Design"
+    xmlns:valueConverters="using:PhotoSharingApp.Universal.ValueConverters"
+    KeyDown="AppShell_KeyDown"
+    TabNavigation="Cycle"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance design:AppShellDesignViewModel, IsDesignTimeCreatable=True}">
+
+    <!-- Using a Page as the root for the app provides a design time experience as well as ensures that
+         when it runs on Mobile the app content won't appear under the system's StatusBar which is visible 
+         by default with a transparent background.  It will also take into account the presence of software
+         navigation buttons if they appear on a device.  An app can opt-out by switching to UseCoreWindow.
+    -->
+    <Page.Resources>
+        <valueConverters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+        <x:Double x:Key="EllipseDimension">30</x:Double>
+        <DataTemplate x:Key="NavMenuItemTemplate" x:DataType="navigationBar:INavigationBarMenuItem">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="48" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <!-- Showing a ToolTip and the Label is redundant.  We put the ToolTip on the icon.
+                     It appears when the user hovers over the icon, but not the label which provides
+                     value when the SplitView is 'Compact' while reducing the likelihood of showing
+                     redundant information when the label is shown.-->
+                <FontIcon
+                    Visibility="{Binding Image, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=true}"
+                    x:Name="glyph" FontSize="16" Glyph="{Binding SymbolAsChar}" VerticalAlignment="Center"
+                    HorizontalAlignment="Center" ToolTipService.ToolTip="{Binding Label}" />
+
+                <Ellipse Visibility="{Binding Image, Converter={StaticResource NullToVisibilityConverter}}"
+                         Width="{StaticResource EllipseDimension}" Height="{StaticResource EllipseDimension}">
+                    <Ellipse.Fill>
+                        <ImageBrush ImageSource="{Binding Image}" />
+                    </Ellipse.Fill>
+                </Ellipse>
+
+                <TextBlock x:Name="text" Grid.Column="1" Text="{Binding Label}" />
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid>
+        <!-- Adaptive triggers -->
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1300" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="rootSplitView.DisplayMode" Value="CompactOverlay" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="720" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="rootSplitView.DisplayMode" Value="CompactOverlay" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="rootSplitView.DisplayMode" Value="Overlay" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <SplitView x:Name="rootSplitView"
+                   DisplayMode="Inline"
+                   OpenPaneLength="256"
+                   IsTabStop="False">
+            <SplitView.Pane>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <controls:NavMenuListView x:Name="navMenuList"
+                                              TabIndex="3"
+                                              Margin="0,48,0,0"
+                                              ItemsSource="{Binding NavigationBarMenuItems}"
+                                              ContainerContentChanging="NavMenuItemContainerContentChanging"
+                                              ItemContainerStyle="{StaticResource NavMenuItemContainerStyle}"
+                                              ItemTemplate="{StaticResource NavMenuItemTemplate}"
+                                              ItemInvoked="NavMenuList_ItemInvoked">
+                    </controls:NavMenuListView>
+
+                    <Border Grid.Row="1" BorderThickness="0,1,0,0">
+                        <controls:NavMenuListView x:Name="bottomNavMenuList"
+                                                  TabIndex="3"
+                                                  ItemsSource="{Binding BottomNavigationBarMenuItems}"
+                                                  ContainerContentChanging="NavMenuItemContainerContentChanging"
+                                                  ItemContainerStyle="{StaticResource NavMenuItemContainerStyle}"
+                                                  ItemTemplate="{StaticResource NavMenuItemTemplate}"
+                                                  ItemInvoked="NavMenuList_ItemInvoked" />
+                    </Border>
+
+                </Grid>
+            </SplitView.Pane>
+
+            <Frame x:Name="frame"
+                   Navigated="OnNavigatedToPage">
+                <Frame.ContentTransitions>
+                    <TransitionCollection>
+                        <NavigationThemeTransition>
+                            <NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                                <EntranceNavigationTransitionInfo />
+                            </NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                        </NavigationThemeTransition>
+                    </TransitionCollection>
+                </Frame.ContentTransitions>
+            </Frame>
+        </SplitView>
+
+        <ToggleButton x:Name="togglePaneButton"
+                      TabIndex="1"
+                      Foreground="Black"
+                      Background="White"
+                      Style="{StaticResource SplitViewTogglePaneButtonStyle}"
+                      IsChecked="{Binding IsPaneOpen, ElementName=rootSplitView, Mode=TwoWay}"
+                      Unchecked="TogglePaneButton_Checked"
+                      AutomationProperties.Name="Menu"
+                      ToolTipService.ToolTip="Menu" />
+    </Grid>
+</Page>
