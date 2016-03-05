@@ -46,18 +46,18 @@ You need an [Azure account](https://azure.microsoft.com) to create an Azure App 
 #### Create Azure Blob storage
 
  1. Create an Azure storage account following the instructions at [Create a storage account](https://azure.microsoft.com/documentation/articles/storage-create-storage-account/).
- 2. At the above link, navigate to the "View and copy storage access keys" section. Note the Storage Account Name and one of the Access Keys, and enter these values in [PhotoSharingApp\PhotoSharingApp.AppService.Shared\Context\DefaultEnvironmentDefinition.cs](PhotoSharingApp/PhotoSharingApp.AppService.Shared/Context/DefaultEnvironmentDefinition.cs)
+ 2. At the above link, navigate to the "View and copy storage access keys" section. Note the Storage Account Name and one of the Access Keys, and enter these values in [PhotoSharingApp\PhotoSharingApp.AppService.Shared\Context\EnvironmentDefinition.cs](PhotoSharingApp/PhotoSharingApp.AppService.Shared/Context/EnvironmentDefinition.cs)
   - `string StorageAccountName`
   - `string StorageAccessKey`
 
 #### Create DocumentDB account, database, and collection
 
  1. [Create a DocumentDB account](https://azure.microsoft.com/documentation/articles/documentdb-create-account/).
- 2. After creation, collect the values below from the Azure Portal and input these values at the following locations in [PhotoSharingApp\PhotoSharingApp.AppService.Shared\Context\DefaultEnvironmentDefinition.cs](PhotoSharingApp/PhotoSharingApp.AppService.Shared/Context/DefaultEnvironmentDefinition.cs):
+ 2. After creation, collect the values below from the Azure Portal and input these values at the following locations in [PhotoSharingApp\PhotoSharingApp.AppService.Shared\Context\EnvironmentDefinition.cs](PhotoSharingApp/PhotoSharingApp.AppService.Shared/Context/EnvironmentDefinition.cs):
   - The DocumentDbStorage.EndpointUrl property setting - *DocumentDB account -> Keys -> URI* (example: *https://contoso-documentdb.documents.azure.com:443/*)
   - The DocumentDbStorage.AuthorizationKey property setting - *DocumentDB account -> Keys -> Primary Key*
 
-The DocumentDB client can programatically create databases and collections, and when the service starts up it will create these for you. There are default values already configured for your DocumentDB database and collection, but you can change these if you want to in the [DefaultEnvironmentDefinition.cs](PhotoSharingApp/PhotoSharingApp.AppService.Shared/Context/DefaultEnvironmentDefinition.cs#L25) file, and let the service to create them for you.
+The DocumentDB client can programatically create databases and collections, and when the service starts up it will create these for you. There are default values already configured for your DocumentDB database and collection, but you can change these if you want to in the [EnvironmentDefinition.cs](PhotoSharingApp/PhotoSharingApp.AppService.Shared/Context/EnvironmentDefinition.cs#L25) file, and let the service to create them for you.
 Or you can [create a DocumentDB database](https://azure.microsoft.com/documentation/articles/documentdb-create-database/) and [create a DocumentDB collection](https://azure.microsoft.com/documentation/articles/documentdb-create-collection/) on your own and update the DefaultEnvironmentDefinition settings with your database and collection IDs.  The service will not overwrite an existing database or collection; it creates a new one only if there is no existing one with a matching id.
   - The DocumentDbStorage.CollectionId property setting - *DocumentDB account -> Databases -> Collections*
   - The DocumentStorage.DatabaseId property setting - *DocumentDB account -> Databases*
@@ -67,7 +67,7 @@ Or you can [create a DocumentDB database](https://azure.microsoft.com/documentat
 
  1. Follow Steps 8 and 9 of "Register your app for the Windows Store" on this [page](https://azure.microsoft.com/documentation/articles/notification-hubs-windows-store-dotnet-get-started/) to get the Client Secret and Package SID of your **PhotoSharingApp**.
  2. Follow "Configure your notification hub" section on the same page. Enter the Client Secret and Package SID for Windows notifications settings which you obtained in the above step.
- 3. Note the DefaultFullSharedAccessSignature connection string and Notification Hub name and enter them at [PhotoSharingApp\PhotoSharingApp.AppService.Shared\Context\DefaultEnvironmentDefinition.cs](PhotoSharingApp/PhotoSharingApp.AppService.Shared/Context/DefaultEnvironmentDefinition.cs#L25)
+ 3. Note the DefaultFullSharedAccessSignature connection string and Notification Hub name and enter them at [PhotoSharingApp\PhotoSharingApp.AppService.Shared\Context\EnvironmentDefinition.cs](PhotoSharingApp/PhotoSharingApp.AppService.Shared/Context/EnvironmentDefinition.cs#L25)
   - ```string HubName```
   - ```string HubFullSharedAccessSignature```
 
@@ -94,6 +94,6 @@ Depending on whether you want both app and service to send telemetry or one of t
 - Select *Windows Store Application* and enter a name for the Application Insights instance.
 - Go ahead and create the instance and copy the instrumentation key
 
-To enable the app to send telemetry to the Application Insights instance you just created, you need to paste the API key into *InstrumentationKey* of your environment definition (in [ServiceEnvironment.cs](PhotoSharingApp\PhotoSharingApp.Universal\ServiceEnvironments\ServiceEnvironment.cs#L25).
+To enable the app to send telemetry to the Application Insights instance you just created, you need to paste the API key into *InstrumentationKey* of your environment definition (in [ServiceEnvironment.cs](PhotoSharingApp\PhotoSharingApp.Universal\ServiceEnvironments\ServiceEnvironment.cs#L25)).
 
-To enable Application Insights in the service, paste your Instrumentation Key found in Azure portal of your *Application Insight instance -> Settings -> Properties* into *instrumentationKey* in Web.config.
+To enable Application Insights in the service, paste your Instrumentation Key found in Azure portal of your *Application Insight instance -> Settings -> Properties* into *instrumentationKey* in [web.config](PhotoSharingApp\PhotoSharingApp.AppService\web.config#L24).
