@@ -96,4 +96,4 @@ Depending on whether you want both app and service to send telemetry or one of t
 
 To enable the app to send telemetry to the Application Insights instance you just created, you need to paste the API key into *InstrumentationKey* of your environment definition (in [ServiceEnvironment.cs](PhotoSharingApp\PhotoSharingApp.Universal\ServiceEnvironments\ServiceEnvironment.cs#L25)).
 
-To enable Application Insights in the service, paste your Instrumentation Key found in Azure portal of your *Application Insight instance -> Settings -> Properties* into *instrumentationKey* in [web.config](PhotoSharingApp\PhotoSharingApp.AppService\web.config#L24).
+To enable Application Insights in the service, paste your Instrumentation Key found in Azure portal of your *Application Insight instance -> Settings -> Properties* into *instrumentationKey* in [Web.config](PhotoSharingApp\PhotoSharingApp.AppService\Web.config#L24).
