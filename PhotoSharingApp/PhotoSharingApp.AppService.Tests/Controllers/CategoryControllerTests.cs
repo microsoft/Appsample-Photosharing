@@ -28,9 +28,9 @@ using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PhotoSharingApp.AppService.Controllers;
+using PhotoSharingApp.AppService.Shared.Context;
 using PhotoSharingApp.AppService.Shared.Repositories;
 using PhotoSharingApp.AppService.Tests.Helpers;
-using PhotoSharingApp.AppService.Tests.Context;
 
 namespace PhotoSharingApp.AppService.Tests.Controllers
 {
@@ -48,7 +48,7 @@ namespace PhotoSharingApp.AppService.Tests.Controllers
             _userRegistrationReferenceProviderMock = new UserRegistrationReferenceProviderMock();
 
             _categoryController = new CategoryController(
-              _repository,
+                _repository,
                 new TelemetryClient(),
                 _userRegistrationReferenceProviderMock);
         }
@@ -131,6 +131,24 @@ namespace PhotoSharingApp.AppService.Tests.Controllers
             Assert.IsTrue(categories.Any(c => c.Id == category3.Id), "category3 was not returned");
             Assert.AreEqual(3, categories.FirstOrDefault(c => c.Id == category3.Id)?.PhotoThumbnails.Count,
                 "category3's thumbnail count was not correct");
+        }
+
+        [TestMethod]
+        public async Task GetPreviewCategoriesWithNoDataTest()
+        {
+            await _repository.ReinitializeDatabase();
+
+            const int numberOfThumbnails = 10;
+
+            // Populate our db with necessary objects
+            // In this case, nothing.
+
+            // Act
+            var categories = await _categoryController.GetAsync(numberOfThumbnails);
+
+            // Verify
+            Assert.IsNotNull(categories, "null response from service");
+            Assert.AreEqual(0, categories.Count, "returned category count was not correct");
         }
     }
 }

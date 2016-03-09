@@ -392,36 +392,42 @@ namespace PhotoSharingApp.AppService.Shared.Repositories
         /// <returns>List interface of CategoryPreviewContract.</returns>
         public async Task<IList<CategoryPreviewContract>> GetCategoriesPreview(int numberOfThumbnails)
         {
+            var results = new List<CategoryPreviewContract>();
+
             var photosQuery = await _documentClient.ExecuteStoredProcedureAsync<List<PhotoDocument>>(
                     GetRecentPhotosForCategoriesStoredProcedureUri,
                     numberOfThumbnails,
                     _currentDocumentVersion);
 
+            
             var mostRecentCategoryPhotos = photosQuery.Response;
 
-            // Create a collection of all categories represented in the list of photos we received
-            var allCategories =
-                mostRecentCategoryPhotos.GroupBy(p => p.CategoryId)
-                    .Select(group => new CategoryContract { Id = group.First().CategoryId, Name = group.First().CategoryName });
-
-            var results = new List<CategoryPreviewContract>();
-
-            foreach (var category in allCategories)
+            if (mostRecentCategoryPhotos != null && mostRecentCategoryPhotos.Any())
             {
-                var photoDocuments = mostRecentCategoryPhotos.Where(p => p.CategoryId == category.Id).ToList();
+                // Create a collection of all categories represented in the list of photos we received
+                var allCategories =
+                    mostRecentCategoryPhotos.GroupBy(p => p.CategoryId)
+                        .Select(group => new CategoryContract { Id = group.First().CategoryId, Name = group.First().CategoryName });
 
-                if (photoDocuments.Any())
+                // Create a CategoryPreviewContract for each category represented
+                // to contain its photos
+                foreach (var category in allCategories)
                 {
-                    results.Add(new CategoryPreviewContract
+                    var photoDocuments = mostRecentCategoryPhotos.Where(p => p.CategoryId == category.Id).ToList();
+
+                    if (photoDocuments.Any())
                     {
-                        Id = category.Id,
-                        Name = category.Name,
-                        PhotoThumbnails = photoDocuments.Select(p => new PhotoThumbnailContract
+                        results.Add(new CategoryPreviewContract
                         {
-                            CreatedAt = p.CreatedDateTime.Date,
-                            ImageUrl = p.ThumbnailUrl
-                        }).OrderByDescending(ptc => ptc.CreatedAt).ToList()
-                    });
+                            Id = category.Id,
+                            Name = category.Name,
+                            PhotoThumbnails = photoDocuments.Select(p => new PhotoThumbnailContract
+                            {
+                                CreatedAt = p.CreatedDateTime.Date,
+                                ImageUrl = p.ThumbnailUrl
+                            }).OrderByDescending(ptc => ptc.CreatedAt).ToList()
+                        });
+                    }
                 }
             }
 

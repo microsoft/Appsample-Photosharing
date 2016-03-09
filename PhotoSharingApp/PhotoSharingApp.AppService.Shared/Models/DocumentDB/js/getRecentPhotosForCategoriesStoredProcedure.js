@@ -27,10 +27,10 @@
 //   @param currentDocumentVersion - The current document version number that the service is using
 function getRecentPhotosForCategories(numberOfPhotos, currentDocumentVersion) {
 
-    getAllCategories(function (allCategories) {
+    // Instantiate the response with an empty array.
+    __.response.setBody([]);
 
-        // Instantiate the response with an empty array.
-        __.response.setBody( [] );
+    getAllCategories(function (allCategories) {
 
         for (var i = 0; i < allCategories.length; i++) {
 
@@ -50,8 +50,8 @@ function getRecentPhotosForCategories(numberOfPhotos, currentDocumentVersion) {
                 throw new Error("Unable to query for all categories, aborting.");
             }
 
-            if (!documents || documents.length < 1) {
-                throw new Error("Unable to find any categories, aborting.");
+            if (documents.length < 1) {
+                return;
             }
 
             callback(documents);
