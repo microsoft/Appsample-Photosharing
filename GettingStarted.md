@@ -29,14 +29,15 @@ You need an [Azure account](https://azure.microsoft.com) to create an Azure App 
 
  1. Create an Azure Mobile App as described [here](https://azure.microsoft.com/documentation/articles/app-service-mobile-dotnet-backend-how-to-use-server-sdk/#create-app). Follow Steps 1 to 4 only, and stop after you have Clicked “Create”.
   - After the Mobile App is provisioned, you will have the mobile app URL available for use. Note this URL (it will look like *https://contoso.azurewebsites.net*).
-  - Enter this URL (use the *https* version) for `string AzureAppServiceBaseUrl` in the file located at  [PhotoSharingApp\PhotoSharingApp.Universal\ServiceEnvironments\ServiceEnvironment.cs](PhotoSharingApp/PhotoSharingApp.Universal/ServiceEnvironments/ServiceEnvironment.cs#L25).
+  - Enter this URL (**use the *https* version**) for `string AzureAppServiceBaseUrl` in the file located at  [PhotoSharingApp\PhotoSharingApp.Universal\ServiceEnvironments\ServiceEnvironment.cs](PhotoSharingApp/PhotoSharingApp.Universal/ServiceEnvironments/ServiceEnvironment.cs#L25).
 
  2. Set up your Mobile App to accept authenticated users.
-  - The **PhotoSharingApp** code sample allows user authentication via Microsoft Account, Facebook, Twitter, and Google. To experience the full functionality of the sample, enable at least 1 means of authentication in [Azure Portal](https://portal.azure.com/) at *Mobile App -> Settings -> Authentication/Authorization*. (**Note**: Do not use *Mobile authentication* under settings).
+  - The **PhotoSharingApp** code sample allows user authentication via Microsoft Account, Facebook, Twitter, and Google. To experience the full functionality of the sample, enable at least one of the following authentication providers in [Azure Portal](https://portal.azure.com/) at *Mobile App -> Settings -> Authentication/Authorization*. (**Note**: Do not use *Mobile authentication* under settings).
       - [Microsoft Account configuration](https://azure.microsoft.com/documentation/articles/app-service-mobile-how-to-configure-microsoft-authentication/).
       - [Facebook configuration](https://azure.microsoft.com/documentation/articles/app-service-mobile-how-to-configure-facebook-authentication/).
       - [Twitter configuration](https://azure.microsoft.com/documentation/articles/app-service-mobile-how-to-configure-twitter-authentication/).
       - [Google configuration](https://azure.microsoft.com/documentation/articles/app-service-mobile-how-to-configure-google-authentication/).
+    - When providing your mobile app URL with the authentication providers, make sure you use the **https** version.
  - Ensure that you set "Allow request (no action)" when the request is not authenticated before you click *Save*.
 
 ![Allow request (no action)](Images/Authentication-NoAction.jpg)
@@ -46,7 +47,7 @@ You need an [Azure account](https://azure.microsoft.com) to create an Azure App 
 #### Create Azure Blob storage
 
  1. Create an Azure storage account following the instructions at [Create a storage account](https://azure.microsoft.com/documentation/articles/storage-create-storage-account/).
- 2. At the above link, navigate to the "View and copy storage access keys" section. Note the Storage Account Name and one of the Access Keys, and enter these values in [PhotoSharingApp\PhotoSharingApp.AppService.Shared\Context\EnvironmentDefinition.cs](PhotoSharingApp/PhotoSharingApp.AppService.Shared/Context/EnvironmentDefinition.cs)
+ 2. Once the creation has completed, navigate to your storage account and click on *Access keys* to note the storage account name and one of the access keys. Enter these values in [PhotoSharingApp\PhotoSharingApp.AppService.Shared\Context\EnvironmentDefinition.cs](PhotoSharingApp/PhotoSharingApp.AppService.Shared/Context/EnvironmentDefinition.cs)
   - `string StorageAccountName`
   - `string StorageAccessKey`
 
@@ -57,13 +58,23 @@ You need an [Azure account](https://azure.microsoft.com) to create an Azure App 
   - The DocumentDbStorage.EndpointUrl property setting - *DocumentDB account -> Keys -> URI* (example: *https://contoso-documentdb.documents.azure.com:443/*)
   - The DocumentDbStorage.AuthorizationKey property setting - *DocumentDB account -> Keys -> Primary Key*
 
-The DocumentDB client can programatically create databases and collections, and when the service starts up it will create these for you. There are default values already configured for your DocumentDB database and collection, but you can change these if you want to in the [EnvironmentDefinition.cs](PhotoSharingApp/PhotoSharingApp.AppService.Shared/Context/EnvironmentDefinition.cs#L25) file, and let the service to create them for you.
+The database and collection are by default created automatically by the service on startup. There are default values for database and collection identifiers already configured, but you can change these if you want to in the [EnvironmentDefinition.cs](PhotoSharingApp/PhotoSharingApp.AppService.Shared/Context/EnvironmentDefinition.cs#L25) file, and let the service to create them for you.
 Or you can [create a DocumentDB database](https://azure.microsoft.com/documentation/articles/documentdb-create-database/) and [create a DocumentDB collection](https://azure.microsoft.com/documentation/articles/documentdb-create-collection/) on your own and update the DefaultEnvironmentDefinition settings with your database and collection IDs.  The service will not overwrite an existing database or collection; it creates a new one only if there is no existing one with a matching id.
   - The DocumentDbStorage.CollectionId property setting - *DocumentDB account -> Databases -> Collections*
   - The DocumentStorage.DatabaseId property setting - *DocumentDB account -> Databases*
 ![Example of DocumentDB account](Images/DocumentDB-Names.jpg)
 
-#### Create NotificationHub for Push Notifications
+#### Deploy service to Azure and connect the app
+
+Download the Mobile App Service publishing profile from the Azure portal (*Get Publish Profile*). Right click on *PhotoSharingApp.AppService* project *-> Select Publish -> Profile -> Import -> Browse to the downloaded Mobile App publishing profile and select it -> Click OK -> Publish*. Refer to "How to: Publish the server project" section at this [page](https://azure.microsoft.com/documentation/articles/app-service-mobile-dotnet-backend-how-to-use-server-sdk/) for more details.
+
+Now set the project PhotoSharingApp.Universal as StartUp Project and launch the app in Debug mode. Within the app, navigate to the Debug page from the navigation panel of the app, disable the *Use Photo Dummy Service* switch, which will enable the service configured earlier in [ServiceEnvironment.cs](PhotoSharingApp/PhotoSharingApp.Universal/ServiceEnvironments/ServiceEnvironment.cs) instead.
+
+If the app has properly connected to the service, you should see a green indicator under the Service Connection Status.  If there were any issues connecting to the service the indicator will be red, please check that you have properly followed the directions involving the service deployment. (**Note**: *If the service code is not deployed to Azure (see section Deploy service to Azure and connect the app) you may get an error since service selection defaults to your set mobile service URL by default.*)
+
+Once published successfully, your **PhotoSharingApp** can now be used with the Azure App Service backend!
+
+## Configure Push Notifications (Optional)
 
  1. Follow Steps 8 and 9 of "Register your app for the Windows Store" on this [page](https://azure.microsoft.com/documentation/articles/notification-hubs-windows-store-dotnet-get-started/) to get the Client Secret and Package SID of your **PhotoSharingApp**.
  2. Follow "Configure your notification hub" section on the same page. Enter the Client Secret and Package SID for Windows notifications settings which you obtained in the above step.
@@ -71,21 +82,7 @@ Or you can [create a DocumentDB database](https://azure.microsoft.com/documentat
   - ```string HubName```
   - ```string HubFullSharedAccessSignature```
 
-##### Test app service locally
-
-In Visual Studio, right-click on the PhotoSharingApp.AppService project and select *Set as StartUp Project*. Press *Ctrl+F5* or select *Debug* > *Start Without Debugging* to start the App Service locally.
-
-Now set the project *PhotoSharingApp.Universal* as *StartUp Project* and launch the app in *Debug* mode. Within the app, navigate to the *Debug* page from the navigation panel of the app, disable the *Use Photo Dummy Service* switch, and select *http://localhost:XXXX/* as service endpoint from the dropdown list to test the connection with the service.
-
-If the app has properly connected to the service, you should see a green indicator under the Service Connection Status.  If there were any issues connecting to the service the indicator will be red, please check that you have properly followed the directions involving the service deployment. (**Note**: *If the service code is not deployed to Azure (see section Deploy service to Azure and connect the app) you may get an error since service selection defaults to your set mobile service URL by default.*)
-
-#### Deploy service to Azure and connect the app
-
-Download the Mobile App Service publishing profile from the Azure portal (*Get Publish Profile*). Right click on *PhotoSharingApp.AppService* project *-> Select Publish -> Profile -> Import -> Browse to the downloaded Mobile App publishing profile and select it -> Click OK -> Publish*. Refer to "How to: Publish the server project" section at this [page](https://azure.microsoft.com/documentation/articles/app-service-mobile-dotnet-backend-how-to-use-server-sdk/) for more details.
-
-Once published successfully, your **PhotoSharingApp** can now be used with the Azure App Service backend!
-
-## Application Insights
+## Application Insights (Optional)
 
 Both service and app have been prepared to support [Application Insights](https://azure.microsoft.com/services/application-insights/) for telemetry data.
 

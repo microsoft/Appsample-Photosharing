@@ -68,7 +68,7 @@ The app allows users to:
 
 ## Running the sample
 
-For instructions on setting up the sample, see [GettingStarted](GettingStarted.md).
+For instructions on setting up the sample, see [Getting Started](GettingStarted.md).
 
 ## Project overview
 
@@ -76,4 +76,4 @@ For an overview of the projects structure and namespaces, see [Project overview]
 
 ## Technical deep dive
 
-For an explanation of how the sample integrates multiple technologies, see [*Technical deep dive*](TechnicalDeepDive.md).
+For an explanation of how the sample integrates multiple technologies, see [Technical deep dive](TechnicalDeepDive.md).

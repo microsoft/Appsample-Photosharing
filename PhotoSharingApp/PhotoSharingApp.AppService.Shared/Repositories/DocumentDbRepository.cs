@@ -187,7 +187,7 @@ namespace PhotoSharingApp.AppService.Shared.Repositories
         /// as well as fetching and setting the proper <see cref="UserContract" /> objects for PhotoContract.User
         /// and AnnotationContract.From fields.
         /// </summary>
-        /// <param name="photoDocuments"></param>
+        /// <param name="photoDocuments">The photo documents.</param>
         /// <returns>A list of photo contracts.</returns>
         private async Task<IList<PhotoContract>> CreatePhotoContractsAndLoadUserData(IList<PhotoDocument> photoDocuments)
         {
