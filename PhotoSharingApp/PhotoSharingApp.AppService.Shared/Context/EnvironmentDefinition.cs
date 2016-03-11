@@ -82,7 +82,7 @@ namespace PhotoSharingApp.AppService.Shared.Context
         /// </summary>
         public override string InstrumentationKey
         {
-            get { return WebConfigurationManager.AppSettings["instrumentationKey"]; }
+            get { return "[You App Insights Instrumentation Key]"; }
         }
 
         /// <summary>
