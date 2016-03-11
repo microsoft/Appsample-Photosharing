@@ -28,9 +28,9 @@ using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PhotoSharingApp.AppService.Controllers;
-using PhotoSharingApp.AppService.Shared.Context;
 using PhotoSharingApp.AppService.Shared.Repositories;
 using PhotoSharingApp.AppService.Tests.Helpers;
+using PhotoSharingApp.AppService.Tests.Context;
 
 namespace PhotoSharingApp.AppService.Tests.Controllers
 {
@@ -48,7 +48,7 @@ namespace PhotoSharingApp.AppService.Tests.Controllers
             _userRegistrationReferenceProviderMock = new UserRegistrationReferenceProviderMock();
 
             _categoryController = new CategoryController(
-                _repository,
+              _repository,
                 new TelemetryClient(),
                 _userRegistrationReferenceProviderMock);
         }
@@ -56,7 +56,7 @@ namespace PhotoSharingApp.AppService.Tests.Controllers
         [TestMethod]
         public async Task GetCategoriesTest()
         {
-            await _repository.ReinitializeDatabase();
+            await _repository.ReinitializeDatabase(string.Empty);
 
             // Populate our db with necessary objects
             await _repository.CreateCategory("Test Category " + DateTime.UtcNow.Ticks);
@@ -95,7 +95,7 @@ namespace PhotoSharingApp.AppService.Tests.Controllers
         [TestMethod]
         public async Task GetPreviewCategoriesTest()
         {
-            await _repository.ReinitializeDatabase();
+            await _repository.ReinitializeDatabase(string.Empty);
 
             const int numberOfThumbnails = 10;
 
@@ -136,7 +136,7 @@ namespace PhotoSharingApp.AppService.Tests.Controllers
         [TestMethod]
         public async Task GetPreviewCategoriesWithNoDataTest()
         {
-            await _repository.ReinitializeDatabase();
+            await _repository.ReinitializeDatabase(string.Empty);
 
             const int numberOfThumbnails = 10;
 

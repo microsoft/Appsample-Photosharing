@@ -182,12 +182,23 @@ namespace PhotoSharingApp.AppService.Shared.Repositories
             }
         }
 
+        private async Task CreateGetRecentPhotosForCategoriesStoredProcedure(string serverPath)
+        {
+            var sproc = new StoredProcedure
+            {
+                Id = GetRecentPhotosForCategoriesStoredProcedureId,
+                Body = File.ReadAllText(Path.Combine(serverPath, GetRecentPhotosForCategoriesStoredProcedureScriptFileName))
+            };
+
+            await _documentClient.UpsertStoredProcedureAsync(DocumentCollectionUri, sproc);
+        }
+
         /// <summary>
         /// Processes a list of photo json documents and creates <see cref="PhotoContract" /> for them,
         /// as well as fetching and setting the proper <see cref="UserContract" /> objects for PhotoContract.User
         /// and AnnotationContract.From fields.
         /// </summary>
-        /// <param name="photoDocuments">The photo documents.</param>
+        /// <param name="photoDocuments"></param>
         /// <returns>A list of photo contracts.</returns>
         private async Task<IList<PhotoContract>> CreatePhotoContractsAndLoadUserData(IList<PhotoDocument> photoDocuments)
         {
@@ -200,6 +211,17 @@ namespace PhotoSharingApp.AppService.Shared.Repositories
             return
                 photoDocuments.Select(photoDocument => photoDocument.ToContract(userDocumentsForPhotosAndAnnotations))
                     .ToList();
+        }
+
+        private async Task CreateTransferGoldStoredProcedure(string serverPath)
+        {
+            var sproc = new StoredProcedure
+            {
+                Id = TransferGoldStoredProcedureId,
+                Body = File.ReadAllText(Path.Combine(serverPath, TransferGoldStoredProcedureScriptFileName))
+            };
+
+            await _documentClient.UpsertStoredProcedureAsync(DocumentCollectionUri, sproc);
         }
 
         /// <summary>
@@ -818,7 +840,7 @@ namespace PhotoSharingApp.AppService.Shared.Repositories
         /// Checks if the defined document database and collection exists
         /// and initializes them if they don't.
         /// </summary>
-        public async Task InitializeDatabaseIfNeeded()
+        public async Task InitializeDatabaseIfNotExisting(string serverPath)
         {
             var database = _documentClient.CreateDatabaseQuery()
                 .Where(db => db.Id == _documentDataBaseId)
@@ -840,26 +862,33 @@ namespace PhotoSharingApp.AppService.Shared.Repositories
                 await CreateDocumentDbCollection(database);
             }
 
-            await InitializeStoredProceduresInDocumentDb();
+            await InitializeStoredProceduresIfNotExisting(serverPath);
         }
 
-        private async Task InitializeStoredProceduresInDocumentDb()
+        private async Task InitializeStoredProceduresIfNotExisting(string serverPath)
         {
-            // Initialize GoldTransaction Sproc
-            var sproc = new StoredProcedure
+            try
             {
-                Id = TransferGoldStoredProcedureId,
-                Body = File.ReadAllText(TransferGoldStoredProcedureScriptFileName)
-            };
-            await _documentClient.UpsertStoredProcedureAsync(DocumentCollectionUri, sproc);
+                var sprocs = _documentClient.CreateStoredProcedureQuery(StoredProceduresUri).AsEnumerable();
 
-            // Initialize GetCategoriesPreview Sproc
-            sproc = new StoredProcedure
+                if (!sprocs.Any(s => s.Id == TransferGoldStoredProcedureId))
+                {
+                    await CreateTransferGoldStoredProcedure(serverPath);
+                }
+
+                if (!sprocs.Any(s => s.Id == GetRecentPhotosForCategoriesStoredProcedureId))
+                {
+                    await CreateGetRecentPhotosForCategoriesStoredProcedure(serverPath);
+                }
+            }
+            catch (IOException ex)
             {
-                Id = GetRecentPhotosForCategoriesStoredProcedureId,
-                Body = File.ReadAllText(GetRecentPhotosForCategoriesStoredProcedureScriptFileName)
-            };
-            await _documentClient.UpsertStoredProcedureAsync(DocumentCollectionUri, sproc);
+                throw new DataLayerException(DataLayerError.NotFound, "The file given for a stored procedure could not be located.", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new DataLayerException(DataLayerError.Unknown, "An unknown error occured while inserting a stored procedure.", ex);
+            }
         }
 
         /// <summary>
@@ -1005,7 +1034,7 @@ namespace PhotoSharingApp.AppService.Shared.Repositories
         /// <summary>
         /// Forces a reinitalization of the database by recreating the document database and collection.
         /// </summary>
-        public async Task ReinitializeDatabase()
+        public async Task ReinitializeDatabase(string serverPath)
         {
             var database =
                 _documentClient.CreateDatabaseQuery()
@@ -1021,7 +1050,8 @@ namespace PhotoSharingApp.AppService.Shared.Repositories
             database = await CreateDocumentDbDatabase();
             await CreateDocumentDbCollection(database);
 
-            await InitializeStoredProceduresInDocumentDb();
+            await CreateTransferGoldStoredProcedure(serverPath);
+            await CreateGetRecentPhotosForCategoriesStoredProcedure(serverPath);
         }
 
         private async Task<PhotoDocument> ReplacePhotoDocument(PhotoDocument photoDocument)

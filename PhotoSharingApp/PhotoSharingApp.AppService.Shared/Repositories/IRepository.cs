@@ -136,7 +136,7 @@ namespace PhotoSharingApp.AppService.Shared.Repositories
         /// <summary>
         /// Checks if the database exists and initializes it if it doesn't.
         /// </summary>
-        Task InitializeDatabaseIfNeeded();
+        Task InitializeDatabaseIfNotExisting(string serverPath);
 
         /// <summary>
         /// Inserts the annotation object and performs the required gold transactions.
@@ -171,7 +171,7 @@ namespace PhotoSharingApp.AppService.Shared.Repositories
         /// <summary>
         /// Forces a reinitalization of the database, deleting any existing data.
         /// </summary>
-        Task ReinitializeDatabase();
+        Task ReinitializeDatabase(string serverPath);
 
         /// <summary>
         /// Update stored photo object.

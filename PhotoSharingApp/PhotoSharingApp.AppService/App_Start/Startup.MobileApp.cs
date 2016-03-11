@@ -22,7 +22,9 @@
 //  THE SOFTWARE.
 //  ---------------------------------------------------------------------------------
 
+using System.IO;
 using System.Reflection;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
 using Autofac;
@@ -65,9 +67,20 @@ namespace PhotoSharingApp.AppService
             app.UseAutofacMiddleware(container);
             app.UseAutofacWebApi(config);
             app.UseWebApi(config);
-            
+
             // Configure Application Insights Telemetry.
             TelemetryConfiguration.Active.InstrumentationKey = SystemContext.Current.Environment.InstrumentationKey;
+
+            var rootPath = HttpContext.Current.Server.MapPath("~");
+            var serverPath = Path.Combine(rootPath, "bin");
+
+            using (var scope = container.BeginLifetimeScope())
+            {
+                var repository = scope.Resolve<IRepository>();
+
+                // Do database initialization synchronously
+                repository.InitializeDatabaseIfNotExisting(serverPath).ConfigureAwait(false).GetAwaiter().GetResult();
+            }
         }
 
         private static IContainer ConfigureWebApiDependencies()
@@ -84,11 +97,6 @@ namespace PhotoSharingApp.AppService
             containerBuilder.Register(c => SystemContext.Current.Environment);
 
             IContainer container = containerBuilder.Build();
-
-            using (var scope = container.BeginLifetimeScope())
-            {
-                scope.Resolve<IRepository>().InitializeDatabaseIfNeeded();
-            }
 
             return container;
         }

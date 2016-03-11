@@ -48,7 +48,7 @@ namespace PhotoSharingApp.AppService.Tests.Controllers
         [TestMethod]
         public async Task GetLeaderboardTest()
         {
-            await _repository.ReinitializeDatabase();
+            await _repository.ReinitializeDatabase(string.Empty);
 
             const int categories = 3;
             const int photos = 3;
