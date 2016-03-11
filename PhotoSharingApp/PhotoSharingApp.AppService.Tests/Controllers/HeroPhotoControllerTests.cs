@@ -55,7 +55,7 @@ namespace PhotoSharingApp.AppService.Tests.Controllers
         [TestMethod]
         public async Task GetHeroPhotosTest()
         {
-            await _repository.ReinitializeDatabase();
+            await _repository.ReinitializeDatabase(string.Empty);
 
             // Populate our db with necessary objects
             var user = await _repository.CreateUser("Test User " + System.DateTime.UtcNow.Ticks);
