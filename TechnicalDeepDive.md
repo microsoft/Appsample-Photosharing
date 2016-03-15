@@ -63,23 +63,20 @@ The XAML page uses DesignInstance to specify the design-time data context as fol
     d:DataContext="{d:DesignInstance design:LeaderboardDesignViewModel, IsDesignTimeCreatable=True}"
 
 
-Design-time ViewModels in **PhotoSharingApp** are usually minimalistic to mimic basic UI data for the Visual Studio designer. The following implementation uses the dummy service to display example images:
+Design-time ViewModels in **PhotoSharingApp** are usually minimalistic to mimic basic UI data for the Visual Studio designer. The following implementation of [LeaderboardDesignViewModel](PhotoSharingApp/PhotoSharingApp.Universal/ViewModels/Design/LeaderboardDesignViewModel.cs#L25) uses the dummy service to display example images:
 
-    namespace Canary.Universal.ViewModels.Design
+    /// <summary>
+    /// The design-time ViewModel for Leaderboards view.
+    /// </summary>
+    class LeaderboardDesignViewModel
     {
-        /// <summary>
-        /// The design-time ViewModel for Leaderboards view.
-        /// </summary>
-        class LeaderboardDesignViewModel
+        public LeaderboardDesignViewModel()
         {
-            public LeaderboardDesignViewModel()
-            {
-                var service = new PhotoDummyService();
-                Leaderboard = service.LeaderboardData;
-            }
-
-            public Leaderboard Leaderboard { get; set; }
+            var service = new PhotoDummyService();
+            Leaderboard = service.LeaderboardData;
         }
+
+        public Leaderboard Leaderboard { get; set; }
     }
 
 Design-time data is helpful when creating the UI and its controls while previewing real data to get a feeling of

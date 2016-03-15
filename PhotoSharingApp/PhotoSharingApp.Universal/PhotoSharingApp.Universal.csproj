@@ -17,7 +17,6 @@
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ApplicationInsightsResourceId>/subscriptions/9511ce72-2392-443c-a383-5d93f4fc1bc7/resourcegroups/Default-ApplicationInsights-CentralUS/providers/microsoft.insights/components/Canary.Universal</ApplicationInsightsResourceId>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
   </PropertyGroup>
@@ -128,7 +127,6 @@
     <Content Include="Assets\Wide310x150Logo.scale-400.png" />
     <Content Include="Store\Simulation\app-listing.xml" />
     <None Include="project.json" />
-    <None Include="Service References\Application Insights\ConnectedService.json" />
     <PRIResource Include="Strings\en\Resources.resw" />
   </ItemGroup>
   <ItemGroup>
@@ -531,9 +529,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">

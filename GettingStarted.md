@@ -77,20 +77,28 @@ Once published successfully, your **PhotoSharingApp** can now be used with the A
 ## Configure Push Notifications (Optional)
 
  1. Follow Steps 8 and 9 of "Register your app for the Windows Store" on this [page](https://azure.microsoft.com/documentation/articles/notification-hubs-windows-store-dotnet-get-started/) to get the Client Secret and Package SID of your **PhotoSharingApp**.
- 2. Follow "Configure your notification hub" section on the same page. Enter the Client Secret and Package SID for Windows notifications settings which you obtained in the above step.
+ 2. Follow "Configure your notification hub" section on the same page. Enter the Client Secret and Package SID for Windows notifications settings which you obtained in the above step. **Stop** at the end of the section.
  3. Note the DefaultFullSharedAccessSignature connection string and Notification Hub name and enter them at [PhotoSharingApp\PhotoSharingApp.AppService.Shared\Context\EnvironmentDefinition.cs](PhotoSharingApp/PhotoSharingApp.AppService.Shared/Context/EnvironmentDefinition.cs#L25)
   - ```string HubName```
   - ```string HubFullSharedAccessSignature```
+ 4. Publish the updates to the service backend.
+
+**Note**: After the service is updated for push notifications, the **PhotoSharingApp** needs to be launched again and users need to sign-in to their accounts to register with the Windows Notification Service for push notifications.
 
 ## Application Insights (Optional)
 
 Both service and app have been prepared to support [Application Insights](https://azure.microsoft.com/services/application-insights/) for telemetry data.
 
-Depending on whether you want both app and service to send telemetry or one of the projects only, you will need to create one or two instances of Application Insights in Azure:
-- Go to [Azure Portal](https://portal.azure.com/#create/Microsoft.AppInsights).
-- Select *Windows Store Application* and enter a name for the Application Insights instance.
-- Go ahead and create the instance and copy the instrumentation key
+#### Azure Mobile App Service Telemetry
 
-To enable the app to send telemetry to the Application Insights instance you just created, you need to paste the API key into *InstrumentationKey* of your environment definition in [ServiceEnvironment.cs](PhotoSharingApp/PhotoSharingApp.Universal/ServiceEnvironments/ServiceEnvironment.cs#L32).
+When you created Azure Mobile App as described in *Create Azure Mobile App with Authentication* section, Azure automatically created an instance of Application Insights for the backend. It is called *yourMobileAppName-azureResourceLocation*. For example, if your Mobile App is *contoso* located in *Central US* then your Application Insights instance would be called *"contoso-Central US"*. This will be located in the [Azure Portal](https://portal.azure.com) at *Application Insights*
 
-To enable Application Insights in the service, paste your Instrumentation Key found in Azure portal of your *Application Insight instance -> Settings -> Properties* into *InstrumentationKey* in [EnvironmentDefinition.cs](PhotoSharingApp/PhotoSharingApp.AppService.Shared/Context/EnvironmentDefinition.cs#L25).
+To enable telemetry for the service, paste your Instrumentation Key found in Azure portal of your *Application Insight instance -> Settings -> Properties* into *InstrumentationKey* in [EnvironmentDefinition.cs](PhotoSharingApp/PhotoSharingApp.AppService.Shared/Context/EnvironmentDefinition.cs#L25).
+
+#### PhotoSharingApp Telemetry
+
+- [Create Application Insights Instance](https://portal.azure.com/#create/Microsoft.AppInsights).
+- Select Application Type as *Windows Store Application* and enter a name for the Application Insights instance.
+- Click *Create* 
+
+To enable the app to send telemetry to the Application Insights instance you just created, copy the instrumentation key from the Azure portal found at *Application Insight instance -> Settings -> Properties* into *InstrumentationKey* of your environment definition in [ServiceEnvironment.cs](PhotoSharingApp/PhotoSharingApp.Universal/ServiceEnvironments/ServiceEnvironment.cs#L25).
