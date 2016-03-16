@@ -96,7 +96,7 @@ namespace PhotoSharingApp.Universal.ViewModels
         private async void OnShowPrivacyPolicy()
         {
             _telemetryClient.TrackEvent(TelemetryEvents.ShowPrivacyAndTermsInvoked);
-            await Launcher.LaunchUriAsync(new Uri("http://microsoft.com/privacy"));
+            await Launcher.LaunchUriAsync(new Uri("http://Your_Privacy_Page.com"));
         }
 
         private async void OnSignOut()
