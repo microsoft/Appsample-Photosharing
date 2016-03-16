@@ -105,7 +105,7 @@ To enable the app to send telemetry to the Application Insights instance you jus
 
 ## Configure IAP (In-App Product) (Optional)
 
-**PhotoSharingApp** features the use of virtual *Gold*. The app has been setup to allow purchase of additional *Gold* through the Windows Store as an IAP. To enable this functionality...
+**PhotoSharingApp** features the use of virtual *Gold*. The app has been set up for purchasing additional *Gold* through the Windows Store as an IAP. To enable this functionality, refer the steps below.
 
  1. Go to your app on [Windows Dev Center](https://dev.windows.com/)
  2. Click on *IAPs -> Create a New IAP*
@@ -114,4 +114,4 @@ To enable the app to send telemetry to the Application Insights instance you jus
  5. Set the Pricing and Description based on your preference.
  6. Click on *Submit to Store*.
 
-For more details arounds IAP submissions refer to this [article](https://msdn.microsoft.com/en-us/windows/uwp/publish/iap-submissions).
+For more details around IAP submissions, refer to this [article](https://msdn.microsoft.com/en-us/windows/uwp/publish/iap-submissions).
