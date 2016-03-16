@@ -85,7 +85,7 @@ Once published successfully, your **PhotoSharingApp** can now be used with the A
 
 **Note**: After the service is updated for push notifications, you may need to re-launch the app in order to successfully subscribe to a push notification channel. Push notification registration is performed when a user has signed in successfully or on app launch (if a user is already signed in).
 
-## Application Insights (Optional)
+## Configure Application Insights (Optional)
 
 Both service and app have been prepared to support [Application Insights](https://azure.microsoft.com/services/application-insights/) for telemetry data.
 
@@ -102,3 +102,16 @@ To enable telemetry for the service, paste your Instrumentation Key found in Azu
 - Click *Create*
 
 To enable the app to send telemetry to the Application Insights instance you just created, copy the instrumentation key from the Azure portal found at *Application Insight instance -> Settings -> Properties* into *InstrumentationKey* of your environment definition in [ServiceEnvironment.cs](PhotoSharingApp/PhotoSharingApp.Universal/ServiceEnvironments/ServiceEnvironment.cs#L25).
+
+## Configure IAP (In-App Product) (Optional)
+
+**PhotoSharingApp** features the use of virtual *Gold*. The app has been set up for purchasing additional *Gold* through the Windows Store as an IAP. To enable this functionality, refer the steps below.
+
+ 1. Go to your app on [Windows Dev Center](https://dev.windows.com/)
+ 2. Click on *IAPs -> Create a New IAP*
+ 3. The product ID for the IAP is defined in [InAppPurchases.cs](PhotoSharingApp/PhotoSharingApp.Universal/Store/InAppPurchases.cs). Enter this value ("Gold" is the preset value) and click *Create IAP*  (**Note** - This value can't be changed or deleted once created.)
+ 4. Set the *Property -> Product Type* as a **Consumable**.
+ 5. Set the Pricing and Description based on your preference.
+ 6. Click on *Submit to Store*.
+
+For more details around IAP submissions, refer to this [article](https://msdn.microsoft.com/en-us/windows/uwp/publish/iap-submissions).
