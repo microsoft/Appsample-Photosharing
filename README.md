@@ -6,7 +6,7 @@ With this app, users can earn virtual gold by uploading and sharing photos with 
 
 The goal of this app is to provide a complete, end-to-end example of a real-world app that uses a variety of UWP features, and exhibits design and development best practices. This makes it a great source of code you can copy into your own apps. It also provides an example of what a real-world app architecture might look like. The decoupled architecture makes it easy to reuse code or to make changes and build your own photo sharing app, which you can then publish in the [Windows Store](http://dev.windows.com).
 
-![Category overview screenshot](Images/Category-Overview-Desktop.jpg "The photo sharing app")
+![Category overview screenshot](Images/Category-Overview-Desktop-Mobile.jpg "The photo sharing app")
 
 Application Screenshots:
 
