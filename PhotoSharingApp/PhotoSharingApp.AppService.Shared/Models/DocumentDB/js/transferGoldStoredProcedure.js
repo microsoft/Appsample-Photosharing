@@ -75,6 +75,7 @@ function transferGold(goldReceiverId, goldGiverId, goldValue, transactionType, p
         toUser.GoldBalance += goldValue;
         if (!systemGiven) {
             fromUser.GoldBalance -= goldValue;
+            fromUser.GoldGiven += goldValue;
         }
 
         // Update toUser's Document.

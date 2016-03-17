@@ -62,9 +62,24 @@ namespace PhotoSharingApp.Universal.ViewModels
         private ObservableCollection<Photo> _heroImages;
 
         /// <summary>
+        /// The timer for scrolling though hero images
+        /// </summary>
+        private DispatcherTimer _heroImageScrollTimer;
+
+        /// <summary>
         /// True, if ViewModel is busy
         /// </summary>
         private bool _isBusy;
+
+        /// <summary>
+        /// The visibility status of the empty data message.
+        /// </summary>
+        private bool _isEmptyDataMessageVisible;
+
+        /// <summary>
+        /// The visibility status of the status container.
+        /// </summary>
+        private bool _isStatusContainerVisible;
 
         /// <summary>
         /// True, if user is signed in. Otherwise, false.
@@ -90,11 +105,6 @@ namespace PhotoSharingApp.Universal.ViewModels
         /// The telemetry client.
         /// </summary>
         private readonly TelemetryClient _telemetryClient;
-
-        /// <summary>
-        /// The timer for scrolling though hero images
-        /// </summary>
-        private DispatcherTimer _heroImageScrollTimer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CategoriesViewModel" /> class.
@@ -185,6 +195,39 @@ namespace PhotoSharingApp.Universal.ViewModels
         }
 
         /// <summary>
+        /// Gets or sets the visibility of the status message that no
+        /// data is available.
+        /// </summary>
+        public bool IsEmptyDataMessageVisible
+        {
+            get { return _isEmptyDataMessageVisible; }
+            set
+            {
+                if (value != _isEmptyDataMessageVisible)
+                {
+                    _isEmptyDataMessageVisible = value;
+                    NotifyPropertyChanged(nameof(IsEmptyDataMessageVisible));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the visibility of the status container.
+        /// </summary>
+        public bool IsStatusContainerVisible
+        {
+            get { return _isStatusContainerVisible; }
+            set
+            {
+                if (value != _isStatusContainerVisible)
+                {
+                    _isStatusContainerVisible = value;
+                    NotifyPropertyChanged(nameof(IsStatusContainerVisible));
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets or sets a value indication whether the user is signed in.
         /// </summary>
         public bool IsUserSignedIn
@@ -245,29 +288,8 @@ namespace PhotoSharingApp.Universal.ViewModels
         /// <value>
         /// The top categories.
         /// </value>
-        public ObservableCollection<CategoryPreview> TopCategories { get; set; } = new ObservableCollection<CategoryPreview>();
-
-        /// <summary>
-        /// Starts the hero image slide show.
-        /// </summary>
-        public void StartHeroImageSlideShow()
-        {
-            // Only start slideshow if we were able to get
-            // any hero images
-            if (HeroImages != null && HeroImages.Any())
-            {
-                _heroImageScrollTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(7) };
-                StartHeroImageSlideshowTimer();
-            }
-        }
-
-        /// <summary>
-        /// Stops hero image slide show.
-        /// </summary>
-        public void StopHeroImageSlideShow()
-        {
-            _heroImageScrollTimer?.Stop();
-        }
+        public ObservableCollection<CategoryPreview> TopCategories { get; set; } =
+            new ObservableCollection<CategoryPreview>();
 
         /// <summary>
         /// Loads the state.
@@ -275,6 +297,9 @@ namespace PhotoSharingApp.Universal.ViewModels
         public override async Task LoadState()
         {
             await base.LoadState();
+
+            IsBusy = true;
+            IsStatusContainerVisible = true;
 
             try
             {
@@ -289,6 +314,9 @@ namespace PhotoSharingApp.Universal.ViewModels
                 var categories =
                     await _photoService.GetTopCategories(AppEnvironment.Instance.CategoryThumbnailsCount);
 
+                IsEmptyDataMessageVisible = !categories.Any();
+                IsStatusContainerVisible = !categories.Any();
+
                 foreach (var c in categories)
                 {
                     TopCategories.Add(c);
@@ -301,6 +329,10 @@ namespace PhotoSharingApp.Universal.ViewModels
             catch (ServiceException)
             {
                 await _dialogService.ShowGenericServiceErrorNotification();
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 
@@ -327,7 +359,7 @@ namespace PhotoSharingApp.Universal.ViewModels
             }
             catch (SignInRequiredException)
             {
-                // Swallow exception.  User canceled the Sign-in dialog.
+                // Swallow exception. User canceled the Sign-in dialog.
             }
             catch (ServiceException)
             {
@@ -352,6 +384,20 @@ namespace PhotoSharingApp.Universal.ViewModels
         }
 
         /// <summary>
+        /// Starts the hero image slide show.
+        /// </summary>
+        public void StartHeroImageSlideShow()
+        {
+            // Only start slideshow if we were able to get
+            // any hero images
+            if (HeroImages != null && HeroImages.Any())
+            {
+                _heroImageScrollTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(7) };
+                StartHeroImageSlideshowTimer();
+            }
+        }
+
+        /// <summary>
         /// Starts a timer which cycles through hero images.
         /// </summary>
         private void StartHeroImageSlideshowTimer()
@@ -365,6 +411,14 @@ namespace PhotoSharingApp.Universal.ViewModels
 
                 SelectedHeroImage = HeroImages[selectedIndex];
             };
+        }
+
+        /// <summary>
+        /// Stops hero image slide show.
+        /// </summary>
+        public void StopHeroImageSlideShow()
+        {
+            _heroImageScrollTimer?.Stop();
         }
     }
 }
