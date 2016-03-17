@@ -27,8 +27,9 @@
 //   @param currentDocumentVersion - The current document version number that the service is using
 function getRecentPhotosForCategories(numberOfPhotos, currentDocumentVersion) {
 
-    // Instantiate the response with an empty array.
-    __.response.setBody([]);
+    let catCount = 0;
+    let catIndex = 0;
+    let existingPhotos = [];
 
     getAllCategories(function (allCategories) {
 
@@ -43,7 +44,7 @@ function getRecentPhotosForCategories(numberOfPhotos, currentDocumentVersion) {
     function getAllCategories(callback) {
 
         // Perform Query using JavaScript Language Integrated Query.
-        __.filter(function(doc) {
+        var result =__.filter(function(doc) {
             return doc.DocumentType == "CATEGORY" && doc.DocumentVersion == currentDocumentVersion;
         }, function(err, documents) {
             if (err) {
@@ -54,26 +55,41 @@ function getRecentPhotosForCategories(numberOfPhotos, currentDocumentVersion) {
                 return;
             }
 
+            catCount = documents.length;
             callback(documents);
         });
+
+        if (!result.isAccepted) {
+            throw new Error("Sproc is too close to violating resource limit, aborting.");
+    }
     }
 
     function getRecentPhotosForCategory(categoryId) {
 
         // Perform Query using chained JavaScript Language Integrated Query.
-        __.chain()
+        var result = __.chain()
         .filter(function(doc) {
-                return doc.DocumentType == "PHOTO" && doc.CategoryId == categoryId && doc.DocumentVersion == currentDocumentVersion;
+                return doc.DocumentType == "PHOTO" && doc.CategoryId == categoryId && doc.DocumentVersion == currentDocumentVersion && doc.Status == 1;
             })
         .sortByDescending(function (photoDoc) { return photoDoc.CreatedDateTime.Epoch })
-        .value({ pageSize: numberOfPhotos }, function (err, results) {
+        .value({ pageSize: numberOfPhotos }, function (err, documents) {
             if (err) {
                 throw new Error("Unable to query for photos in category " + categoryId + ", aborting.");
             }
 
-            // Add the photos found for this category to the response.
-            var existingPhotos = __.response.getBody();
-            __.response.setBody(existingPhotos.concat(results));
+            // Append the documents to our total collection
+            existingPhotos = existingPhotos.concat(documents);
+            ++catIndex;
+
+            // Once we have iterated over every category, we can return
+            // them all to the response.
+            if (catIndex >= catCount) {
+                __.response.setBody(existingPhotos);
+            }
         });
+
+        if (!result.isAccepted) {
+            throw new Error("Sproc is too close to violating resource limit, aborting.");
+        }
     }
 }

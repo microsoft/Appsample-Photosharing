@@ -246,6 +246,18 @@
                                              IsEnabled="{Binding SelectedHeroImage.CanGiveGold}"
                                              CommandParameter="{Binding SelectedHeroImage}" />
                     </Viewbox>
+
+                    <Grid Background="{StaticResource AppAccentBackgroundColorBrush}"
+                          Padding="38" Grid.ColumnSpan="2"
+                          Visibility="{Binding IsStatusContainerVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                            <ProgressBar IsIndeterminate="True"
+                                         Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            <TextBlock Text="No data available. Upload some photos!" FontSize="32" 
+                                       Visibility="{Binding IsEmptyDataMessageVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                       FontWeight="Light" TextWrapping="WrapWholeWords" />
+                        </StackPanel>
+                    </Grid>
                 </Grid>
 
                 <GridView x:Name="heroImagesStateIndicator" ItemsSource="{Binding HeroImages}"

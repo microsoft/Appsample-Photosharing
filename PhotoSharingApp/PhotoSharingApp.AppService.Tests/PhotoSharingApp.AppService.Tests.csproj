@@ -106,6 +106,7 @@
   <ItemGroup>
     <Compile Include="BaseTest.cs" />
     <Compile Include="Context\TestEnvironmentDefinition.cs" />
+    <Compile Include="Caching\MemoryCacheServiceTests.cs" />
     <Compile Include="Controllers\AnnotationControllerTests.cs" />
     <Compile Include="Controllers\CategoryControllerTests.cs" />
     <Compile Include="Controllers\ConfigControllerTests.cs" />
@@ -116,6 +117,10 @@
     <Compile Include="Controllers\SasUrlControllerTests.cs" />
     <Compile Include="Controllers\UserControllerTests.cs" />
     <Compile Include="Controllers\UserPhotoControllerTests.cs" />
+    <Compile Include="DAL\CachedRepositoryLoadTests.cs" />
+    <Compile Include="DAL\CachedRepositoryTests.cs" />
+    <Compile Include="DAL\DocumentDbLoadTests.cs" />
+    <Compile Include="DAL\RepositoryMock.cs" />
     <Compile Include="DAL\DocumentDbRepositoryTests.cs" />
     <Compile Include="E2E\UploadE2ETests.cs" />
     <Compile Include="Helpers\UserRegistrationReferenceProviderMock.cs" />

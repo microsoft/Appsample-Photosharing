@@ -35,6 +35,7 @@ using Microsoft.Azure.Mobile.Server.Config;
 using Owin;
 using PhotoSharingApp.AppService.Helpers;
 using PhotoSharingApp.AppService.Notifications;
+using PhotoSharingApp.AppService.Shared.Caching;
 using PhotoSharingApp.AppService.Shared.Context;
 using PhotoSharingApp.AppService.Shared.Repositories;
 using PhotoSharingApp.AppService.Shared.Validation;
@@ -89,7 +90,11 @@ namespace PhotoSharingApp.AppService
 
             containerBuilder.RegisterApiControllers(Assembly.GetExecutingAssembly());
             containerBuilder.RegisterType<TelemetryClient>().As<TelemetryClient>();
-            containerBuilder.RegisterType<DocumentDbRepository>().As<IRepository>();
+            containerBuilder.RegisterType<MemoryCacheService>().As<ICacheService>();
+            containerBuilder.RegisterType<CachedRepository>()
+                .As<IRepository>()
+                .WithParameter(new TypedParameter(typeof(IRepository),
+                    new DocumentDbRepository(SystemContext.Current.Environment)));
             containerBuilder.RegisterType<IapValidator>().As<IIapValidator>();
             containerBuilder.RegisterType<PhotoValidation>().As<IPhotoValidation>();
             containerBuilder.RegisterType<NotificationHandler>().As<INotificationHandler>();
