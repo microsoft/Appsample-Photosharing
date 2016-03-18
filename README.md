@@ -8,6 +8,8 @@ The goal of this app is to provide a complete, end-to-end example of a real-worl
 
 ![Category overview screenshot](Images/Category-Overview-Desktop-Mobile.jpg "The photo sharing app")
 
+**See our post on the Windows Apps Team blog: <a href="https://blogs.windows.com/buildingapps/2016/03/17/uwp-azure-app-services-and-documentdb-soup-a-photo-sharing-app/">SnapGold</a>**
+
 Application Screenshots:
 
 - Categories Page [Desktop](Images/Category-Overview-Desktop.jpg) [Mobile](Images/Category-Overview-Mobile.jpg)
@@ -21,7 +23,7 @@ The app allows users to:
 - Browse photo categories and navigate into photo collections and photo details.
 - Take and upload photos directly in the app or upload an existing photo.
 - Give gold and add comments to photos uploaded by other users.
-- Receive push notifications when they they are given gold for uploaded photos.
+- Receive push notifications when users are given gold for uploaded photos.
 - Explore a leaderboard of users with the most gold, users that have given the most gold to other photos, and the photos that have received the most gold.
 - Sign in with a Microsoft, Facebook, Google, or Twitter account.
 - Report content as abusive, inappropriate, or spam.
