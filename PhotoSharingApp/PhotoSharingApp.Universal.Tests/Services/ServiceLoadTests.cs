@@ -25,7 +25,6 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.ApplicationInsights;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.Services;
@@ -45,9 +44,7 @@ namespace PhotoSharingApp.Universal.Tests.Services
         [TestInitialize]
         public void Init()
         {
-            var telemetryClient = new TelemetryClient();
-            _serviceClient = new ServiceClient(telemetryClient,
-                new AuthenticationHandler(telemetryClient));
+            _serviceClient = new ServiceClient(new AuthenticationHandler());
             _configuration = new DefaultConfig();
         }
 

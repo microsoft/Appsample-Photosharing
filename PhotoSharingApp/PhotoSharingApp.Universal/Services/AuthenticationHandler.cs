@@ -28,7 +28,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.ApplicationInsights;
 using Microsoft.WindowsAzure.MobileServices;
 using PhotoSharingApp.Portable.DataContracts;
 using PhotoSharingApp.Universal.ContractModelConverterExtensions;
@@ -44,17 +43,10 @@ namespace PhotoSharingApp.Universal.Services
     public class AuthenticationHandler : IAuthenticationHandler
     {
         /// <summary>
-        /// The telemetry client.
-        /// </summary>
-        private readonly TelemetryClient _telemetryClient;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="AuthenticationHandler" /> class.
         /// </summary>
-        public AuthenticationHandler(TelemetryClient telemetryClient)
+        public AuthenticationHandler()
         {
-            _telemetryClient = telemetryClient;
-
             AuthenticationProviders = new List<MobileServiceAuthenticationProvider>
             {
                 MobileServiceAuthenticationProvider.Facebook,
@@ -94,8 +86,6 @@ namespace PhotoSharingApp.Universal.Services
             }
             catch (InvalidOperationException invalidOperationException)
             {
-                _telemetryClient.TrackException(invalidOperationException);
-
                 if (invalidOperationException.Message
                     .Contains("Authentication was cancelled by the user."))
                 {
@@ -107,7 +97,6 @@ namespace PhotoSharingApp.Universal.Services
             }
             catch (Exception e)
             {
-                _telemetryClient.TrackException(e);
                 throw new AuthenticationException("Authentication failed", e);
             }
         }

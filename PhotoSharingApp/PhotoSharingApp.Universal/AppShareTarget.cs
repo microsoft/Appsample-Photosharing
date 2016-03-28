@@ -24,13 +24,11 @@
 
 using System;
 using System.Linq;
-using Microsoft.ApplicationInsights;
 using Microsoft.Practices.ServiceLocation;
 using Microsoft.Practices.Unity;
 using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.Lifecycle;
 using PhotoSharingApp.Universal.Models;
-using PhotoSharingApp.Universal.Telemetry;
 using PhotoSharingApp.Universal.Unity;
 using PhotoSharingApp.Universal.ViewModels;
 using Windows.ApplicationModel.Activation;
@@ -73,9 +71,6 @@ namespace PhotoSharingApp.Universal
         /// <param name="args">Event data for the event.</param>
         protected override async void OnShareTargetActivated(ShareTargetActivatedEventArgs args)
         {
-            var telemetryClient = new TelemetryClient();
-            telemetryClient.TrackEvent(TelemetryEvents.AppOnShareTargetActivated);
-
             IAppEnvironment mainAppEnvironment = null;
             IUploadFinishedHandler mainUploadFinishedHandler = null;
 
@@ -146,10 +141,8 @@ namespace PhotoSharingApp.Universal
                         Window.Current.Activate();
                     }
                 }
-                catch (Exception exception)
+                catch (Exception)
                 {
-                    telemetryClient.TrackException(exception);
-
                     args.ShareOperation.ReportCompleted();
                 }
             }

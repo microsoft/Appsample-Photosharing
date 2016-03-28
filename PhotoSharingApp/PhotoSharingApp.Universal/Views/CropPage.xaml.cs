@@ -22,7 +22,6 @@
 //  THE SOFTWARE.
 //  ---------------------------------------------------------------------------------
 
-using Microsoft.ApplicationInsights;
 using Microsoft.Practices.ServiceLocation;
 using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.ViewModels;
@@ -46,7 +45,6 @@ namespace PhotoSharingApp.Universal.Views
             _viewModel = new CropViewModel(
                 ServiceLocator.Current.GetInstance<INavigationFacade>(),
                 cropControl,
-                ServiceLocator.Current.GetInstance<TelemetryClient>(),
                 ServiceLocator.Current.GetInstance<IDialogService>());
 
             DataContext = _viewModel;

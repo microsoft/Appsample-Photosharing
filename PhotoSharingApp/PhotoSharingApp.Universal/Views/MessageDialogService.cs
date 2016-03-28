@@ -24,8 +24,6 @@
 
 using System;
 using System.Threading.Tasks;
-using PhotoSharingApp.Universal.Models;
-using PhotoSharingApp.Universal.Telemetry;
 using Windows.ApplicationModel.Resources;
 using Windows.UI.Core;
 using Windows.UI.Popups;
@@ -108,7 +106,6 @@ namespace PhotoSharingApp.Universal.Views
         /// <returns>True, if user has chosen yes. Otherwise, false.</returns>
         public async Task<bool> ShowYesNoNotification(string message, string title, bool useResourceLoader = true)
         {
-            AppEnvironment.Instance.TelemetryClient.TrackEvent(TelemetryEvents.ShowYesNoDialog);
             var resourceLoader = ResourceLoader.GetForCurrentView();
 
             // Load from resource loader if necessary
@@ -127,18 +124,7 @@ namespace PhotoSharingApp.Universal.Views
 
             var result = await dialog.ShowAsync();
 
-            var yesSelected = result == yesCommand;
-
-            if (yesSelected)
-            {
-                AppEnvironment.Instance.TelemetryClient.TrackEvent(TelemetryEvents.YesSelected);
-            }
-            else
-            {
-                AppEnvironment.Instance.TelemetryClient.TrackEvent(TelemetryEvents.NoSelected);
-            }
-
-            return yesSelected;
+            return result == yesCommand;
         }
     }
 }

@@ -25,13 +25,9 @@
 using System;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using Microsoft.ApplicationInsights;
 using Microsoft.Practices.ServiceLocation;
 using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.Lifecycle;
-using PhotoSharingApp.Universal.Models;
-using PhotoSharingApp.Universal.ServiceEnvironments;
-using PhotoSharingApp.Universal.Telemetry;
 using PhotoSharingApp.Universal.Unity;
 using PhotoSharingApp.Universal.Views;
 using Windows.ApplicationModel;
@@ -57,11 +53,6 @@ namespace PhotoSharingApp.Universal
         /// </summary>
         public App()
         {
-            WindowsAppInitializer.InitializeAsync(ServiceEnvironmentBase.Current.InstrumentationKey,
-                WindowsCollectors.Metadata
-                | WindowsCollectors.Session
-                | WindowsCollectors.UnhandledException);
-
             InitializeComponent();
 
             // Register for events
@@ -124,7 +115,7 @@ namespace PhotoSharingApp.Universal
                 await AppInitialization.DoInitializations();
 
                 // Create a AppShell to act as the navigation context and navigate to the first page
-                shell = new AppShell(AppEnvironment.Instance.TelemetryClient);
+                shell = new AppShell();
 
                 // Set the default language
                 shell.Language = ApplicationLanguages.Languages[0];
@@ -142,9 +133,6 @@ namespace PhotoSharingApp.Universal
         protected override async void OnActivated(IActivatedEventArgs args)
         {
             base.OnActivated(args);
-
-            var telemetryClient = new TelemetryClient();
-            telemetryClient.TrackEvent(TelemetryEvents.AppOnNotificationActivated);
 
             var shell = Window.Current.Content as AppShell;
 
@@ -167,11 +155,6 @@ namespace PhotoSharingApp.Universal
         /// <param name="e">Details about the launch request and process.</param>
         protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
-            // We have not configured our dependency container yet for the very first launch event, 
-            // so we create this instance manually.
-            var telemetryClient = new TelemetryClient();
-            telemetryClient.TrackEvent(TelemetryEvents.AppOnLaunch);
-
             var shell = await Initialize();
 
             // Place our app shell in the current Window
@@ -232,9 +215,6 @@ namespace PhotoSharingApp.Universal
         private async void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             e.Handled = true;
-
-            var telemetryClient = new TelemetryClient();
-            telemetryClient.TrackException(e.Exception);
 
             var resourceLoader = ResourceLoader.GetForCurrentView();
             var dialog = new MessageDialog(resourceLoader.GetString("UnexpectedError_Message"),

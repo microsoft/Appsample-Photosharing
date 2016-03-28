@@ -22,10 +22,8 @@
 //  THE SOFTWARE.
 //  ---------------------------------------------------------------------------------
 
-using System.Collections.Generic;
 using Microsoft.Practices.ServiceLocation;
 using PhotoSharingApp.Universal.Models;
-using PhotoSharingApp.Universal.Telemetry;
 using PhotoSharingApp.Universal.ViewModels;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -40,7 +38,6 @@ namespace PhotoSharingApp.Universal.Views
         public CategoriesChooserDialog()
         {
             InitializeComponent();
-            AppEnvironment.Instance.TelemetryClient.TrackEvent(TelemetryEvents.ShowCategoryChooserDialog);
             ViewModel = ServiceLocator.Current.GetInstance<CategoriesChooserViewModel>();
             DataContext = ViewModel;
 
@@ -52,7 +49,6 @@ namespace PhotoSharingApp.Universal.Views
 
         private void CancelButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            AppEnvironment.Instance.TelemetryClient.TrackEvent(TelemetryEvents.CategoryChooseDialogCanceled);
             ViewModel.SelectedCategory = null;
         }
 
@@ -69,15 +65,6 @@ namespace PhotoSharingApp.Universal.Views
                 // and takes away too much space by default.
                 searchTextBox.Focus(FocusState.Keyboard);
             }
-        }
-
-        private void OkButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
-            AppEnvironment.Instance.TelemetryClient.TrackEvent(TelemetryEvents.CategoryChooseOk,
-                new Dictionary<string, string>
-                {
-                    { TelemetryProperties.CategoryName, ViewModel.SelectedCategory.Name }
-                });
         }
     }
 }

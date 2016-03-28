@@ -26,14 +26,12 @@ using System;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.ApplicationInsights;
 using PhotoSharingApp.Portable.DataContracts;
 using PhotoSharingApp.Universal.Commands;
 using PhotoSharingApp.Universal.ComponentModel;
 using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.Services;
-using PhotoSharingApp.Universal.Telemetry;
 using PhotoSharingApp.Universal.Views;
 using Windows.UI.Xaml;
 
@@ -52,21 +50,18 @@ namespace PhotoSharingApp.Universal.ViewModels
         private readonly INavigationFacade _navigationFacade;
         private int _photosCount;
         private readonly IPhotoService _photoService;
-        private readonly TelemetryClient _telemetryClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProfileViewModel" /> class.
         /// </summary>
         /// <param name="navigationFacade">The navigation facade.</param>
         /// <param name="photoService">The photo service.</param>
-        /// <param name="telemetryClient">The telemetry client</param>
         /// <param name="dialogService">The dialog service.</param>
         public ProfileViewModel(INavigationFacade navigationFacade, IPhotoService photoService,
-            TelemetryClient telemetryClient, IDialogService dialogService)
+            IDialogService dialogService)
         {
             _navigationFacade = navigationFacade;
             _photoService = photoService;
-            _telemetryClient = telemetryClient;
             _dialogService = dialogService;
 
             Photos = new IncrementalLoadingCollection<Photo>(s =>
@@ -220,7 +215,6 @@ namespace PhotoSharingApp.Universal.ViewModels
 
             try
             {
-                _telemetryClient.TrackEvent(TelemetryEvents.DeletePhotoCommandInvoked);
                 IsBusy = true;
                 await _photoService.DeletePhoto(photo);
                 await OnRefresh();
@@ -241,7 +235,6 @@ namespace PhotoSharingApp.Universal.ViewModels
         /// <param name="photo">the photo.</param>
         private void OnPhotoSelected(Photo photo)
         {
-            _telemetryClient.TrackEvent(TelemetryEvents.PhotoStreamItemSelected);
             _navigationFacade.NavigateToPhotoDetailsView(photo);
         }
 
@@ -260,7 +253,6 @@ namespace PhotoSharingApp.Universal.ViewModels
         {
             try
             {
-                _telemetryClient.TrackEvent(TelemetryEvents.SetProfilePhotoInvoked);
                 IsBusy = true;
                 await _photoService.UpdateUserProfilePhoto(photo);
 

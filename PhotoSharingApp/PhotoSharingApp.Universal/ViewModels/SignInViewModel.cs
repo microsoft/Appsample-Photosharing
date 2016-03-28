@@ -24,12 +24,10 @@
 
 using System;
 using System.Collections.Generic;
-using Microsoft.ApplicationInsights;
 using Microsoft.WindowsAzure.MobileServices;
 using PhotoSharingApp.Universal.Commands;
 using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.Services;
-using PhotoSharingApp.Universal.Telemetry;
 using PhotoSharingApp.Universal.Views;
 using Windows.ApplicationModel.Resources;
 
@@ -43,21 +41,18 @@ namespace PhotoSharingApp.Universal.ViewModels
         private readonly IDialogService _dialogService;
         private readonly INavigationFacade _navigationFacade;
         private readonly IPhotoService _photoService;
-        private readonly TelemetryClient _telemetryClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SignInViewModel" /> class.
         /// </summary>
         /// <param name="navigationFacade">The navigation facade.</param>
         /// <param name="photoService">The photo service.</param>
-        /// <param name="telemetryClient">The telemetry client.</param>
         /// <param name="dialogService">The dialog service.</param>
         public SignInViewModel(INavigationFacade navigationFacade, IPhotoService photoService,
-            TelemetryClient telemetryClient, IDialogService dialogService)
+            IDialogService dialogService)
         {
             _navigationFacade = navigationFacade;
             _photoService = photoService;
-            _telemetryClient = telemetryClient;
             _dialogService = dialogService;
 
             // Initialize commands
@@ -103,17 +98,7 @@ namespace PhotoSharingApp.Universal.ViewModels
         {
             try
             {
-                _telemetryClient.TrackEvent(TelemetryEvents.SignInInitiated, new Dictionary<string, string>
-                {
-                    { TelemetryProperties.AuthenticationProvider, authenticationProviderProvider.ToString() }
-                });
-
                 await _photoService.SignInAsync(authenticationProviderProvider);
-
-                _telemetryClient.TrackEvent(TelemetryEvents.SignInSuccess, new Dictionary<string, string>
-                {
-                    { TelemetryProperties.AuthenticationProvider, authenticationProviderProvider.ToString() }
-                });
 
                 if (RedirectToProfilePage)
                 {
@@ -123,18 +108,14 @@ namespace PhotoSharingApp.Universal.ViewModels
             }
             catch (AuthenticationException)
             {
-                _telemetryClient.TrackEvent(TelemetryEvents.SignInFail);
                 await _dialogService.ShowNotification("AuthenticationFailed_Message", "AuthenticationFailed_Title");
             }
             catch (AuthenticationCanceledException)
             {
-                _telemetryClient.TrackEvent(TelemetryEvents.SignInCanceled);
-
                 // User canceled, do nothing in this case.
             }
             catch (Exception)
             {
-                _telemetryClient.TrackEvent(TelemetryEvents.SignInFail);
                 await _dialogService.ShowNotification("GenericError_Title", "GenericError_Message");
             }
         }

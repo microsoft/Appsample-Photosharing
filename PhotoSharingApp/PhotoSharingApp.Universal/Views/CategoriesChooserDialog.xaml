@@ -33,7 +33,6 @@
     mc:Ignorable="d"
     Title="Choose Category"
     PrimaryButtonText="ok"
-    PrimaryButtonClick="OkButtonClick"
     SecondaryButtonText="cancel"
     SecondaryButtonClick="CancelButtonClick"
     d:DataContext="{d:DesignInstance design:CategoriesChooserDesignViewModel, IsDesignTimeCreatable=True}"

@@ -23,16 +23,13 @@
 //  ---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.ApplicationInsights;
 using PhotoSharingApp.Universal.Commands;
 using PhotoSharingApp.Universal.Extensions;
 using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.Services;
-using PhotoSharingApp.Universal.Telemetry;
 using PhotoSharingApp.Universal.Views;
 using Windows.Storage;
 using Windows.UI.Xaml.Media;
@@ -88,11 +85,6 @@ namespace PhotoSharingApp.Universal.ViewModels
         private readonly IPhotoService _photoService;
 
         /// <summary>
-        /// The telemetry client.
-        /// </summary>
-        private readonly TelemetryClient _telemetryClient;
-
-        /// <summary>
         /// The event handler for handling a successful upload.
         /// </summary>
         private readonly IUploadFinishedHandler _uploadFinishedHandler;
@@ -108,17 +100,15 @@ namespace PhotoSharingApp.Universal.ViewModels
         /// <param name="navigationFacade">The navigation facade.</param>
         /// <param name="photoService">The photo service.</param>
         /// <param name="authEnforcementHandler">Authentication enforcement handler.</param>
-        /// <param name="telemetryClient">The telemetry client.</param>
         /// <param name="uploadFinishedHandler">The handler that is called when the upload finished.</param>
         /// <param name="dialogService">The dialog service.</param>
         public UploadViewModel(INavigationFacade navigationFacade, IPhotoService photoService,
-            IAuthEnforcementHandler authEnforcementHandler, TelemetryClient telemetryClient,
-            IUploadFinishedHandler uploadFinishedHandler, IDialogService dialogService)
+            IAuthEnforcementHandler authEnforcementHandler, IUploadFinishedHandler uploadFinishedHandler,
+            IDialogService dialogService)
         {
             _navigationFacade = navigationFacade;
             _photoService = photoService;
             _authEnforcementHandler = authEnforcementHandler;
-            _telemetryClient = telemetryClient;
             _uploadFinishedHandler = uploadFinishedHandler;
             _dialogService = dialogService;
 
@@ -316,7 +306,6 @@ namespace PhotoSharingApp.Universal.ViewModels
 
         private async void OnChooseCategory()
         {
-            _telemetryClient.TrackEvent(TelemetryEvents.EditCategoryInvoked);
             var selectedCategory = await _navigationFacade.ShowCategoryChooserDialog();
 
             if (selectedCategory != null)
@@ -341,8 +330,6 @@ namespace PhotoSharingApp.Universal.ViewModels
         {
             try
             {
-                _telemetryClient.TrackEvent(TelemetryEvents.UpdatePhotoInitiated);
-
                 // The user needs to be signed-in
                 await _authEnforcementHandler.CheckUserAuthentication();
 
@@ -368,8 +355,6 @@ namespace PhotoSharingApp.Universal.ViewModels
                 await _photoService.UpdatePhoto(Photo);
 
                 _navigationFacade.NavigateToPhotoDetailsView(Category.ToCategoryPreview(), Photo);
-
-                _telemetryClient.TrackEvent(TelemetryEvents.UpdatePhotoSuccess);
             }
             catch (CategoryRequiredException)
             {
@@ -396,9 +381,6 @@ namespace PhotoSharingApp.Universal.ViewModels
         {
             try
             {
-                var startTime = DateTime.Now;
-                _telemetryClient.TrackEvent(TelemetryEvents.UploadPhotoInitiated);
-
                 // The user needs to be signed-in
                 await _authEnforcementHandler.CheckUserAuthentication();
 
@@ -431,13 +413,6 @@ namespace PhotoSharingApp.Universal.ViewModels
 
                 // Refresh gold balance
                 AppEnvironment.Instance.CurrentUser = uploadedPhoto.User;
-
-                // Telemetry that upload finished successfully
-                var timeTaken = DateTime.Now - startTime;
-                _telemetryClient.TrackEvent(TelemetryEvents.UploadPhotoSuccess, null, new Dictionary<string, double>
-                {
-                    { TelemetryProperties.TotalTimeToUploadPhoto, timeTaken.TotalMilliseconds }
-                });
 
                 await _uploadFinishedHandler.OnUploadFinished(Category);
             }

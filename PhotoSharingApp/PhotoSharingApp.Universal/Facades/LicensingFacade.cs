@@ -22,14 +22,10 @@
 //  ---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.ApplicationInsights;
-using PhotoSharingApp.Universal.Extensions;
 using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.Services;
 using PhotoSharingApp.Universal.Store;
-using PhotoSharingApp.Universal.Telemetry;
 using Windows.ApplicationModel.Store;
 
 namespace PhotoSharingApp.Universal.Facades
@@ -49,15 +45,9 @@ namespace PhotoSharingApp.Universal.Facades
         /// </summary>
         private readonly IPhotoService _photoService;
 
-        /// <summary>
-        /// The telemetry client.
-        /// </summary>
-        private readonly TelemetryClient _telemetryClient;
-
-        public LicensingFacade(TelemetryClient telemetryClient, IPhotoService photoService,
+        public LicensingFacade(IPhotoService photoService,
             IAuthEnforcementHandler authEnforcementHandler)
         {
-            _telemetryClient = telemetryClient;
             _photoService = photoService;
             _authEnforcementHandler = authEnforcementHandler;
         }
@@ -73,8 +63,6 @@ namespace PhotoSharingApp.Universal.Facades
         /// </remarks>
         private async Task DoFulfillment()
         {
-            _telemetryClient.TrackEvent(TelemetryEvents.DoFullfillment);
-
             var productLicenses = CurrentAppProxy.LicenseInformation.ProductLicenses;
 
             // Do fulfillment of all avalaible IAPs.
@@ -95,17 +83,8 @@ namespace PhotoSharingApp.Universal.Facades
         {
             await _authEnforcementHandler.CheckUserAuthentication();
 
-            _telemetryClient.TrackEvent(TelemetryEvents.PurchaseGoldInitiated,
-                TelemetryProperties.ProductId, productId);
-
             // Kick off the purchase
             var purchaseResults = await CurrentAppProxy.RequestProductPurchaseAsync(productId);
-            _telemetryClient.TrackEvent(TelemetryEvents.PurchaseGoldPurchaseResultsAvailable,
-                new Dictionary<string, string>
-                {
-                    { TelemetryProperties.ProductId, productId },
-                    { TelemetryProperties.PurchaseStatus, purchaseResults.Status.ToString() }
-                });
 
             if (purchaseResults.Status == ProductPurchaseStatus.Succeeded
                 || purchaseResults.Status == ProductPurchaseStatus.NotFulfilled)
@@ -138,16 +117,6 @@ namespace PhotoSharingApp.Universal.Facades
 
                 // Now update local gold balance
                 AppEnvironment.Instance.CurrentUser.GoldBalance = user.GoldBalance;
-
-                _telemetryClient.TrackEvent(TelemetryEvents.PurchaseGoldSuccess);
-            }
-            else
-            {
-                _telemetryClient.TrackEvent(TelemetryEvents.PurchaseGoldFail,
-                    new Dictionary<string, string>
-                    {
-                        { TelemetryProperties.ProductId, productLicense.ProductId }
-                    });
             }
         }
     }

@@ -25,12 +25,10 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.ApplicationInsights;
 using PhotoSharingApp.Universal.Commands;
 using PhotoSharingApp.Universal.Editing;
 using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.Models;
-using PhotoSharingApp.Universal.Telemetry;
 using PhotoSharingApp.Universal.Views;
 using Windows.Graphics.Imaging;
 using Windows.Storage;
@@ -60,21 +58,17 @@ namespace PhotoSharingApp.Universal.ViewModels
 
         private StorageFile _sourceFile;
 
-        private readonly TelemetryClient _telemetryClient;
-
         /// <summary>
         /// The constructor
         /// </summary>
         /// <param name="navigationFacade">The navigation facade.</param>
         /// <param name="cropControl">The crop control.</param>
-        /// <param name="telemetryClient">The telemetry client.</param>
         /// <param name="dialogService">The dialog service.</param>
         public CropViewModel(INavigationFacade navigationFacade, ICropControl cropControl,
-            TelemetryClient telemetryClient, IDialogService dialogService)
+            IDialogService dialogService)
         {
             _navigationFacade = navigationFacade;
             _cropControl = cropControl;
-            _telemetryClient = telemetryClient;
             _dialogService = dialogService;
 
             Rotation = _rotationOrder.FirstOrDefault();
@@ -155,9 +149,8 @@ namespace PhotoSharingApp.Universal.ViewModels
                     await _cropControl.LoadImage(fileStream);
                 }
             }
-            catch (Exception exception)
+            catch (Exception)
             {
-                _telemetryClient.TrackException(exception);
                 await _dialogService.ShowNotification("InvalidImage_Message", "InvalidImage_Title");
                 _navigationFacade.GoBack();
             }
@@ -179,20 +172,17 @@ namespace PhotoSharingApp.Universal.ViewModels
         {
             try
             {
-                _telemetryClient.TrackEvent(TelemetryEvents.NextCommandInvoked);
                 var croppedImage = await _cropControl.GetCroppedImage();
                 _navigationFacade.NavigateToUploadView(croppedImage, Category);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                _telemetryClient.TrackException(e);
                 await _dialogService.ShowNotification("CroppingError_Message", "GenericError_Title");
             }
         }
 
         private async void OnRotateClockwise()
         {
-            _telemetryClient.TrackEvent(TelemetryEvents.RotateClockwiseCommandInvoked);
             var currentIndex = Array.IndexOf(_rotationOrder, Rotation);
             var index = (currentIndex + 1)%_rotationOrder.Length;
             Rotation = _rotationOrder[index];

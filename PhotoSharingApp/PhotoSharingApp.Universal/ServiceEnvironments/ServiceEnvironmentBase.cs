@@ -52,11 +52,6 @@ namespace PhotoSharingApp.Universal.ServiceEnvironments
         }
 
         /// <summary>
-        /// The Application Insights instrumentation key.
-        /// </summary>
-        public abstract string InstrumentationKey { get; }
-
-        /// <summary>
         /// Gets the service base URL.
         /// </summary>
         /// <value>

@@ -209,7 +209,6 @@
     <Compile Include="Extensions\PackageVersionExtensions.cs" />
     <Compile Include="Extensions\PhotoStatusExtensions.cs" />
     <Compile Include="Extensions\PhotoExtensions.cs" />
-    <Compile Include="Extensions\TelemetryClientExtensions.cs" />
     <Compile Include="Facades\ILicensingFacade.cs" />
     <Compile Include="Facades\LicensingFacade.cs" />
     <Compile Include="Lifecycle\AppLaunchCounter.cs" />
@@ -237,8 +236,6 @@
     <Compile Include="Store\CurrentAppProxy.cs" />
     <Compile Include="Store\InAppPurchaseException.cs" />
     <Compile Include="Store\InAppPurchases.cs" />
-    <Compile Include="Telemetry\TelemetryEvents.cs" />
-    <Compile Include="Telemetry\TelemetryProperties.cs" />
     <Compile Include="Unity\ServiceLocatorExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\VideoEncodingPropertiesExtensions.cs" />

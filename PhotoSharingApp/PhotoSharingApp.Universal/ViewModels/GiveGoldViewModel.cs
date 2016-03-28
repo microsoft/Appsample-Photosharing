@@ -23,11 +23,9 @@
 //  ---------------------------------------------------------------------------------
 
 using System.Threading.Tasks;
-using Microsoft.ApplicationInsights;
 using PhotoSharingApp.Universal.Commands;
 using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.Services;
-using PhotoSharingApp.Universal.Telemetry;
 using PhotoSharingApp.Universal.Views;
 
 namespace PhotoSharingApp.Universal.ViewModels
@@ -41,19 +39,15 @@ namespace PhotoSharingApp.Universal.ViewModels
         private readonly IDialogService _dialogService;
         private bool _isBusy;
         private readonly IPhotoService _photoService;
-        private readonly TelemetryClient _telemetryClient;
 
         /// <summary>
         /// Creates a new instance.
         /// </summary>
         /// <param name="photoService">The photo service.</param>
-        /// <param name="telemetryClient">The telemetry client.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public GiveGoldViewModel(IPhotoService photoService, TelemetryClient telemetryClient,
-            IDialogService dialogService)
+        public GiveGoldViewModel(IPhotoService photoService, IDialogService dialogService)
         {
             _photoService = photoService;
-            _telemetryClient = telemetryClient;
             _dialogService = dialogService;
 
             // Initialize commands
@@ -122,7 +116,6 @@ namespace PhotoSharingApp.Universal.ViewModels
 
         private void OnCancel()
         {
-            _telemetryClient.TrackEvent(TelemetryEvents.GiveGoldDialogCanceled);
             Annotation = null;
         }
 
@@ -137,27 +130,22 @@ namespace PhotoSharingApp.Universal.ViewModels
                 // If annotation was succesfully posted, update HasUserGivenGold, and store annotation
                 if (serviceResult != null)
                 {
-                    _telemetryClient.TrackEvent(TelemetryEvents.GiveGoldDialogSuccess);
                     Photo.HasUserGivenGold = true;
                     Annotation = serviceResult;
 
                     return true;
                 }
 
-                _telemetryClient.TrackEvent(TelemetryEvents.GiveGoldDialogFailed);
-
                 return false;
             }
-            catch (InsufficientBalanceException balanceException)
+            catch (InsufficientBalanceException)
             {
-                _telemetryClient.TrackException(balanceException);
                 await _dialogService.ShowNotification("InsufficientBalance_Message", "InsufficientBalance_Title");
 
                 return false;
             }
-            catch (ServiceException e)
+            catch (ServiceException)
             {
-                _telemetryClient.TrackException(e);
                 await _dialogService.ShowGenericServiceErrorNotification();
 
                 return false;

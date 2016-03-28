@@ -29,7 +29,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.ApplicationInsights;
 using Microsoft.WindowsAzure.MobileServices;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Newtonsoft.Json;
@@ -50,17 +49,13 @@ namespace PhotoSharingApp.Universal.Services
     {
         private readonly IAuthenticationHandler _authenticationHandler;
         private readonly MobileServiceClient _mobileServiceClient;
-        private readonly TelemetryClient _telemetryClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceClient" /> class.
         /// </summary>
-        /// <param name="telemetryClient">The telemetry client.</param>
         /// <param name="authenticationHandler">The authentication handler.</param>
-        public ServiceClient(TelemetryClient telemetryClient,
-            IAuthenticationHandler authenticationHandler)
+        public ServiceClient(IAuthenticationHandler authenticationHandler)
         {
-            _telemetryClient = telemetryClient;
             _authenticationHandler = authenticationHandler;
 
             _mobileServiceClient = AzureAppService.Current;
@@ -83,8 +78,6 @@ namespace PhotoSharingApp.Universal.Services
             }
             catch (MobileServiceInvalidOperationException invalidOperationException)
             {
-                _telemetryClient.TrackException(invalidOperationException);
-
                 var content = await invalidOperationException.Response.Content.ReadAsStringAsync();
                 var serviceFault = TryGetServiceFault(content);
 
@@ -99,7 +92,6 @@ namespace PhotoSharingApp.Universal.Services
             }
             catch (Exception e)
             {
-                _telemetryClient.TrackException(e);
                 throw new ServiceException("CreateCategory error", e);
             }
         }
@@ -118,7 +110,6 @@ namespace PhotoSharingApp.Universal.Services
             }
             catch (Exception e)
             {
-                _telemetryClient.TrackException(e);
                 throw new ServiceException("DeletePhoto error", e);
             }
         }
@@ -147,7 +138,6 @@ namespace PhotoSharingApp.Universal.Services
             }
             catch (Exception e)
             {
-                _telemetryClient.TrackException(e);
                 throw new ServiceException("FulfillGold error", e);
             }
         }
@@ -177,7 +167,6 @@ namespace PhotoSharingApp.Universal.Services
             }
             catch (Exception e)
             {
-                _telemetryClient.TrackException(e);
                 throw new ServiceException("GetCategories error", e);
             }
         }
@@ -198,7 +187,6 @@ namespace PhotoSharingApp.Universal.Services
             }
             catch (Exception e)
             {
-                _telemetryClient.TrackException(e);
                 throw new ServiceException("GetConfig error", e);
             }
         }
@@ -219,8 +207,6 @@ namespace PhotoSharingApp.Universal.Services
             }
             catch (MobileServiceInvalidOperationException invalidOperationException)
             {
-                _telemetryClient.TrackException(invalidOperationException);
-
                 if (invalidOperationException.Response.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     throw new UnauthorizedException();
@@ -230,7 +216,6 @@ namespace PhotoSharingApp.Universal.Services
             }
             catch (Exception e)
             {
-                _telemetryClient.TrackException(e);
                 throw new ServiceException("GetCurrentUser error", e);
             }
         }
@@ -255,7 +240,6 @@ namespace PhotoSharingApp.Universal.Services
             }
             catch (Exception e)
             {
-                _telemetryClient.TrackException(e);
                 throw new ServiceException("GetHeroImages error", e);
             }
         }
@@ -283,7 +267,6 @@ namespace PhotoSharingApp.Universal.Services
             }
             catch (Exception e)
             {
-                _telemetryClient.TrackException(e);
                 throw new ServiceException("GetLeaderboardData error", e);
             }
         }
@@ -308,7 +291,6 @@ namespace PhotoSharingApp.Universal.Services
             }
             catch (Exception e)
             {
-                _telemetryClient.TrackException(e);
                 throw new ServiceException("GetPhotoDetails error", e);
             }
         }
@@ -344,7 +326,6 @@ namespace PhotoSharingApp.Universal.Services
             }
             catch (Exception e)
             {
-                _telemetryClient.TrackException(e);
                 throw new ServiceException("GetPhotosForCategory error", e);
             }
         }
@@ -378,7 +359,6 @@ namespace PhotoSharingApp.Universal.Services
             }
             catch (Exception e)
             {
-                _telemetryClient.TrackException(e);
                 throw new ServiceException("GetPhotosForCurrentUser error", e);
             }
         }
@@ -397,7 +377,6 @@ namespace PhotoSharingApp.Universal.Services
             }
             catch (Exception e)
             {
-                _telemetryClient.TrackException(e);
                 throw new ServiceException("GetSasUrls error", e);
             }
         }
@@ -423,7 +402,6 @@ namespace PhotoSharingApp.Universal.Services
             }
             catch (Exception e)
             {
-                _telemetryClient.TrackException(e);
                 throw new ServiceException("GetTopCategories error", e);
             }
         }
@@ -472,8 +450,6 @@ namespace PhotoSharingApp.Universal.Services
             }
             catch (MobileServiceInvalidOperationException invalidOperationException)
             {
-                _telemetryClient.TrackException(invalidOperationException);
-
                 var content = await invalidOperationException.Response.Content.ReadAsStringAsync();
                 var serviceFault = TryGetServiceFault(content);
 
@@ -488,7 +464,6 @@ namespace PhotoSharingApp.Universal.Services
             }
             catch (Exception e)
             {
-                _telemetryClient.TrackException(e);
                 throw new ServiceException("PostAnnotation error", e);
             }
         }
@@ -506,9 +481,9 @@ namespace PhotoSharingApp.Universal.Services
                 var registrationClient = new NotificationRegistrationClient();
                 await registrationClient.RegisterAsync(channel.Uri, new[] { "user:" + currentUserId });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _telemetryClient.TrackException(ex);
+                // We can ignore this exception, as this may happend when not internet connection is available.
             }
         }
 
@@ -526,7 +501,6 @@ namespace PhotoSharingApp.Universal.Services
             }
             catch (Exception e)
             {
-                _telemetryClient.TrackException(e);
                 throw new ServiceException("RemoveAnnotation error", e);
             }
         }
@@ -553,7 +527,6 @@ namespace PhotoSharingApp.Universal.Services
             }
             catch (Exception e)
             {
-                _telemetryClient.TrackException(e);
                 throw new ServiceException("ReportAnnotation error", e);
             }
         }
@@ -581,7 +554,6 @@ namespace PhotoSharingApp.Universal.Services
             }
             catch (Exception e)
             {
-                _telemetryClient.TrackException(e);
                 throw new ServiceException("ReportPhoto error", e);
             }
         }
@@ -614,8 +586,6 @@ namespace PhotoSharingApp.Universal.Services
         {
             await _authenticationHandler.AuthenticateAsync(provider);
 
-            _telemetryClient.TrackTrace("Signed in with Azure App Service");
-
             var user = await GetCurrentUser();
             AppEnvironment.Instance.CurrentUser = user;
 
@@ -631,12 +601,7 @@ namespace PhotoSharingApp.Universal.Services
 
             // Delete push notification registration for the user.
             var registrationClient = new NotificationRegistrationClient();
-            var statusCode = await registrationClient.DeleteRegistrationAsync();
-
-            if (statusCode != HttpStatusCode.OK)
-            {
-                _telemetryClient.TrackTrace("Push notification deletion failed.");
-            }
+            await registrationClient.DeleteRegistrationAsync();
         }
 
         private ServiceFaultContract TryGetServiceFault(string serializedContent)
@@ -674,7 +639,6 @@ namespace PhotoSharingApp.Universal.Services
             }
             catch (Exception e)
             {
-                _telemetryClient.TrackException(e);
                 throw new ServiceException("UpdatePhoto error", e);
             }
         }
@@ -703,7 +667,6 @@ namespace PhotoSharingApp.Universal.Services
             }
             catch (Exception e)
             {
-                _telemetryClient.TrackException(e);
                 throw new ServiceException("UpdateUserProfilePhoto error", e);
             }
         }
@@ -765,7 +728,6 @@ namespace PhotoSharingApp.Universal.Services
             }
             catch (Exception e)
             {
-                _telemetryClient.TrackException(e);
                 throw new ServiceException("UploadPhoto error", e);
             }
         }

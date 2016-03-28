@@ -22,7 +22,6 @@
 //  THE SOFTWARE.
 //  ---------------------------------------------------------------------------------
 
-using Microsoft.ApplicationInsights;
 using Microsoft.Practices.Unity;
 using PhotoSharingApp.Universal.Camera;
 using PhotoSharingApp.Universal.Facades;
@@ -74,9 +73,6 @@ namespace PhotoSharingApp.Universal.Registries
 #else
             Container.RegisterType<IPhotoService, ServiceClient>();
 #endif
-
-            var telemetryClient = new TelemetryClient();
-            Container.RegisterInstance(typeof(TelemetryClient), telemetryClient);
         }
     }
 }
