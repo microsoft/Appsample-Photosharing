@@ -29,16 +29,7 @@ namespace PhotoSharingApp.Universal.ServiceEnvironments
     /// </summary>
     public class ServiceEnvironment : ServiceEnvironmentBase
     {
-        private const string ApplicationInsightsInstrumentationKey = "[Your Application Insights Instrumentation Key]";
         private const string AzureAppServiceBaseUrl = "https://[Your Prod Azure App Service].azurewebsites.net/";
-
-        /// <summary>
-        /// The Application Insights instrumentation key.
-        /// </summary>
-        public override string InstrumentationKey
-        {
-            get { return ApplicationInsightsInstrumentationKey; }
-        }
 
         /// <summary>
         /// The Azure App service base URL.
