@@ -27,7 +27,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.ApplicationInsights;
 using PhotoSharingApp.Universal.ComponentModel;
 using PhotoSharingApp.Universal.Editing;
 using PhotoSharingApp.Universal.Extensions;
@@ -86,16 +85,6 @@ namespace PhotoSharingApp.Universal.Camera
         /// The selected previous resolution
         /// </summary>
         private VideoEncodingProperties _selectedPreviewResolution;
-
-        /// <summary>
-        /// The telemetry client.
-        /// </summary>
-        private readonly TelemetryClient _telemetryClient;
-
-        public CameraEngine(TelemetryClient telemetryClient)
-        {
-            _telemetryClient = telemetryClient;
-        }
 
         /// <summary>
         /// Gets a value indicating whether multiple cameras are available.
@@ -266,7 +255,6 @@ namespace PhotoSharingApp.Universal.Camera
             }
             else
             {
-                _telemetryClient.TrackTrace("No camera detected");
                 throw new CameraNotFoundException();
             }
         }
@@ -353,10 +341,6 @@ namespace PhotoSharingApp.Universal.Camera
             {
                 await _mediaCapture.StopPreviewAsync();
                 IsPreviewing = false;
-            }
-            else
-            {
-                _telemetryClient.TrackTraceWithCallerName("mediaCapture is null");
             }
         }
 

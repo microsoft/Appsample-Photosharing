@@ -23,11 +23,9 @@
 //  ---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.ApplicationInsights;
 using Microsoft.Practices.ServiceLocation;
 using Microsoft.Practices.Unity;
 using PhotoSharingApp.Universal.Commands;
@@ -51,21 +49,18 @@ namespace PhotoSharingApp.Universal.ViewModels
         private bool _isServiceConnected;
         private ServiceEnvironmentBase _selectedService;
         private IPhotoService _photoService;
-        private readonly TelemetryClient _telemetryClient;
 
         /// <summary>
         /// Creates a new instance.
         /// </summary>
         /// <param name="photoService">The photo service.</param>
         /// <param name="authenticationHandler">The authentication handler.</param>
-        /// <param name="telemetryClient">The telemetry client.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public DebugViewModel(IPhotoService photoService, IAuthenticationHandler authenticationHandler, TelemetryClient telemetryClient,
+        public DebugViewModel(IPhotoService photoService, IAuthenticationHandler authenticationHandler,
             IDialogService dialogService)
         {
             _photoService = photoService;
             _authenticationHandler = authenticationHandler;
-            _telemetryClient = telemetryClient;
             _dialogService = dialogService;
 
             ThrowExceptionCommand = new RelayCommand(OnThrowException);
@@ -150,17 +145,8 @@ namespace PhotoSharingApp.Universal.ViewModels
             }
             set
             {
-                var previousServiceUrl = SelectedService.ServiceBaseUrl;
                 _selectedService = value;
                 ServiceEnvironmentBase.Current = _selectedService;
-
-                var properties = new Dictionary<string, string>
-                {
-                    { "From", previousServiceUrl },
-                    { "To", _selectedService.ServiceBaseUrl }
-                };
-
-                _telemetryClient.TrackEvent("Service Environment Switch", properties);
 
                 // Auth credentials will not work across different environments,
                 // so we need to sign out the user.

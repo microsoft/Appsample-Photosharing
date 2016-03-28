@@ -33,7 +33,6 @@
     Title="Create Category"
     PrimaryButtonText="ok"
     SecondaryButtonText="cancel"
-    SecondaryButtonClick="CancelButtonClick"
     PrimaryButtonCommand="{Binding CreateCategoryCommand}"
     PrimaryButtonClick="OkButtonClick"
     Background="White">

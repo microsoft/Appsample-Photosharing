@@ -26,14 +26,12 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.ApplicationInsights;
 using PhotoSharingApp.Portable.DataContracts;
 using PhotoSharingApp.Universal.Commands;
 using PhotoSharingApp.Universal.Extensions;
 using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.Services;
-using PhotoSharingApp.Universal.Telemetry;
 using PhotoSharingApp.Universal.Views;
 
 namespace PhotoSharingApp.Universal.ViewModels
@@ -86,26 +84,18 @@ namespace PhotoSharingApp.Universal.ViewModels
         private Annotation _selectedAnnotation;
 
         /// <summary>
-        /// Telemtry client
-        /// </summary>
-        private readonly TelemetryClient _telemetryClient;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="PhotoDetailsViewModel" /> class.
         /// </summary>
         /// <param name="navigationFacade">The navigation facade.</param>
         /// <param name="photoService">The photo service.</param>
         /// <param name="authEnforcementHandler">The auth enforcement handler.</param>
-        /// <param name="telemetryClient">The telemetry client.</param>
         /// <param name="dialogService">The dialog service.</param>
         public PhotoDetailsViewModel(INavigationFacade navigationFacade, IPhotoService photoService,
-            IAuthEnforcementHandler authEnforcementHandler, TelemetryClient telemetryClient,
-            IDialogService dialogService)
+            IAuthEnforcementHandler authEnforcementHandler, IDialogService dialogService)
         {
             _navigationFacade = navigationFacade;
             _photoService = photoService;
             _authEnforcementHandler = authEnforcementHandler;
-            _telemetryClient = telemetryClient;
             _dialogService = dialogService;
 
             // Initialize commands
@@ -316,24 +306,17 @@ namespace PhotoSharingApp.Universal.ViewModels
         {
             try
             {
-                _telemetryClient.TrackEvent(TelemetryEvents.DeleteAnnotationInitiated);
                 var deleteAnnotation =
                     await _dialogService.ShowYesNoNotification("DeleteComment_Message", "DeleteComment_Title");
 
                 if (deleteAnnotation)
                 {
-                    _telemetryClient.TrackEvent(TelemetryEvents.DeleteAnnotationSuccess);
                     await _photoService.RemoveAnnotation(_selectedAnnotation);
                     Annotations.Remove(_selectedAnnotation);
-                }
-                else
-                {
-                    _telemetryClient.TrackEvent(TelemetryEvents.DeleteAnnotationCanceled);
                 }
             }
             catch (ServiceException)
             {
-                _telemetryClient.TrackEvent(TelemetryEvents.DeleteAnnotationFailed);
                 await _dialogService.ShowNotification("DeleteCommentErrorMessage", "GenericErrorTitle");
             }
         }
@@ -347,13 +330,11 @@ namespace PhotoSharingApp.Universal.ViewModels
         {
             try
             {
-                _telemetryClient.TrackEvent(TelemetryEvents.GiveGoldInitiated);
                 await _authEnforcementHandler.CheckUserAuthentication();
 
                 var annotation = await _navigationFacade.ShowGiveGoldDialog(_photo);
                 if (annotation != null)
                 {
-                    _telemetryClient.TrackEvent(TelemetryEvents.AddAnnotationToPhoto);
                     Annotations.Insert(0, annotation);
                 }
             }
@@ -377,7 +358,6 @@ namespace PhotoSharingApp.Universal.ViewModels
             try
             {
                 IsBusy = true;
-                _telemetryClient.TrackEvent(TelemetryEvents.ReportPhotoCommandInvoked);
 
                 await _authEnforcementHandler.CheckUserAuthentication();
                 var result = await _dialogService.ShowYesNoNotification("ReportContent_Message", "ReportContent_Title");
@@ -406,7 +386,6 @@ namespace PhotoSharingApp.Universal.ViewModels
             try
             {
                 IsBusy = true;
-                _telemetryClient.TrackEvent(TelemetryEvents.ReportPhotoCommandInvoked);
 
                 await _authEnforcementHandler.CheckUserAuthentication();
                 var result = await _dialogService.ShowYesNoNotification("ReportContent_Message", "ReportContent_Title");

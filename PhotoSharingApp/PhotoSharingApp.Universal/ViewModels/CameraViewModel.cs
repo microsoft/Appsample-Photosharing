@@ -23,9 +23,7 @@
 //  ---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.ApplicationInsights;
 using PhotoSharingApp.Portable.DataContracts;
 using PhotoSharingApp.Portable.Extensions;
 using PhotoSharingApp.Universal.Camera;
@@ -33,7 +31,6 @@ using PhotoSharingApp.Universal.Commands;
 using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.Storage;
-using PhotoSharingApp.Universal.Telemetry;
 using PhotoSharingApp.Universal.Views;
 using Windows.ApplicationModel.Resources;
 using Windows.Media.Capture;
@@ -73,22 +70,15 @@ namespace PhotoSharingApp.Universal.ViewModels
         private readonly INavigationFacade _navigationFacade;
 
         /// <summary>
-        /// The telemetry client.
-        /// </summary>
-        private readonly TelemetryClient _telemetryClient;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="CameraViewModel" /> class.
         /// </summary>
         /// <param name="cameraEngine">The camera engine.</param>
         /// <param name="navigationFacade">The navigation facade.</param>
-        /// <param name="telemetryClient">The telemetry client.</param>
         /// <param name="dialogService">The dialog service.</param>
         public CameraViewModel(ICameraEngine cameraEngine, INavigationFacade navigationFacade,
-            TelemetryClient telemetryClient, IDialogService dialogService)
+            IDialogService dialogService)
         {
             _navigationFacade = navigationFacade;
-            _telemetryClient = telemetryClient;
             _dialogService = dialogService;
             _cameraEngine = cameraEngine;
 
@@ -221,9 +211,8 @@ namespace PhotoSharingApp.Universal.ViewModels
             {
                 await _dialogService.ShowNotification("CameraNotFound_Message", "CameraNotFound_Title");
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                _telemetryClient.TrackException(e);
                 await _dialogService.ShowNotification("GenericError_Message", "GenericError_Title");
             }
         }
@@ -277,9 +266,8 @@ namespace PhotoSharingApp.Universal.ViewModels
             {
                 await _cameraEngine.SwitchCamera();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                _telemetryClient.TrackException(e);
                 await _dialogService.ShowNotification("GenericError_Message", "GenericError_Title");
             }
         }
@@ -290,9 +278,8 @@ namespace PhotoSharingApp.Universal.ViewModels
             {
                 await _cameraEngine.SwitchFlashMode();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                _telemetryClient.TrackException(e);
                 await _dialogService.ShowNotification("GenericError_Message", "GenericError_Title");
             }
         }
@@ -301,18 +288,10 @@ namespace PhotoSharingApp.Universal.ViewModels
         {
             try
             {
-                var startTime = DateTime.Now;
-                _telemetryClient.TrackEvent("Camera triggered");
-
                 IsBusy = true;
+
                 var photo = await _cameraEngine.TakePhoto();
                 _navigationFacade.NavigateToUploadView(photo, Category);
-
-                var timeTaken = DateTime.Now - startTime;
-                _telemetryClient.TrackEvent("Photo taken", null, new Dictionary<string, double>
-                {
-                    { TelemetryProperties.TotalTimeToTakePhoto, timeTaken.TotalMilliseconds }
-                });
             }
             finally
             {

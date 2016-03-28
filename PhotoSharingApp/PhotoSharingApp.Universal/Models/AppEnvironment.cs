@@ -23,7 +23,6 @@
 //  ---------------------------------------------------------------------------------
 
 using System;
-using Microsoft.ApplicationInsights;
 using Microsoft.Practices.ServiceLocation;
 using PhotoSharingApp.Universal.ComponentModel;
 using PhotoSharingApp.Universal.Extensions;
@@ -92,11 +91,6 @@ namespace PhotoSharingApp.Universal.Models
         {
             get { return DeviceFamily == DeviceFamily.Mobile; }
         }
-
-        /// <summary>
-        /// Gets the telemetry client.
-        /// </summary>
-        public TelemetryClient TelemetryClient { get; private set; } = new TelemetryClient();
 
         /// <summary>
         /// Invoked when the current user has changed.

@@ -26,12 +26,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using Microsoft.ApplicationInsights;
 using Microsoft.Practices.ObjectBuilder2;
 using PhotoSharingApp.Universal.Commands;
 using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.Services;
-using PhotoSharingApp.Universal.Telemetry;
 using PhotoSharingApp.Universal.Views;
 
 namespace PhotoSharingApp.Universal.ViewModels
@@ -48,19 +46,15 @@ namespace PhotoSharingApp.Universal.ViewModels
         private readonly IPhotoService _photoService;
         private string _searchText;
         private Category _selectedCategory;
-        private readonly TelemetryClient _telemetryClient;
 
         /// <summary>
         /// Creates a new instance.
         /// </summary>
         /// <param name="photoService">The photo service.</param>
-        /// <param name="telemetryClient">The telemetry client.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public CategoriesChooserViewModel(IPhotoService photoService, TelemetryClient telemetryClient,
-            IDialogService dialogService)
+        public CategoriesChooserViewModel(IPhotoService photoService, IDialogService dialogService)
         {
             _photoService = photoService;
-            _telemetryClient = telemetryClient;
             _dialogService = dialogService;
             _categoryMatchFinder = new CategoryMatchFinder();
 
@@ -206,11 +200,6 @@ namespace PhotoSharingApp.Universal.ViewModels
                     _categoryMatchFinder.ValidateCategoryAcceptanceCriteria(SearchText, Categories);
                     var category = await _photoService.CreateCategory(SearchText);
 
-                    _telemetryClient.TrackEvent(TelemetryEvents.CreateCategorySuccess, new Dictionary<string, string>
-                    {
-                        { TelemetryProperties.CategoryName, category.Name }
-                    });
-
                     // The created category needs to be added to the view
                     // and pre-selected so that the user can continue immediately.
                     Categories.Add(category);
@@ -218,14 +207,12 @@ namespace PhotoSharingApp.Universal.ViewModels
                     SelectedCategory = category;
                 }
             }
-            catch (CategoryMatchedException categoryMatchedException)
+            catch (CategoryMatchedException)
             {
-                _telemetryClient.TrackException(categoryMatchedException);
                 await _dialogService.ShowNotification("CategoryAlreadyExists_Message", "CategoryAlreadyExists_Title");
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                _telemetryClient.TrackException(e);
                 await _dialogService.ShowGenericServiceErrorNotification();
             }
             finally

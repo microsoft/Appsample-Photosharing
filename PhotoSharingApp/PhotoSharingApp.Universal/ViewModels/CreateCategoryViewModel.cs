@@ -26,10 +26,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using Microsoft.ApplicationInsights;
 using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.Services;
-using PhotoSharingApp.Universal.Telemetry;
 using PhotoSharingApp.Universal.Views;
 
 namespace PhotoSharingApp.Universal.ViewModels
@@ -46,19 +44,15 @@ namespace PhotoSharingApp.Universal.ViewModels
         private readonly IDialogService _dialogService;
         private bool _isBusy;
         private readonly IPhotoService _photoService;
-        private readonly TelemetryClient _telemetryClient;
 
         /// <summary>
         /// Creates a new instance.
         /// </summary>
         /// <param name="photoService">The photo service.</param>
-        /// <param name="telemetryClient">The telemetry client.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public CreateCategoryViewModel(IPhotoService photoService, TelemetryClient telemetryClient,
-            IDialogService dialogService)
+        public CreateCategoryViewModel(IPhotoService photoService, IDialogService dialogService)
         {
             _photoService = photoService;
-            _telemetryClient = telemetryClient;
             _dialogService = dialogService;
             _categoryMatchFinder = new CategoryMatchFinder();
 
@@ -137,31 +131,19 @@ namespace PhotoSharingApp.Universal.ViewModels
         {
             try
             {
-                _telemetryClient.TrackEvent(TelemetryEvents.CreateCategoryInitiated, new Dictionary<string, string>
-                {
-                    { TelemetryProperties.CategoryName, Category.Name }
-                });
-
                 IsBusy = true;
                 _categoryMatchFinder.ValidateCategoryAcceptanceCriteria(Category.Name, _categories);
                 await _photoService.CreateCategory(Category.Name);
 
-                _telemetryClient.TrackEvent(TelemetryEvents.CreateCategorySuccess, new Dictionary<string, string>
-                {
-                    { TelemetryProperties.CategoryName, Category.Name }
-                });
-
                 return true;
             }
-            catch (CategoryMatchedException categoryMatchedException)
+            catch (CategoryMatchedException)
             {
-                _telemetryClient.TrackException(categoryMatchedException);
                 await _dialogService.ShowNotification("CategoryAlreadyExists_Message", "CategoryAlreadyExists_Title");
                 return false;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                _telemetryClient.TrackException(e);
                 await _dialogService.ShowGenericServiceErrorNotification();
                 return false;
             }

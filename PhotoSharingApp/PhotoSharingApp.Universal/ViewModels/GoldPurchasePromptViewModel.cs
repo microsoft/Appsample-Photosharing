@@ -23,7 +23,6 @@
 //  ---------------------------------------------------------------------------------
 
 using System;
-using Microsoft.ApplicationInsights;
 using PhotoSharingApp.Universal.Commands;
 using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.Models;
@@ -41,19 +40,16 @@ namespace PhotoSharingApp.Universal.ViewModels
         private User _currentUser;
         private readonly IDialogService _dialogService;
         private readonly ILicensingFacade _licensingFacade;
-        private readonly TelemetryClient _telemetryClient;
 
         /// <summary>
         /// Creates a new instance.
         /// </summary>
         /// <param name="licensingFacade"></param>
-        /// <param name="telemetryClient"></param>
         /// <param name="dialogService">The dialog service.</param>
         public GoldPurchasePromptViewModel(ILicensingFacade licensingFacade,
-            TelemetryClient telemetryClient, IDialogService dialogService)
+            IDialogService dialogService)
         {
             _licensingFacade = licensingFacade;
-            _telemetryClient = telemetryClient;
             _dialogService = dialogService;
 
             // Initialize commands
@@ -95,9 +91,8 @@ namespace PhotoSharingApp.Universal.ViewModels
             {
                 // User canceled the Sign-in dialog.
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                _telemetryClient.TrackException(e);
                 await _dialogService.ShowNotification("PurchaseError_Message", "PurchaseError_Title");
             }
         }

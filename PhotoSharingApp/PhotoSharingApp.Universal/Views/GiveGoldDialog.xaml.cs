@@ -24,7 +24,6 @@
 
 using Microsoft.Practices.ServiceLocation;
 using PhotoSharingApp.Universal.Models;
-using PhotoSharingApp.Universal.Telemetry;
 using PhotoSharingApp.Universal.ViewModels;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -39,8 +38,6 @@ namespace PhotoSharingApp.Universal.Views
         public GiveGoldDialog(Photo photo)
         {
             InitializeComponent();
-
-            AppEnvironment.Instance.TelemetryClient.TrackEvent(TelemetryEvents.ShowGiveGoldDialog);
 
             ViewModel = ServiceLocator.Current.GetInstance<GiveGoldViewModel>();
             ViewModel.Photo = photo;

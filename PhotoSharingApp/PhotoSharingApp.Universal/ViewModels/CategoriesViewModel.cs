@@ -23,17 +23,14 @@
 //  ---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.ApplicationInsights;
 using PhotoSharingApp.Universal.Commands;
 using PhotoSharingApp.Universal.ComponentModel;
 using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.Services;
-using PhotoSharingApp.Universal.Telemetry;
 using PhotoSharingApp.Universal.Views;
 using Windows.UI.Xaml;
 
@@ -102,25 +99,17 @@ namespace PhotoSharingApp.Universal.ViewModels
         private Photo _selectedHeroImage;
 
         /// <summary>
-        /// The telemetry client.
-        /// </summary>
-        private readonly TelemetryClient _telemetryClient;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="CategoriesViewModel" /> class.
         /// </summary>
         /// <param name="navigationFacade">The navigation facade.</param>
         /// <param name="photoService">The photo service.</param>
-        /// <param name="telemetryClient">The telemetry client.</param>
         /// <param name="authEnforcementHandler">The auth enforcement handler.</param>
         /// <param name="dialogService">The dialog service</param>
         public CategoriesViewModel(INavigationFacade navigationFacade, IPhotoService photoService,
-            TelemetryClient telemetryClient, IAuthEnforcementHandler authEnforcementHandler,
-            IDialogService dialogService)
+            IAuthEnforcementHandler authEnforcementHandler, IDialogService dialogService)
         {
             _navigationFacade = navigationFacade;
             _photoService = photoService;
-            _telemetryClient = telemetryClient;
             _authEnforcementHandler = authEnforcementHandler;
             _dialogService = dialogService;
 
@@ -338,20 +327,12 @@ namespace PhotoSharingApp.Universal.ViewModels
 
         private void OnCategorySelected(CategoryPreview categoryPreview)
         {
-            _telemetryClient.TrackEvent(TelemetryEvents.CategoryPreviewSelected, new Dictionary<string, string>
-            {
-                {
-                    TelemetryProperties.CategoryName, categoryPreview.Name
-                }
-            });
-
             SelectedCategoryPreview = categoryPreview;
             _navigationFacade.NavigateToPhotoStream(categoryPreview);
         }
 
         private async void OnGiveGold(Photo photo)
         {
-            _telemetryClient.TrackEvent(TelemetryEvents.GiveGoldInitiated);
             try
             {
                 await _authEnforcementHandler.CheckUserAuthentication();
@@ -369,7 +350,6 @@ namespace PhotoSharingApp.Universal.ViewModels
 
         private void OnHeroImageSelected(Photo photo)
         {
-            _telemetryClient.TrackEvent(TelemetryEvents.HeroImageSelected);
             _navigationFacade.NavigateToPhotoDetailsView(photo);
         }
 

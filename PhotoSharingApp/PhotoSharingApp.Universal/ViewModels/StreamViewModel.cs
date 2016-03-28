@@ -24,7 +24,6 @@
 
 using System;
 using System.Threading.Tasks;
-using Microsoft.ApplicationInsights;
 using PhotoSharingApp.Portable.DataContracts;
 using PhotoSharingApp.Universal.Commands;
 using PhotoSharingApp.Universal.ComponentModel;
@@ -32,7 +31,6 @@ using PhotoSharingApp.Universal.Extensions;
 using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.Services;
-using PhotoSharingApp.Universal.Telemetry;
 using PhotoSharingApp.Universal.Views;
 
 namespace PhotoSharingApp.Universal.ViewModels
@@ -62,25 +60,17 @@ namespace PhotoSharingApp.Universal.ViewModels
         private readonly INavigationFacade _navigationFacade;
 
         /// <summary>
-        /// The telemetry client
-        /// </summary>
-        private readonly TelemetryClient _telemetryClient;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="StreamViewModel" /> class.
         /// </summary>
         /// <param name="navigationFacade">The navigation facade.</param>
         /// <param name="photoService">The photo service.</param>
         /// <param name="authEnforcementHandler">the authentication enforcement handler</param>
-        /// <param name="telemetryClient">The telemetry client</param>
         /// <param name="dialogService">The dialog service.</param>
         public StreamViewModel(INavigationFacade navigationFacade, IPhotoService photoService,
-            IAuthEnforcementHandler authEnforcementHandler, TelemetryClient telemetryClient,
-            IDialogService dialogService)
+            IAuthEnforcementHandler authEnforcementHandler, IDialogService dialogService)
         {
             _navigationFacade = navigationFacade;
             _authEnforcementHandler = authEnforcementHandler;
-            _telemetryClient = telemetryClient;
             _dialogService = dialogService;
 
             Photos = new IncrementalLoadingCollection<Photo>(s =>
@@ -210,7 +200,6 @@ namespace PhotoSharingApp.Universal.ViewModels
         {
             try
             {
-                _telemetryClient.TrackEvent(TelemetryEvents.GiveGoldInitiated);
                 await _authEnforcementHandler.CheckUserAuthentication();
                 await _navigationFacade.ShowGiveGoldDialog(photo);
             }
@@ -226,7 +215,6 @@ namespace PhotoSharingApp.Universal.ViewModels
 
         private void OnGotoCamera()
         {
-            _telemetryClient.TrackEvent(TelemetryEvents.GoToCameraCommandInvoked);
             _navigationFacade.NavigateToCameraView(Category);
         }
 
@@ -236,14 +224,12 @@ namespace PhotoSharingApp.Universal.ViewModels
         /// <param name="photo">the photo.</param>
         private void OnPhotoSelected(Photo photo)
         {
-            _telemetryClient.TrackEvent(TelemetryEvents.PhotoStreamItemSelected);
             SelectedPhoto = photo;
             _navigationFacade.NavigateToPhotoDetailsView(Category, photo);
         }
 
         private async void OnRefresh()
         {
-            _telemetryClient.TrackEvent(TelemetryEvents.RefreshCommandInvoked);
             Photos.Clear();
             await Photos.Refresh();
         }

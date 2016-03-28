@@ -24,7 +24,6 @@
 
 using System.Threading.Tasks;
 using PhotoSharingApp.Universal.Models;
-using PhotoSharingApp.Universal.Telemetry;
 using PhotoSharingApp.Universal.Views;
 using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml.Controls;
@@ -93,8 +92,6 @@ namespace PhotoSharingApp.Universal.Services
                 _signInTaskCompletionSource = new TaskCompletionSource<SignInCompletionSource>();
                 var dialogTask = _signInTaskCompletionSource.Task;
 
-                AppEnvironment.Instance.TelemetryClient.TrackEvent(TelemetryEvents.ShowSignInDialog);
-
                 // Grab the task for showing the dialog.
                 var task = contentDialog.ShowAsync();
                 task.Completed = (info, status) =>
@@ -126,7 +123,6 @@ namespace PhotoSharingApp.Universal.Services
                 // if we have the current user object available.
                 if (AppEnvironment.Instance.CurrentUser == null)
                 {
-                    AppEnvironment.Instance.TelemetryClient.TrackEvent(TelemetryEvents.SignInCanceled);
                     throw new SignInRequiredException("Sign-in not successful");
                 }
             }

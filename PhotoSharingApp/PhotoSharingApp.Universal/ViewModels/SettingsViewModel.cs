@@ -23,12 +23,10 @@
 //  ---------------------------------------------------------------------------------
 
 using System;
-using Microsoft.ApplicationInsights;
 using PhotoSharingApp.Universal.Commands;
 using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.Services;
-using PhotoSharingApp.Universal.Telemetry;
 using PhotoSharingApp.Universal.Views;
 using Windows.System;
 
@@ -42,21 +40,18 @@ namespace PhotoSharingApp.Universal.ViewModels
         private readonly IDialogService _dialogService;
         private readonly INavigationFacade _navigationFacade;
         private readonly IPhotoService _photoService;
-        private readonly TelemetryClient _telemetryClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingsViewModel" /> class.
         /// </summary>
         /// <param name="photoService">The photo service.</param>
         /// <param name="navigationFacade">The navigation facade.</param>
-        /// <param name="telemetryClient"></param>
         /// <param name="dialogService">The dialog service.</param>
         public SettingsViewModel(IPhotoService photoService, INavigationFacade navigationFacade,
-            TelemetryClient telemetryClient, IDialogService dialogService)
+            IDialogService dialogService)
         {
             _photoService = photoService;
             _navigationFacade = navigationFacade;
-            _telemetryClient = telemetryClient;
             _dialogService = dialogService;
 
             PrivacyCommand = new RelayCommand(OnShowPrivacyPolicy);
@@ -89,13 +84,11 @@ namespace PhotoSharingApp.Universal.ViewModels
 
         private void OnShowAbout()
         {
-            _telemetryClient.TrackEvent(TelemetryEvents.ShowAboutCommandInvoked);
             _navigationFacade.NavigateToAboutView();
         }
 
         private async void OnShowPrivacyPolicy()
         {
-            _telemetryClient.TrackEvent(TelemetryEvents.ShowPrivacyAndTermsInvoked);
             await Launcher.LaunchUriAsync(new Uri("http://Your_Privacy_Page.com"));
         }
 
@@ -103,20 +96,15 @@ namespace PhotoSharingApp.Universal.ViewModels
         {
             try
             {
-                _telemetryClient.TrackEvent(TelemetryEvents.SignOutInvoked);
-
                 await _photoService.SignOutAsync();
 
                 // Resetting the current user.
                 AppEnvironment.Instance.CurrentUser = null;
 
                 NotifyPropertyChanged(nameof(IsUserSignedIn));
-
-                _telemetryClient.TrackEvent(TelemetryEvents.SignOutSuccess);
             }
             catch (Exception)
             {
-                _telemetryClient.TrackEvent(TelemetryEvents.SignOutFail);
                 await _dialogService.ShowGenericServiceErrorNotification();
             }
         }

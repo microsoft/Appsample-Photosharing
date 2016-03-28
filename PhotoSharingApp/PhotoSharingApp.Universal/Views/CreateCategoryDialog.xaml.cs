@@ -23,8 +23,6 @@
 //  ---------------------------------------------------------------------------------
 
 using Microsoft.Practices.ServiceLocation;
-using PhotoSharingApp.Universal.Models;
-using PhotoSharingApp.Universal.Telemetry;
 using PhotoSharingApp.Universal.ViewModels;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -51,11 +49,6 @@ namespace PhotoSharingApp.Universal.Views
         /// </summary>
         public CreateCategoryViewModel ViewModel { get; }
 
-        private void CancelButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
-            AppEnvironment.Instance.TelemetryClient.TrackEvent(TelemetryEvents.CreateCategoryDialogCanceled);
-        }
-
         private async void CreateCategoryDialog_Loaded(object sender, RoutedEventArgs e)
         {
             await ViewModel.LoadState();
@@ -63,8 +56,6 @@ namespace PhotoSharingApp.Universal.Views
 
         private async void OkButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            AppEnvironment.Instance.TelemetryClient.TrackEvent(TelemetryEvents.CreateCategoryDialogOk);
-
             // Get the deferral because we need to await the
             // category creation.
             var deferral = args.GetDeferral();

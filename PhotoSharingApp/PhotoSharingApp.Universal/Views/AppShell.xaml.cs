@@ -23,12 +23,9 @@
 //  ---------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using Microsoft.ApplicationInsights;
 using PhotoSharingApp.Universal.Controls;
 using PhotoSharingApp.Universal.NavigationBar;
-using PhotoSharingApp.Universal.Telemetry;
 using PhotoSharingApp.Universal.ViewModels;
 using Windows.Foundation;
 using Windows.System;
@@ -52,20 +49,18 @@ namespace PhotoSharingApp.Universal.Views
     {
         public static AppShell Current;
         private Type _lastSourcePageType;
-        private readonly TelemetryClient _telemetryClient;
         private readonly AppShellViewModel _viewModel;
 
         /// <summary>
         /// Initializes a new instance of the AppShell.
         /// </summary>
-        /// <param name="telemetryClient">The telemetry client.</param>
-        public AppShell(TelemetryClient telemetryClient)
+        public AppShell()
         {
-            _telemetryClient = telemetryClient;
             InitializeComponent();
 
             // Set the data context
             _viewModel = new AppShellViewModel();
+
             DataContext = _viewModel;
 
             Loaded += (sender, args) =>
@@ -212,20 +207,10 @@ namespace PhotoSharingApp.Universal.Views
         {
             var item = (INavigationBarMenuItem)((NavMenuListView)sender).ItemFromContainer(listViewItem);
 
-            if (item != null)
+            if (item?.DestPage != null &&
+                item.DestPage != AppFrame.CurrentSourcePageType)
             {
-                _telemetryClient.TrackEvent(TelemetryEvents.NavigationItemInvoked, new Dictionary<string, string>
-                {
-                    {
-                        TelemetryProperties.NavigatingTo, item.DestPage.ToString()
-                    }
-                });
-
-                if (item.DestPage != null &&
-                    item.DestPage != AppFrame.CurrentSourcePageType)
-                {
-                    AppFrame.Navigate(item.DestPage, item.Arguments);
-                }
+                AppFrame.Navigate(item.DestPage, item.Arguments);
             }
         }
 
@@ -243,8 +228,6 @@ namespace PhotoSharingApp.Universal.Views
                 AppFrame.CanGoBack ?
                 AppViewBackButtonVisibility.Visible :
                 AppViewBackButtonVisibility.Collapsed;
-
-            _telemetryClient.TrackPageView(e.SourcePageType.FullName);
 
             _lastSourcePageType = e.SourcePageType;
 

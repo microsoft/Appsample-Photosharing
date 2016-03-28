@@ -27,7 +27,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using Microsoft.ApplicationInsights;
 using PhotoSharingApp.Universal.Extensions;
 using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.Serialization;
@@ -54,20 +53,6 @@ namespace PhotoSharingApp.Universal.Facades
         /// The current frame.
         /// </summary>
         private Frame _frame;
-
-        /// <summary>
-        /// The telemetry client.
-        /// </summary>
-        private readonly TelemetryClient _telemetryClient;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NavigationFacade" /> class.
-        /// </summary>
-        /// <param name="telemetryClient">The telemetry client.</param>
-        public NavigationFacade(TelemetryClient telemetryClient)
-        {
-            _telemetryClient = telemetryClient;
-        }
 
         /// <summary>
         /// Determines if back navigation
@@ -424,10 +409,9 @@ namespace PhotoSharingApp.Universal.Facades
                                 framesToRemove++;
                             }
                         }
-                        catch (SerializationException e)
+                        catch (SerializationException)
                         {
-                            // Swallow exception.  Args were of different type than expected.
-                            _telemetryClient.TrackException(e);
+                            // Swallow exception. Args were of different type than expected.
                         }
                     }
 
