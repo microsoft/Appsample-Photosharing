@@ -87,21 +87,13 @@ Once published successfully, your **PhotoSharingApp** can now be used with the A
 
 ## Configure Application Insights (Optional)
 
-Both service and app have been prepared to support [Application Insights](https://azure.microsoft.com/services/application-insights/) for telemetry data.
+The service has prepared to support [Application Insights](https://azure.microsoft.com/services/application-insights/) for telemetry data.
 
 #### Azure Mobile App Service Telemetry
 
 When you created the Azure Mobile App as described in *Create Azure Mobile App with Authentication* section, Azure automatically created an instance of Application Insights for the backend. It is called *yourMobileAppName-azureResourceLocation*. For example, if your Mobile App is *contoso* located in *Central US* then your Application Insights instance would be called *"contoso-Central US"*. This will be located in the [Azure Portal](https://portal.azure.com) at *Application Insights*
 
 To enable telemetry for the service, paste your Instrumentation Key found in Azure portal of your *Application Insight instance -> Settings -> Properties* into *InstrumentationKey* in [EnvironmentDefinition.cs](PhotoSharingApp/PhotoSharingApp.AppService.Shared/Context/EnvironmentDefinition.cs#L25).
-
-#### PhotoSharingApp Telemetry
-
-- [Create Application Insights Instance](https://portal.azure.com/#create/Microsoft.AppInsights).
-- Select Application Type as *Windows Store Application* and enter a name for the Application Insights instance.
-- Click *Create*
-
-To enable the app to send telemetry to the Application Insights instance you just created, copy the instrumentation key from the Azure portal found at *Application Insight instance -> Settings -> Properties* into *InstrumentationKey* of your environment definition in [ServiceEnvironment.cs](PhotoSharingApp/PhotoSharingApp.Universal/ServiceEnvironments/ServiceEnvironment.cs#L25).
 
 ## Configure IAP (In-App Product) (Optional)
 

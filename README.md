@@ -62,7 +62,7 @@ The app allows users to:
 
 - Usage analysis with [Visual Studio Application Insights](https://azure.microsoft.com/services/application-insights/)
 
-    > [PhotoSharingApp.Universal.ViewModels.UploadViewModel](PhotoSharingApp/PhotoSharingApp.Universal/ViewModels/UploadViewModel.cs)
+    > [PhotoSharingApp.AppService.Controllers.PhotoController](PhotoSharingApp/PhotoSharingApp.AppService/Controllers/PhotoController.cs)
 
 - Push Notifications (see [Integration with App Service Mobile Apps](https://azure.microsoft.com/documentation/articles/notification-hubs-overview/#integration-with-app-service-mobile-apps) in [Azure Notification Hubs](https://azure.microsoft.com/documentation/articles/notification-hubs-overview):
 

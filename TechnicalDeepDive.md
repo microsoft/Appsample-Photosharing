@@ -135,11 +135,10 @@ UI pages resolve their ViewModels using the ServiceLocator as follows:
 Constructor injection is automatically performed with the dependencies registered in Unity:
 
         public CategoriesViewModel(INavigationFacade navigationFacade, IPhotoService photoService,
-            TelemetryClient telemetryClient, IAuthEnforcementHandler authEnforcementHandler)
+            IAuthEnforcementHandler authEnforcementHandler)
         {
             _navigationFacade = navigationFacade;
             _photoService = photoService;
-            _telemetryClient = telemetryClient;
             _authEnforcementHandler = authEnforcementHandler;
             ...
 
