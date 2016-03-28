@@ -87,7 +87,7 @@ Once published successfully, your **PhotoSharingApp** can now be used with the A
 
 ## Configure Application Insights (Optional)
 
-The service has prepared to support [Application Insights](https://azure.microsoft.com/services/application-insights/) for telemetry data.
+The service has been prepared to support [Application Insights](https://azure.microsoft.com/services/application-insights/) for telemetry data.
 
 #### Azure Mobile App Service Telemetry
 
