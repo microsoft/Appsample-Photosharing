@@ -806,8 +806,9 @@ namespace PhotoSharingApp.AppService.Shared.Repositories
         /// </summary>
         /// <param name="userId">The user id.</param>
         /// <param name="continuationToken">Last captured ticks in the form of a string.</param>
+        /// <param name="includeNonActivePhotos">By default, false. If true, non-active photos are included.</param>
         /// <returns>List of photos up to the page size.</returns>
-        public async Task<PagedResponse<PhotoContract>> GetUserPhotoStream(string userId, string continuationToken)
+        public async Task<PagedResponse<PhotoContract>> GetUserPhotoStream(string userId, string continuationToken, bool includeNonActivePhotos = false)
         {
             var feedOptions = new FeedOptions
             {
@@ -819,11 +820,19 @@ namespace PhotoSharingApp.AppService.Shared.Repositories
                 feedOptions)
                 .Where(d => d.DocumentType == PhotoDocument.DocumentTypeIdentifier)
                 .Where(d => d.DocumentVersion == _currentDocumentVersion)
-                .Where(p => p.UserId == userId)
+                .Where(p => p.UserId == userId);
+
+            if (!includeNonActivePhotos)
+            {
+                query = query
+                    .Where(p => p.Status == PhotoStatus.Active);
+            }
+
+            var documentQuery = query
                 .OrderByDescending(p => p.CreatedDateTime.Epoch)
                 .AsDocumentQuery();
 
-            var documentResponse = await query.ExecuteNextAsync<PhotoDocument>();
+            var documentResponse = await documentQuery.ExecuteNextAsync<PhotoDocument>();
 
             var photoContracts = await CreatePhotoContractsAndLoadUserData(documentResponse.ToList());
 
@@ -1162,14 +1171,30 @@ namespace PhotoSharingApp.AppService.Shared.Repositories
         /// <summary>
         /// Updates an existing photo object's category and description fields.
         /// </summary>
-        /// <param name="photoContract">Photo Object.</param>
-        /// <returns>New PhotoContract containing updated data.</returns>
+        /// <param name="photoContract">Photo object.</param>
+        /// <returns>PhotoContract containing updated data.</returns>
         public async Task<PhotoContract> UpdatePhoto(PhotoContract photoContract)
         {
             var photoDocument = GetPhotoDocument(photoContract.Id);
 
             photoDocument.CategoryId = photoContract.CategoryId;
             photoDocument.Description = photoContract.Description;
+
+            await ReplacePhotoDocument(photoDocument);
+
+            return photoContract;
+        }
+
+        /// <summary>
+        /// Updates the status of the stored photo object.
+        /// </summary>
+        /// <param name="photoContract">Photo object.</param>
+        /// <returns>PhotoContract containing updated data.</returns>
+        public async Task<PhotoContract> UpdatePhotoStatus(PhotoContract photoContract)
+        {
+            var photoDocument = GetPhotoDocument(photoContract.Id);
+
+            photoDocument.Status = photoContract.Status;
 
             await ReplacePhotoDocument(photoDocument);
 

@@ -1,5 +1,4 @@
-﻿//-----------------------------------------------------------------------------------
-//  Copyright (c) Microsoft Corporation.  All rights reserved.
+﻿//  Copyright (c) Microsoft Corporation.  All rights reserved.
 // 
 //  The MIT License (MIT)
 // 
@@ -22,37 +21,27 @@
 //  THE SOFTWARE.
 //  ---------------------------------------------------------------------------------
 
-using Newtonsoft.Json;
-
-namespace PhotoSharingApp.Universal.Serialization
+namespace PhotoSharingApp.Universal.ViewModels
 {
     /// <summary>
-    /// Helper class for serialization.
+    /// Base class for ViewModel navigation arguments.
     /// </summary>
-    public static class SerializationHelper
+    public class ViewModelArgs
     {
         /// <summary>
-        /// Deserializes the specified XML.
+        /// Initializes the instance.
         /// </summary>
-        /// <typeparam name="T">Target type.</typeparam>
-        /// <param name="xml">The XML.</param>
-        /// <returns>The deserialized object.</returns>
-        public static T Deserialize<T>(string xml)
+        public ViewModelArgs()
         {
-            return JsonConvert.DeserializeObject<T>(xml);
         }
 
         /// <summary>
-        /// Serializes the specified object.
+        /// Gets or sets the value determining whether the target view
+        /// is being highlighted on the navigation bar.
+        /// <remarks>
+        /// By default, this property returns true.
+        /// </remarks>
         /// </summary>
-        /// <param name="obj">The object.</param>
-        /// <returns>The string.</returns>
-        public static string Serialize(object obj)
-        {
-            return JsonConvert.SerializeObject(obj, new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.All
-            });
-        }
+        public bool HighlightOnNavigationBar { get; set; } = true;
     }
 }

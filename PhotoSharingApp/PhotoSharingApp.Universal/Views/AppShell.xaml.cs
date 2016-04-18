@@ -26,6 +26,7 @@ using System;
 using System.Linq;
 using PhotoSharingApp.Universal.Controls;
 using PhotoSharingApp.Universal.NavigationBar;
+using PhotoSharingApp.Universal.Serialization;
 using PhotoSharingApp.Universal.ViewModels;
 using Windows.Foundation;
 using Windows.System;
@@ -48,7 +49,7 @@ namespace PhotoSharingApp.Universal.Views
     public sealed partial class AppShell : Page
     {
         public static AppShell Current;
-        private Type _lastSourcePageType;
+        private Tuple<Type, object> _lastSourcePageEventArgs;
         private readonly AppShellViewModel _viewModel;
 
         /// <summary>
@@ -72,7 +73,7 @@ namespace PhotoSharingApp.Universal.Views
                 // We need to update the initial selection because
                 // OnNavigatingToPage happens before Items are loaded in
                 // both navigation bars.
-                UpdateSelectionState(_lastSourcePageType);
+                UpdateSelectionState();
             };
 
             rootSplitView.RegisterPropertyChangedCallback(
@@ -207,8 +208,11 @@ namespace PhotoSharingApp.Universal.Views
         {
             var item = (INavigationBarMenuItem)((NavMenuListView)sender).ItemFromContainer(listViewItem);
 
-            if (item?.DestPage != null &&
-                item.DestPage != AppFrame.CurrentSourcePageType)
+            // We navigate only if current page is different to target page
+            // or if navigation arguments are available.
+            if ((item.DestPage != null
+                && item.DestPage != AppFrame.CurrentSourcePageType)
+                || _lastSourcePageEventArgs.Item2 != null)
             {
                 AppFrame.Navigate(item.DestPage, item.Arguments);
             }
@@ -229,9 +233,9 @@ namespace PhotoSharingApp.Universal.Views
                 AppViewBackButtonVisibility.Visible :
                 AppViewBackButtonVisibility.Collapsed;
 
-            _lastSourcePageType = e.SourcePageType;
+            _lastSourcePageEventArgs = new Tuple<Type, object>(e.SourcePageType, e.Parameter);
 
-            UpdateSelectionState(e.SourcePageType);
+            UpdateSelectionState();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -266,30 +270,46 @@ namespace PhotoSharingApp.Universal.Views
         /// </summary>
         public event TypedEventHandler<AppShell, Rect> TogglePaneButtonRectChanged;
 
-        private void UpdateSelectionState(Type sourcePageType)
+        private void UpdateSelectionState()
         {
             navMenuList.SetSelectedItem(null);
             bottomNavMenuList.SetSelectedItem(null);
 
-            var item =
+            INavigationBarMenuItem itemToHighlight = null;
+            ViewModelArgs viewModelArgs = null;
+
+            var parameter = _lastSourcePageEventArgs.Item2 as string;
+
+            if (parameter != null)
+            {
+                viewModelArgs = SerializationHelper.Deserialize<ViewModelArgs>(parameter);
+            }
+
+            // We only highlight the current page in the navigation bar
+            // if navigation arguments tell us to.
+            if (viewModelArgs == null
+                || viewModelArgs.HighlightOnNavigationBar)
+            {
+                itemToHighlight =
                 (from p in _viewModel.NavigationBarMenuItems.Union(_viewModel.BottomNavigationBarMenuItems)
-                 where p.DestPage == sourcePageType
+                 where p.DestPage == _lastSourcePageEventArgs.Item1
                  select p)
                     .SingleOrDefault();
+            }
 
-            togglePaneButton.Background = item == null ?
+            togglePaneButton.Background = itemToHighlight == null ?
                 new SolidColorBrush((Color)Application.Current.Resources["AppAccentLightColor"]) :
                 new SolidColorBrush(Colors.White);
 
             ListViewItem container;
 
-            if (navMenuList.Items != null && navMenuList.Items.Contains(item))
+            if (navMenuList.Items != null && navMenuList.Items.Contains(itemToHighlight))
             {
-                container = (ListViewItem)navMenuList.ContainerFromItem(item);
+                container = (ListViewItem)navMenuList.ContainerFromItem(itemToHighlight);
             }
             else
             {
-                container = (ListViewItem)bottomNavMenuList.ContainerFromItem(item);
+                container = (ListViewItem)bottomNavMenuList.ContainerFromItem(itemToHighlight);
             }
 
             // While updating the selection state of the item prevent it from taking keyboard focus. If a

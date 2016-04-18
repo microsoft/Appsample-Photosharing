@@ -1,5 +1,4 @@
-﻿//-----------------------------------------------------------------------------------
-//  Copyright (c) Microsoft Corporation.  All rights reserved.
+﻿//  Copyright (c) Microsoft Corporation.  All rights reserved.
 // 
 //  The MIT License (MIT)
 // 
@@ -22,37 +21,35 @@
 //  THE SOFTWARE.
 //  ---------------------------------------------------------------------------------
 
-using Newtonsoft.Json;
+using PhotoSharingApp.Universal.Models;
 
-namespace PhotoSharingApp.Universal.Serialization
+namespace PhotoSharingApp.Universal.ViewModels
 {
     /// <summary>
-    /// Helper class for serialization.
+    /// The navigation arguments for the profile view.
     /// </summary>
-    public static class SerializationHelper
+    public class ProfileViewModelArgs : ViewModelArgs
     {
         /// <summary>
-        /// Deserializes the specified XML.
+        /// Initializes a new instance.
         /// </summary>
-        /// <typeparam name="T">Target type.</typeparam>
-        /// <param name="xml">The XML.</param>
-        /// <returns>The deserialized object.</returns>
-        public static T Deserialize<T>(string xml)
+        /// <param name="user">The user to display.</param>
+        public ProfileViewModelArgs(User user)
         {
-            return JsonConvert.DeserializeObject<T>(xml);
+            User = user;
+            HighlightOnNavigationBar = false;
         }
 
         /// <summary>
-        /// Serializes the specified object.
+        /// Initializes a new instance.
         /// </summary>
-        /// <param name="obj">The object.</param>
-        /// <returns>The string.</returns>
-        public static string Serialize(object obj)
+        public ProfileViewModelArgs()
         {
-            return JsonConvert.SerializeObject(obj, new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.All
-            });
         }
+
+        /// <summary>
+        /// Gets or sets the user.
+        /// </summary>
+        public User User { get; set; }
     }
 }

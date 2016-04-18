@@ -67,6 +67,7 @@ namespace PhotoSharingApp.Universal.ViewModels
 
             PhotoSelectedCommand = new RelayCommand<Photo>(OnPhotoSelected);
             CategorySelectedCommand = new RelayCommand<Category>(OnCategorySelected);
+            UserSelectedCommand = new RelayCommand<User>(OnUserSelected);
         }
 
         /// <summary>
@@ -115,6 +116,11 @@ namespace PhotoSharingApp.Universal.ViewModels
         public RelayCommand<Photo> PhotoSelectedCommand { get; private set; }
 
         /// <summary>
+        /// Gets the user selected command.
+        /// </summary>
+        public RelayCommand<User> UserSelectedCommand { get; private set; }
+
+        /// <summary>
         /// Loads the state.
         /// </summary>
         public override async Task LoadState()
@@ -139,7 +145,7 @@ namespace PhotoSharingApp.Universal.ViewModels
         /// <summary>
         /// Action to take when a photo has been selected
         /// </summary>
-        /// <param name="category">the category.</param>
+        /// <param name="category">The category.</param>
         private void OnCategorySelected(Category category)
         {
             _navigationFacade.NavigateToPhotoStream(category);
@@ -148,10 +154,19 @@ namespace PhotoSharingApp.Universal.ViewModels
         /// <summary>
         /// Action to take when a photo has been selected
         /// </summary>
-        /// <param name="photo">the photo.</param>
+        /// <param name="photo">The photo.</param>
         private void OnPhotoSelected(Photo photo)
         {
             _navigationFacade.NavigateToPhotoDetailsView(photo);
+        }
+
+        /// <summary>
+        /// Action to take when a user has been selected.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        private void OnUserSelected(User user)
+        {
+            _navigationFacade.NavigateToProfileView(user);
         }
     }
 }

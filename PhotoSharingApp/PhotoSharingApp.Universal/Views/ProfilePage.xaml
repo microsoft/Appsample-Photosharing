@@ -104,13 +104,13 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Image Grid.ColumnSpan="3" VerticalAlignment="Center" Source="{Binding CurrentUser.ProfilePictureUrl}"
+            <Image Grid.ColumnSpan="3" VerticalAlignment="Center" Source="{Binding User.ProfilePictureUrl}"
                    Stretch="UniformToFill" />
             <Border Grid.ColumnSpan="3" Background="#CCFFFFFF" />
             <controls:UserProfilePictureControl Grid.Column="1"
                                                 Width="130"
                                                 Height="{Binding RelativeSource={RelativeSource Self}, Path=Width}"
-                                                Source="{Binding CurrentUser.ProfilePictureUrl}"
+                                                Source="{Binding User.ProfilePictureUrl}"
                                                 x:Name="profilePictureControl">
                 <controls:UserProfilePictureControl.Transitions>
                     <TransitionCollection>
@@ -178,10 +178,10 @@
                                         CommandParameter="{Binding}" />
                                 </core:EventTriggerBehavior>
                                 <core:EventTriggerBehavior EventName="Holding">
-                                    <actions:OpenMenuFlyoutAction />
+                                    <actions:OpenMenuFlyoutAction IsEnabled="{Binding DataContext.IsShowingCurrentUser, ElementName=layoutRoot}"/>
                                 </core:EventTriggerBehavior>
                                 <core:EventTriggerBehavior EventName="RightTapped">
-                                    <actions:OpenMenuFlyoutAction />
+                                    <actions:OpenMenuFlyoutAction IsEnabled="{Binding DataContext.IsShowingCurrentUser, ElementName=layoutRoot}" />
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
 
@@ -189,10 +189,12 @@
                                 <MenuFlyout>
                                     <MenuFlyoutItem x:Uid="DeletePhotoFlyoutItem" Text="delete"
                                                     Command="{Binding DataContext.DeletePhotoCommand, ElementName=layoutRoot}"
-                                                    CommandParameter="{Binding}" />
+                                                    CommandParameter="{Binding}"
+                                                    Visibility="{Binding DataContext.IsShowingCurrentUser, ElementName=layoutRoot, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                     <MenuFlyoutItem x:Uid="ChangeProfilePicFlyoutItem" Text="set as profile pic"
                                                     Command="{Binding DataContext.SetProfilePhotoCommand, ElementName=layoutRoot}"
-                                                    CommandParameter="{Binding}" />
+                                                    CommandParameter="{Binding}"
+                                                    Visibility="{Binding DataContext.IsShowingCurrentUser, ElementName=layoutRoot, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                 </MenuFlyout>
                             </FlyoutBase.AttachedFlyout>
                         </controls:AnimatedImage>
@@ -218,6 +220,7 @@
                                        TextTrimming="CharacterEllipsis" MaxLines="2" />
 
                             <HyperlinkButton Foreground="{StaticResource AppAccentLightColorBrush}"
+                                             Visibility="{Binding DataContext.IsShowingCurrentUser, ElementName=layoutRoot, Converter={StaticResource BooleanToVisibilityConverter}}"
                                              Command="{Binding DataContext.SetProfilePhotoCommand, ElementName=layoutRoot}"
                                              CommandParameter="{Binding}"
                                              Grid.Row="0" Grid.ColumnSpan="3" Content="Set as profile picture" />

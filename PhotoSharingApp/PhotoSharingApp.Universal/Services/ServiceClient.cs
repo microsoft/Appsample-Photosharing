@@ -299,7 +299,7 @@ namespace PhotoSharingApp.Universal.Services
         /// Gets photos for the given category id.
         /// </summary>
         /// <param name="categoryId">The identifier.</param>
-        /// <param name="continuationToken">The continuation token.</param>
+        /// <param name="continuationToken">Optional. The continuation token. By default, null.</param>
         /// <returns>The photos.</returns>
         public async Task<PagedResponse<Photo>> GetPhotosForCategoryId(string categoryId,
             string continuationToken = null)
@@ -333,7 +333,7 @@ namespace PhotoSharingApp.Universal.Services
         /// <summary>
         /// Gets photos uploaded by the current user.
         /// </summary>
-        /// <param name="continuationToken">The continuation token.</param>
+        /// <param name="continuationToken">Optional. The continuation token. By default, null.</param>
         /// <returns>The photos.</returns>
         public async Task<PagedResponse<Photo>> GetPhotosForCurrentUser(string continuationToken = null)
         {
@@ -364,6 +364,39 @@ namespace PhotoSharingApp.Universal.Services
         }
 
         /// <summary>
+        /// Gets photos uploaded by the specified user.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <param name="continuationToken">Optional. The continuation token. By default, null.</param>
+        /// <returns>The photos.</returns>
+        public async Task<PagedResponse<Photo>> GetPhotosForUser(User user, string continuationToken = null)
+        {
+            try
+            {
+                if (continuationToken == null)
+                {
+                    continuationToken = string.Empty;
+                }
+
+                var result = await _mobileServiceClient.InvokeApiAsync<PagedResponse<PhotoContract>>($"userphoto/{user.UserId}",
+                    HttpMethod.Get,
+                    new Dictionary<string, string>
+                    {
+                        { "continuationToken", continuationToken }
+                    });
+
+                return new PagedResponse<Photo> {
+                    ContinuationToken = result.ContinuationToken,
+                    Items = result.Items.Select(i => i.ToDataModel()).ToList()
+                };
+            }
+            catch (Exception e)
+            {
+                throw new ServiceException("GetPhotosForUser error", e);
+            }
+        }
+
+        /// <summary>
         /// Retrieves SAS Urls for uploading photos.
         /// </summary>
         /// <returns>The SAS Urls.</returns>
@@ -385,9 +418,9 @@ namespace PhotoSharingApp.Universal.Services
         /// Retrieves top categories with thumbnails.
         /// </summary>
         /// <param name="categoryThumbnailsCount">The number of thumbnails per each category.</param>
-        /// <param name="continuationToken">The continuation token.</param>
+        /// <param name="continuationToken">Optional. The continuation token. By default, null.</param>
         /// <returns>The category list.</returns>
-        public async Task<List<CategoryPreview>> GetTopCategories(int categoryThumbnailsCount, string continuationToken)
+        public async Task<List<CategoryPreview>> GetTopCategories(int categoryThumbnailsCount, string continuationToken = null)
         {
             try
             {
@@ -654,7 +687,6 @@ namespace PhotoSharingApp.Universal.Services
             {
                 var userContract = AppEnvironment.Instance.CurrentUser.ToDataContract();
                 userContract.ProfilePhotoId = photo.Id;
-                userContract.ProfilePhotoUrl = photo.ThumbnailUrl;
 
                 var result = await _mobileServiceClient.InvokeApiAsync<UserContract, UserContract>("user",
                     userContract,

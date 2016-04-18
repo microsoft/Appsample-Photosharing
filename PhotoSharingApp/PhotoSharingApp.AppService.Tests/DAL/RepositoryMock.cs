@@ -112,7 +112,7 @@ namespace PhotoSharingApp.AppService.Tests.DAL
             throw new NotImplementedException();
         }
 
-        public Task<PagedResponse<PhotoContract>> GetUserPhotoStream(string userId, string continuationToken)
+        public Task<PagedResponse<PhotoContract>> GetUserPhotoStream(string userId, string continuationToken, bool includeNonActivePhotos = false)
         {
             throw new NotImplementedException();
         }
@@ -147,7 +147,12 @@ namespace PhotoSharingApp.AppService.Tests.DAL
             throw new NotImplementedException();
         }
 
-        public Task<PhotoContract> UpdatePhoto(PhotoContract photo)
+        public Task<PhotoContract> UpdatePhoto(PhotoContract photoContract)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<PhotoContract> UpdatePhotoStatus(PhotoContract photoContract)
         {
             throw new NotImplementedException();
         }

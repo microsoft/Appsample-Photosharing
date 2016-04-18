@@ -22,6 +22,7 @@
 //  THE SOFTWARE.
 //  ---------------------------------------------------------------------------------
 
+using PhotoSharingApp.Universal.Commands;
 using PhotoSharingApp.Universal.Models;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -33,6 +34,13 @@ namespace PhotoSharingApp.Universal.Controls
     /// </summary>
     public sealed partial class LeaderboardsUserControl : UserControl
     {
+        /// <summary>
+        /// The dependency property backing the <see cref="NavigationCommand" /> property
+        /// </summary>
+        public static readonly DependencyProperty NavigationCommandProperty =
+            DependencyProperty.Register("NavigationCommand", typeof(object), typeof(LeaderboardsUserControl),
+                new PropertyMetadata(null));
+
         /// <summary>
         /// The dependency property backing the <see cref="UserEntryProperty" /> property
         /// </summary>
@@ -47,6 +55,15 @@ namespace PhotoSharingApp.Universal.Controls
         {
             InitializeComponent();
             layoutRoot.DataContext = this;
+        }
+
+        /// <summary>
+        /// The command used to navigate when this entry is clicked
+        /// </summary>
+        public RelayCommand<User> NavigationCommand
+        {
+            get { return (RelayCommand<User>)GetValue(NavigationCommandProperty); }
+            set { SetValue(NavigationCommandProperty, value); }
         }
 
         /// <summary>

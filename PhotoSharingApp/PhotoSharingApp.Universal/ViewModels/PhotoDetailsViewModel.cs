@@ -105,6 +105,7 @@ namespace PhotoSharingApp.Universal.ViewModels
             ReportPhotoCommand = new RelayCommand<ReportReason>(OnReportPhoto);
             ReportAnnotationCommand = new RelayCommand(OnReportAnnotation);
             EditPhotoCommand = new RelayCommand(OnEditPhoto);
+            UserSelectedCommand = new RelayCommand<User>(OnUserSelected);
         }
 
         /// <summary>
@@ -257,7 +258,8 @@ namespace PhotoSharingApp.Universal.ViewModels
         /// <summary>
         /// List of report reasons.
         /// </summary>
-        public ReportReason[] ReportReasons { get; } = Enum.GetValues(typeof(ReportReason)).Cast<ReportReason>().ToArray();
+        public ReportReason[] ReportReasons { get; } =
+            Enum.GetValues(typeof(ReportReason)).Cast<ReportReason>().ToArray();
 
         /// <summary>
         /// Gets or sets selected annotation
@@ -272,6 +274,11 @@ namespace PhotoSharingApp.Universal.ViewModels
                 NotifyPropertyChanged(nameof(IsUserAbleToReportAnnotation));
             }
         }
+
+        /// <summary>
+        /// Gets the user selected command.
+        /// </summary>
+        public RelayCommand<User> UserSelectedCommand { get; private set; }
 
         /// <summary>
         /// Load the state.
@@ -406,6 +413,11 @@ namespace PhotoSharingApp.Universal.ViewModels
             {
                 IsBusy = false;
             }
+        }
+
+        private void OnUserSelected(User user)
+        {
+            _navigationFacade.NavigateToProfileView(user);
         }
 
         /// <summary>

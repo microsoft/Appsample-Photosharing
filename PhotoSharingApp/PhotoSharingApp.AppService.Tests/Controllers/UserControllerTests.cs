@@ -101,8 +101,6 @@ namespace PhotoSharingApp.AppService.Tests.Controllers
             _userRegistrationReferenceProviderMock.GetCurrentUserRegistrationReference =
                 () => user2.RegistrationReference;
 
-            user1.ProfilePhotoUrl = "http://northwind-traders.com";
-
             // Act
             await _userController.UpdateUserProfile(user1);
         }
@@ -113,10 +111,13 @@ namespace PhotoSharingApp.AppService.Tests.Controllers
             // Populate our db with necessary objects
             var user = await _repository.CreateUser("Test User " + DateTime.UtcNow.Ticks);
 
+            var category1 = await _repository.CreateCategory("Test Category " + DateTime.UtcNow.Ticks);
+            var photo = await _repository.InsertPhoto(CreateTestPhoto(category1, user, "Test photo 1"), 1);
+
+            user.ProfilePhotoId = photo.Id;
+
             _userRegistrationReferenceProviderMock.GetCurrentUserRegistrationReference =
                 () => user.RegistrationReference;
-
-            user.ProfilePhotoUrl = "http://northwind-traders.com";
 
             // Act
             var actionResult = await _userController.UpdateUserProfile(user);
@@ -133,6 +134,26 @@ namespace PhotoSharingApp.AppService.Tests.Controllers
             Assert.IsNotNull(actionResult, "null response from service");
             Assert.AreEqual(user.ProfilePhotoUrl, actionResult.ProfilePhotoUrl,
                 "profile photo url update wasn't persisted after UpdateUserProfile service call");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(HttpResponseException))]
+        public async Task UpdateUserWithInvalidPhotoTest()
+        {
+            // Populate our db with necessary objects
+            var user = await _repository.CreateUser("Test User " + DateTime.UtcNow.Ticks);
+            var user2 = await _repository.CreateUser("Test User 2" + DateTime.UtcNow.Ticks);
+
+            var category1 = await _repository.CreateCategory("Test Category " + DateTime.UtcNow.Ticks);
+            var photoByUser2 = await _repository.InsertPhoto(CreateTestPhoto(category1, user2, "Test Photo 1"), 1);
+
+            user.ProfilePhotoId = photoByUser2.Id;
+
+            _userRegistrationReferenceProviderMock.GetCurrentUserRegistrationReference =
+                () => user.RegistrationReference;
+
+            // Act
+            await _userController.UpdateUserProfile(user);
         }
     }
 }

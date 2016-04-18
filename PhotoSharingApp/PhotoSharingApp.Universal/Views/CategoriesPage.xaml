@@ -210,7 +210,15 @@
 
                                 <controls:UserProfilePictureControl
                                     Width="130" Height="130" Grid.Row="1" Margin="24"
-                                    Source="{Binding Path=SelectedHeroImage.User.ProfilePictureUrl}" />
+                                    Source="{Binding Path=SelectedHeroImage.User.ProfilePictureUrl}">
+                                    <interactivity:Interaction.Behaviors>
+                                        <core:EventTriggerBehavior EventName="Tapped">
+                                            <core:InvokeCommandAction
+                                            Command="{Binding DataContext.UserSelectedCommand, ElementName=LayoutRoot}"
+                                            CommandParameter="{Binding SelectedHeroImage.User}" />
+                                        </core:EventTriggerBehavior>
+                                    </interactivity:Interaction.Behaviors>
+                                </controls:UserProfilePictureControl>
 
                                 <TextBlock MaxLines="2" x:Name="caption" HorizontalAlignment="Center" 
                                            Text="{Binding SelectedHeroImage.Caption}" Grid.Row="2" 

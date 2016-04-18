@@ -43,7 +43,7 @@ namespace PhotoSharingApp.Universal.ViewModels
     public class ProfileViewModel : ViewModelBase
     {
         private bool _arePhotosEmpty;
-        private User _currentUser;
+        private User _user;
         private readonly IDialogService _dialogService;
         private int _goldBalance;
         private bool _isBusy;
@@ -68,8 +68,13 @@ namespace PhotoSharingApp.Universal.ViewModels
             {
                 Func<Task<PagedResponse<Photo>>> f = async () =>
                 {
-                    var stream = await photoService.GetPhotosForCurrentUser(s);
-                    return stream;
+                    if (IsShowingCurrentUser)
+                    {
+                        var stream = await photoService.GetPhotosForCurrentUser(s);
+                        return stream;
+                    }
+
+                    return await photoService.GetPhotosForUser(User, s);
                 };
                 return f();
             }, async () => await _dialogService.ShowGenericServiceErrorNotification(),
@@ -88,9 +93,12 @@ namespace PhotoSharingApp.Universal.ViewModels
             // we want to prevent an initial notification showing up
             // that the user has no pictures.
             ArePhotosEmpty = false;
-
-            CurrentUser = AppEnvironment.Instance.CurrentUser;
         }
+
+        /// <summary>
+        /// Returns true, if the user is shown that is signed in. Otherwise, false.
+        /// </summary>
+        public bool IsShowingCurrentUser => User == AppEnvironment.Instance.CurrentUser;
 
         /// <summary>
         /// Gets or sets whether photos are available.
@@ -111,15 +119,15 @@ namespace PhotoSharingApp.Universal.ViewModels
         /// <summary>
         /// Gets the current user;
         /// </summary>
-        public User CurrentUser
+        public User User
         {
-            get { return _currentUser; }
+            get { return _user; }
             private set
             {
-                if (value != _currentUser)
+                if (value != _user)
                 {
-                    _currentUser = value;
-                    NotifyPropertyChanged(nameof(CurrentUser));
+                    _user = value;
+                    NotifyPropertyChanged(nameof(User));
                 }
             }
         }
@@ -199,10 +207,24 @@ namespace PhotoSharingApp.Universal.ViewModels
         {
             await base.LoadState();
 
-            if (CurrentUser != null)
+            User = AppEnvironment.Instance.CurrentUser;
+
+            if (User != null)
             {
                 RunCounterAnimations();
             }
+        }
+
+        /// <summary>
+        /// Loads the state.
+        /// </summary>
+        /// <param name="viewModelArgs">The arguments.</param>
+        public async Task LoadState(ProfileViewModelArgs viewModelArgs)
+        {
+            await base.LoadState();
+
+            User = viewModelArgs.User;
+            RunCounterAnimations();
         }
 
         private async void OnDeletePhoto(Photo photo)
@@ -256,7 +278,7 @@ namespace PhotoSharingApp.Universal.ViewModels
                 IsBusy = true;
                 await _photoService.UpdateUserProfilePhoto(photo);
 
-                CurrentUser = AppEnvironment.Instance.CurrentUser;
+                User = AppEnvironment.Instance.CurrentUser;
             }
             catch (ServiceException)
             {
@@ -288,14 +310,14 @@ namespace PhotoSharingApp.Universal.ViewModels
                 }
 
                 // Gold counter animation
-                if (GoldBalance < CurrentUser.GoldBalance)
+                if (GoldBalance < User.GoldBalance)
                 {
                     needToProceed = true;
                     GoldBalance += 1;
 
-                    if (GoldBalance > CurrentUser.GoldBalance)
+                    if (GoldBalance > User.GoldBalance)
                     {
-                        GoldBalance = CurrentUser.GoldBalance;
+                        GoldBalance = User.GoldBalance;
                     }
                 }
 

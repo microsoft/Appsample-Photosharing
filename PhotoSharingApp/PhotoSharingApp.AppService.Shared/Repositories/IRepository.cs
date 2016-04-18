@@ -130,8 +130,9 @@ namespace PhotoSharingApp.AppService.Shared.Repositories
         /// </summary>
         /// <param name="userId">The user id.</param>
         /// <param name="continuationToken">Last captured ticks in the form of a string.</param>
+        /// <param name="includeNonActivePhotos">By default, false. If true, non-active photos are included.</param>
         /// <returns>List of photos up to the page size.</returns>
-        Task<PagedResponse<PhotoContract>> GetUserPhotoStream(string userId, string continuationToken);
+        Task<PagedResponse<PhotoContract>> GetUserPhotoStream(string userId, string continuationToken, bool includeNonActivePhotos = false);
 
         /// <summary>
         /// Checks if the database exists and initializes it if it doesn't.
@@ -174,11 +175,18 @@ namespace PhotoSharingApp.AppService.Shared.Repositories
         Task ReinitializeDatabase(string serverPath);
 
         /// <summary>
-        /// Update stored photo object.
+        /// Updates an existing photo object's category and description fields.
         /// </summary>
-        /// <param name="photo">Photo Object.</param>
-        /// <returns>New PhotoContract containing updated data.</returns>
-        Task<PhotoContract> UpdatePhoto(PhotoContract photo);
+        /// <param name="photoContract">Photo object.</param>
+        /// <returns>PhotoContract containing updated data.</returns>
+        Task<PhotoContract> UpdatePhoto(PhotoContract photoContract);
+
+        /// <summary>
+        /// Updates the status of the stored photo.
+        /// </summary>
+        /// <param name="photoContract">Photo object.</param>
+        /// <returns>PhotoContract containing updated data.</returns>
+        Task<PhotoContract> UpdatePhotoStatus(PhotoContract photoContract);
 
         /// <summary>
         /// Updates the user profile picture.  User gold balance is also updated if it is the first time

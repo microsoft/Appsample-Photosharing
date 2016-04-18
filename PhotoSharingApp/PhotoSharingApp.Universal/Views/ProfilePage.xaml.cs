@@ -25,6 +25,7 @@
 using System;
 using Microsoft.Practices.ServiceLocation;
 using PhotoSharingApp.Universal.Models;
+using PhotoSharingApp.Universal.Serialization;
 using PhotoSharingApp.Universal.Unity;
 using PhotoSharingApp.Universal.ViewModels;
 using Windows.UI.Xaml;
@@ -37,11 +38,12 @@ namespace PhotoSharingApp.Universal.Views
     /// </summary>
     public sealed partial class ProfilePage : BasePage
     {
+        private static object _lastUsedNavigationArgs;
         private const int ItemMargin = 4;
         private const double PreferredImageWidth = 300;
         private Thickness _imageMargin;
-        private ProfileViewModel _viewModel;
         private double _imageWidth;
+        private ProfileViewModel _viewModel;
 
         /// <summary>
         /// The constructor
@@ -92,13 +94,31 @@ namespace PhotoSharingApp.Universal.Views
         {
             base.OnNavigatedTo(e);
 
-            var loadData = e.NavigationMode != NavigationMode.Back;
+            var navigationArgs = e.Parameter;
+
+            // We only load data if we either navigate forwards or
+            // if navigation parameters have changed (e.g. showing different user on profile page).
+            var loadData = e.NavigationMode != NavigationMode.Back
+                           || _lastUsedNavigationArgs != navigationArgs;
+
             _viewModel = ServiceLocator.Current.GetInstance<ProfileViewModel>(loadData);
             DataContext = _viewModel;
 
             if (loadData)
             {
-                await _viewModel.LoadState();
+                _lastUsedNavigationArgs = navigationArgs;
+
+                if (navigationArgs != null)
+                {
+                    var profilePageNavigationArgs =
+                        SerializationHelper.Deserialize<ProfileViewModelArgs>(navigationArgs as string);
+
+                    await _viewModel.LoadState(profilePageNavigationArgs);
+                }
+                else
+                {
+                    await _viewModel.LoadState();
+                }
             }
         }
 
