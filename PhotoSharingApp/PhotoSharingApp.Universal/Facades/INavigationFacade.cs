@@ -112,9 +112,15 @@ namespace PhotoSharingApp.Universal.Facades
         void NavigateToPhotoStream(CategoryPreview categoryPreview, PhotoThumbnail photoThumbnail);
 
         /// <summary>
-        /// Navigates to the profile view.
+        /// Navigates to the signed-in user's profile view.
         /// </summary>
         void NavigateToProfileView();
+
+        /// <summary>
+        /// Navigates to the given user's profile view.
+        /// </summary>
+        /// <param name="user">The user to show the profile view for.</param>
+        void NavigateToProfileView(User user);
 
         /// <summary>
         /// Navigates to the sign-in view.

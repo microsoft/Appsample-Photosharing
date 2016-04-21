@@ -23,13 +23,15 @@
 //  ---------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PhotoSharingApp.AppService.Controllers;
 using PhotoSharingApp.AppService.Shared.Repositories;
-using PhotoSharingApp.AppService.Tests.Helpers;
 using PhotoSharingApp.AppService.Tests.Context;
+using PhotoSharingApp.AppService.Tests.Helpers;
+using PhotoSharingApp.Portable.DataContracts;
 
 namespace PhotoSharingApp.AppService.Tests.Controllers
 {
@@ -51,6 +53,36 @@ namespace PhotoSharingApp.AppService.Tests.Controllers
         }
 
         [TestMethod]
+        public async Task GetOtherUserPhotoStreamTest()
+        {
+            // Populate our db with necessary objects
+            var user = await _repository.CreateUser("Test User " + DateTime.UtcNow.Ticks);
+
+            var category1 = await _repository.CreateCategory("Test Category " + DateTime.UtcNow.Ticks);
+            var category2 = await _repository.CreateCategory("Test Category " + DateTime.UtcNow.Ticks);
+            var category3 = await _repository.CreateCategory("Test Category " + DateTime.UtcNow.Ticks);
+
+            await _repository.InsertPhoto(CreateTestPhoto(category1, user, "Test photo 1"), 1);
+            await _repository.InsertPhoto(CreateTestPhoto(category2, user, "Test photo 2"), 1);
+            await _repository.InsertPhoto(CreateTestPhoto(category3, user, "Test photo 3"), 1);
+
+            // Insert objectionable photo
+            var photo = CreateTestPhoto(category3, user, "Test photo 3");
+            var insertedPhoto = await _repository.InsertPhoto(photo, 1);
+
+            insertedPhoto.Status = PhotoStatus.ObjectionableContent;
+            await _repository.UpdatePhotoStatus(insertedPhoto);
+
+            // Act
+            var actionResult = await _userPhotoController.GetPagedAsync(user.UserId, null);
+
+            // Verify
+            Assert.IsNotNull(actionResult.Items, "null response from service");
+            Assert.AreEqual(3, actionResult.Items.Count, "photo count returned was not correct");
+            Assert.IsNull(actionResult.Items.FirstOrDefault(p => p.Status == PhotoStatus.ObjectionableContent));
+        }
+
+        [TestMethod]
         public async Task GetUserPhotoStreamTest()
         {
             // Populate our db with necessary objects
@@ -64,6 +96,13 @@ namespace PhotoSharingApp.AppService.Tests.Controllers
             await _repository.InsertPhoto(CreateTestPhoto(category2, user, "Test photo 2"), 1);
             await _repository.InsertPhoto(CreateTestPhoto(category3, user, "Test photo 3"), 1);
 
+            // Insert objectionable photo
+            var photo = CreateTestPhoto(category3, user, "Test photo 3");
+            var insertedPhoto = await _repository.InsertPhoto(photo, 1);
+
+            insertedPhoto.Status = PhotoStatus.ObjectionableContent;
+            await _repository.UpdatePhotoStatus(insertedPhoto);
+
             _userRegistrationReferenceProviderMock.GetCurrentUserRegistrationReference =
                 () => user.RegistrationReference;
 
@@ -72,7 +111,8 @@ namespace PhotoSharingApp.AppService.Tests.Controllers
 
             // Verify
             Assert.IsNotNull(actionResult.Items, "null response from service");
-            Assert.AreEqual(3, actionResult.Items.Count, "photo count returned was not correct");
+            Assert.AreEqual(4, actionResult.Items.Count, "photo count returned was not correct");
+            Assert.IsNotNull(actionResult.Items.FirstOrDefault(p => p.Status == PhotoStatus.ObjectionableContent));
         }
     }
 }

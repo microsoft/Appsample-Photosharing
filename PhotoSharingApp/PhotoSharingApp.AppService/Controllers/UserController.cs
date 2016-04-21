@@ -115,10 +115,22 @@ namespace PhotoSharingApp.AppService.Controllers
 
                 var currentUserId = await ValidateAndReturnCurrentUserId();
 
+                // A user should only be able to update his/her own profile.
                 if (!currentUserId.Equals(user.RegistrationReference))
                 {
                     throw ServiceExceptions.NotAllowed();
                 }
+
+                // Check if the user owns the photo that is passed in as profile photo
+                var photo = await _repository.GetPhoto(user.ProfilePhotoId);
+
+                if (!photo.User.UserId.Equals(user.UserId))
+                {
+                    throw ServiceExceptions.NotAllowed();
+                }
+
+                // Refreshing profile photo url
+                user.ProfilePhotoUrl = photo.ThumbnailUrl;
 
                 var existingUser = await _repository.UpdateUser(user);
 

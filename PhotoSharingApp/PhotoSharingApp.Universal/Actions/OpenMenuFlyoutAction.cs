@@ -34,6 +34,12 @@ namespace PhotoSharingApp.Universal.Actions
     public class OpenMenuFlyoutAction : DependencyObject, IAction
     {
         /// <summary>
+        /// The dependency property for the <see cref="IsEnabled"/> property.
+        /// </summary>
+        public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.Register(
+            "IsEnabled", typeof(bool), typeof(OpenMenuFlyoutAction), new PropertyMetadata(true));
+
+        /// <summary>
         /// Executes the action.
         /// </summary>
         /// <param name="sender">
@@ -49,12 +55,24 @@ namespace PhotoSharingApp.Universal.Actions
         /// </returns>
         public object Execute(object sender, object parameter)
         {
-            var senderElement = sender as FrameworkElement;
-            var flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
+            if (IsEnabled)
+            {
+                var senderElement = sender as FrameworkElement;
+                var flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
 
-            flyoutBase.ShowAt(senderElement);
+                flyoutBase.ShowAt(senderElement);
+            }
 
             return null;
+        }
+
+        /// <summary>
+        /// Gets or sets whether the flyout is being displayed.
+        /// </summary>
+        public bool IsEnabled
+        {
+            get { return (bool)GetValue(IsEnabledProperty); }
+            set { SetValue(IsEnabledProperty, value); }
         }
     }
 }

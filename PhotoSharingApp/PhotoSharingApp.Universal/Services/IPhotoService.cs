@@ -101,22 +101,30 @@ namespace PhotoSharingApp.Universal.Services
         /// Gets photos for the given category id.
         /// </summary>
         /// <param name="categoryId">The identifier.</param>
-        /// <param name="continuationToken">The continuation token.</param>
+        /// <param name="continuationToken">Optional. The continuation token. By default, null.</param>
         /// <returns>The photos.</returns>
         Task<PagedResponse<Photo>> GetPhotosForCategoryId(string categoryId, string continuationToken = null);
 
         /// <summary>
         /// Gets photos uploaded by the current user.
         /// </summary>
-        /// <param name="continuationToken">The continuation token.</param>
+        /// <param name="continuationToken">Optional. The continuation token. By default, null.</param>
         /// <returns>The photos.</returns>
         Task<PagedResponse<Photo>> GetPhotosForCurrentUser(string continuationToken = null);
+
+        /// <summary>
+        /// Gets photos uploaded by the specified user.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <param name="continuationToken">Optional. The continuation token. By default, null.</param>
+        /// <returns>The photos.</returns>
+        Task<PagedResponse<Photo>> GetPhotosForUser(User user, string continuationToken = null);
 
         /// <summary>
         /// Retrieves top categories with thumbnails.
         /// </summary>
         /// <param name="categoryThumbnailsCount">The number of thumbnails per each category.</param>
-        /// <param name="continuationToken">The continuation token.</param>
+        /// <param name="continuationToken">Optional. The continuation token. By default, null.</param>
         /// <returns>The category list.</returns>
         Task<List<CategoryPreview>> GetTopCategories(int categoryThumbnailsCount, string continuationToken = null);
 

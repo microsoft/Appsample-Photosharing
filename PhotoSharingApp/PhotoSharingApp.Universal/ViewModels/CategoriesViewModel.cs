@@ -121,6 +121,7 @@ namespace PhotoSharingApp.Universal.ViewModels
             PhotoThumbnailSelectedCommand = new RelayCommand<PhotoThumbnail>(OnPhotoThumbnailSelected);
             HeroImageSelectedCommand = new RelayCommand<Photo>(OnHeroImageSelected);
             GiveGoldCommand = new RelayCommand<Photo>(OnGiveGold);
+            UserSelectedCommand = new RelayCommand<User>(OnUserSelected);
 
             IsUserSignedIn = AppEnvironment.Instance.CurrentUser != null;
         }
@@ -281,6 +282,11 @@ namespace PhotoSharingApp.Universal.ViewModels
             new ObservableCollection<CategoryPreview>();
 
         /// <summary>
+        /// Gets the user selected command.
+        /// </summary>
+        public RelayCommand<User> UserSelectedCommand { get; private set; }
+
+        /// <summary>
         /// Loads the state.
         /// </summary>
         public override async Task LoadState()
@@ -361,6 +367,11 @@ namespace PhotoSharingApp.Universal.ViewModels
             {
                 _navigationFacade.NavigateToPhotoStream(categoryPreview, photoThumbnail);
             }
+        }
+
+        private void OnUserSelected(User user)
+        {
+            _navigationFacade.NavigateToProfileView(user);
         }
 
         /// <summary>

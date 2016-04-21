@@ -43,6 +43,14 @@
 
     <Grid x:Name="layoutRoot" Margin="0,0,0,0" Background="Transparent">
 
+        <interactivity:Interaction.Behaviors>
+            <core:EventTriggerBehavior EventName="Tapped">
+                <core:InvokeCommandAction
+                            Command="{Binding DataContext.NavigationCommand, ElementName=layoutRoot}"
+                            CommandParameter="{Binding UserEntry.Model}" />
+            </core:EventTriggerBehavior>
+        </interactivity:Interaction.Behaviors>
+
         <Grid x:Name="LeaderboardItem" Grid.Column="1" Background="{StaticResource AppAccentBackgroundColorBrush}">
             <Border>
                 <Border.Transitions>

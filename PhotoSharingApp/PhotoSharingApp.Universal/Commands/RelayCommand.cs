@@ -74,7 +74,10 @@ namespace PhotoSharingApp.Universal.Commands
                 parameter = ((ItemClickEventArgs)parameter).ClickedItem;
             }
 
-            _action((T)parameter);
+            if (parameter is T)
+            {
+                _action((T)parameter);
+            }
         }
     }
 

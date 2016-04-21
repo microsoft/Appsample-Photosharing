@@ -185,10 +185,11 @@ namespace PhotoSharingApp.AppService.Shared.Repositories
         /// </summary>
         /// <param name="userId">The user id.</param>
         /// <param name="continuationToken">Last captured ticks in the form of a string.</param>
+        /// <param name="includeNonActivePhotos">By default, false. If true, non-active photos are included.</param>
         /// <returns>List of photos up to the page size.</returns>
-        public Task<PagedResponse<PhotoContract>> GetUserPhotoStream(string userId, string continuationToken)
+        public Task<PagedResponse<PhotoContract>> GetUserPhotoStream(string userId, string continuationToken, bool includeNonActivePhotos = false)
         {
-            return _repository.GetUserPhotoStream(userId, continuationToken);
+            return _repository.GetUserPhotoStream(userId, continuationToken, includeNonActivePhotos);
         }
 
         /// <summary>
@@ -250,13 +251,23 @@ namespace PhotoSharingApp.AppService.Shared.Repositories
         }
 
         /// <summary>
-        /// Update stored photo object.
+        /// Updates an existing photo object's category and description fields.
         /// </summary>
-        /// <param name="photo">Photo Object.</param>
+        /// <param name="photoContract">Photo object.</param>
         /// <returns>New PhotoContract containing updated data.</returns>
-        public Task<PhotoContract> UpdatePhoto(PhotoContract photo)
+        public Task<PhotoContract> UpdatePhoto(PhotoContract photoContract)
         {
-            return _repository.UpdatePhoto(photo);
+            return _repository.UpdatePhoto(photoContract);
+        }
+
+        /// <summary>
+        /// Updates the status of the stored photo.
+        /// </summary>
+        /// <param name="photoContract">Photo object.</param>
+        /// <returns>PhotoContract containing updated data.</returns>
+        public Task<PhotoContract> UpdatePhotoStatus(PhotoContract photoContract)
+        {
+            return _repository.UpdatePhotoStatus(photoContract);
         }
 
         /// <summary>

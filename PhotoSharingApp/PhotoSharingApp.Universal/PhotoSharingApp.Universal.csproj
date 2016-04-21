@@ -317,6 +317,7 @@
     <Compile Include="ViewModels\PhotoDetailsViewModelArgs.cs" />
     <Compile Include="ViewModels\PhotoDetailsViewModelPhotoIdArgs.cs" />
     <Compile Include="ViewModels\ProfileViewModel.cs" />
+    <Compile Include="ViewModels\ProfileViewModelArgs.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\ShareTargetUploadFinishedHandler.cs" />
     <Compile Include="ViewModels\SignInPromptViewModel.cs" />
@@ -328,6 +329,7 @@
     <Compile Include="ViewModels\UploadViewModel.cs" />
     <Compile Include="ViewModels\UploadViewModelArgs.cs" />
     <Compile Include="ViewModels\UploadViewModelEditPhotoArgs.cs" />
+    <Compile Include="ViewModels\ViewModelArgs.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\WelcomeViewModel.cs" />
     <Compile Include="Views\AboutPage.xaml.cs">

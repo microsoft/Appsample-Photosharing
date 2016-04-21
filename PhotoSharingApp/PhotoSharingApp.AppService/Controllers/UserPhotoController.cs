@@ -58,12 +58,12 @@ namespace PhotoSharingApp.AppService.Controllers
         }
 
         /// <summary>
-        /// Gets a users paged photostream after provided continuation token.
+        /// Gets the paged photostream for the authorized user.
         /// </summary>
         /// <verb>GET</verb>
         /// <url>http://{host}/api/userphoto?continuationToken={continuationToken}</url>
         /// <param name="continuationToken">Continuation token for paged response.</param>
-        /// <returns>Paged photo contracts</returns>
+        /// <returns>Paged photo contracts which include flagged and non-flagged photos.</returns>
         [Authorize]
         [Route("api/userphoto")]
         public async Task<PagedResponse<PhotoContract>> GetPagedAsync([FromUri] string continuationToken)
@@ -75,6 +75,40 @@ namespace PhotoSharingApp.AppService.Controllers
                 var registrationReference = await ValidateAndReturnCurrentUserId();
 
                 var user = await _repository.GetUser(null, registrationReference);
+
+                var stream = await _repository.GetUserPhotoStream(user.UserId, continuationToken, true);
+
+                return stream;
+            }
+            catch (DataLayerException ex)
+            {
+                _telemetryClient.TrackException(ex);
+
+                if (ex.Error == DataLayerError.Unknown)
+                {
+                    throw ServiceExceptions.UnknownInternalFailureException(ServiceExceptions.Source);
+                }
+
+                throw ServiceExceptions.DataLayerException(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Gets a user's paged photostream.
+        /// </summary>
+        /// <verb>GET</verb>
+        /// <url>http://{host}/api/userphoto/{userId}?continuationToken={continuationToken}</url>
+        /// <param name="userId">The userId.</param>
+        /// <param name="continuationToken">Continuation token for paged response.</param>
+        /// <returns>Paged photo contracts which includes non-flagged photos only.</returns>
+        [Route("api/userphoto/{userId}")]
+        public async Task<PagedResponse<PhotoContract>> GetPagedAsync(string userId, [FromUri] string continuationToken)
+        {
+            try
+            {
+                _telemetryClient.TrackEvent("UserPhotoController GetPagedAsync invoked");
+
+                var user = await _repository.GetUser(userId);
 
                 var stream = await _repository.GetUserPhotoStream(user.UserId, continuationToken);
 

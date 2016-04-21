@@ -113,7 +113,8 @@
                               ItemContainerStyle="{StaticResource ListViewItemContainerStyle}" Margin="0">
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <controls:LeaderboardsUserControl UserEntry="{Binding}" />
+                                <controls:LeaderboardsUserControl UserEntry="{Binding}"
+                                                                  NavigationCommand="{Binding DataContext.UserSelectedCommand, ElementName=layoutRoot}" />
                             </DataTemplate>
                         </ListView.ItemTemplate>
 
@@ -130,7 +131,8 @@
                               ItemContainerStyle="{StaticResource ListViewItemContainerStyle}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <controls:LeaderboardsUserControl UserEntry="{Binding}" />
+                                <controls:LeaderboardsUserControl UserEntry="{Binding}"
+                                                                  NavigationCommand="{Binding DataContext.UserSelectedCommand, ElementName=layoutRoot}" />
                             </DataTemplate>
                         </ListView.ItemTemplate>
 
