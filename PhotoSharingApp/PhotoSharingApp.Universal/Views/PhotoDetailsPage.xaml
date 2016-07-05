@@ -215,7 +215,8 @@
                           Visibility="{Binding IsUserAbleToReportAnnotation, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                           Label="Report Annotation" Command="{Binding ReportAnnotationCommand}" />
             <AppBarButton Icon="ReportHacked"
-                          Label="Report Photo">
+                          Visibility="{Binding IsUserAbleToReportPhoto, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                          Label="Report Photo" Command="{Binding ReportPhotoCommand}" >
                 <AppBarButton.Flyout>
                     <Flyout>
                         <ListView x:Name="reportPhotoRoot" ItemsSource="{Binding ReportReasons}" SelectionMode="None">

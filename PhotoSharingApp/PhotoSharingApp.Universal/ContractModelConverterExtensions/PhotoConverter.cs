@@ -81,6 +81,7 @@ namespace PhotoSharingApp.Universal.ContractModelConverterExtensions
                 NumberOfAnnotations = photoContract.NumberOfAnnotations,
                 GoldCount = photoContract.NumberOfGoldVotes,
                 CategoryName = photoContract.CategoryName,
+                Reports = photoContract.Reports,
                 Status = photoContract.Status
             };
 

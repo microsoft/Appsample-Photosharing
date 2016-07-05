@@ -60,6 +60,7 @@ namespace PhotoSharingApp.AppService.Shared.Repositories
 
         private readonly int _firstProfilePhotoUpdateGoldIncrement;
         private readonly int _newUserGoldBalance;
+        private readonly int _maxReportsPermitted;
 
         /// <summary>
         /// The <see cref="DocumentDbRepository" /> constructor.
@@ -67,6 +68,7 @@ namespace PhotoSharingApp.AppService.Shared.Repositories
         /// <param name="environmentDefinition">The specified environment definition.</param>
         public DocumentDbRepository(EnvironmentDefinitionBase environmentDefinition)
         {
+            _maxReportsPermitted = environmentDefinition.MaxReports;
             _newUserGoldBalance = environmentDefinition.NewUserGoldBalance;
             _firstProfilePhotoUpdateGoldIncrement = environmentDefinition.FirstProfilePhotoUpdateGoldAward;
 
@@ -421,7 +423,7 @@ namespace PhotoSharingApp.AppService.Shared.Repositories
                     numberOfThumbnails,
                     _currentDocumentVersion);
 
-            
+
             var mostRecentCategoryPhotos = photosQuery.Response;
 
             if (mostRecentCategoryPhotos != null && mostRecentCategoryPhotos.Any())
@@ -733,6 +735,35 @@ namespace PhotoSharingApp.AppService.Shared.Repositories
             return document;
         }
 
+        /// <summary>
+        /// Gets the list of photos with a specific status.
+        /// </summary>
+        /// <param name="status">The photo status.</param>
+        /// <returns>A list of photos with provided status.</returns>
+        public async Task<PagedResponse<PhotoContract>> GetPhotosWithStatus(PhotoStatus status)
+        {
+            var query = _documentClient.CreateDocumentQuery<PhotoDocument>(DocumentCollectionUri)
+                .Where(d => d.DocumentType == PhotoDocument.DocumentTypeIdentifier)
+                .Where(d => d.DocumentVersion == _currentDocumentVersion)
+                .Where(p => p.Status == status);
+
+            var documentQuery = query
+                .OrderByDescending(p => p.CreatedDateTime.Epoch)
+                .AsDocumentQuery();
+
+            var documentResponse = await documentQuery.ExecuteNextAsync<PhotoDocument>();
+
+            var photoContracts = await CreatePhotoContractsAndLoadUserData(documentResponse.ToList());
+
+            var result = new PagedResponse<PhotoContract>
+            {
+                Items = photoContracts,
+                ContinuationToken = documentResponse.ResponseContinuation
+            };
+
+            return result;
+        }
+
         private string GetRecentPhotosForCategoriesStoredProcedureUri
         {
             get { return $"{StoredProceduresUri}/{GetRecentPhotosForCategoriesStoredProcedureId}"; }
@@ -1025,7 +1056,13 @@ namespace PhotoSharingApp.AppService.Shared.Repositories
             {
                 case ContentType.Photo:
                     var photoDocument = GetPhotoDocument(reportContract.ContentId);
-                    photoDocument.Report = reportDocument;
+                    photoDocument.Reports.Add(reportDocument);
+
+                    if (photoDocument.Reports.Count >= _maxReportsPermitted)
+                    {
+                        photoDocument.Status = PhotoStatus.UnderReview;
+                    }
+
                     await ReplacePhotoDocument(photoDocument);
                     break;
                 case ContentType.Annotation:

@@ -26,6 +26,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PhotoSharingApp.AppService.Shared;
 using PhotoSharingApp.AppService.Shared.Context;
+using PhotoSharingApp.AppService.Shared.Models.DocumentDB;
 using PhotoSharingApp.AppService.Shared.Repositories;
 using PhotoSharingApp.AppService.Tests.Context;
 using PhotoSharingApp.Portable.DataContracts;
@@ -180,6 +181,37 @@ namespace PhotoSharingApp.AppService.Tests.DAL
 
             // Get photo - expect it to fail here
             await _repository.GetPhoto(actionResult.Id);
+        }
+
+        [TestMethod]
+        public async Task PhotoStatusChangeAfterReportsTest()
+        {
+            // Populate db with necessary objects
+            var user1 = await _repository.CreateUser("test user " + System.DateTime.UtcNow.Ticks);
+            var category = await _repository.CreateCategory("Test Category " + System.DateTime.UtcNow.Ticks);
+            var photo = await _repository.InsertPhoto(CreateTestPhoto(category, user1), 1);
+            var maxReports = _environmentDefinition.MaxReports;
+
+            // Verify that every report before maxReports does not change photo status.
+            for (int i = 0; i < maxReports - 1; i++)
+            {
+                var newUser = await _repository.CreateUser("test user " + System.DateTime.UtcNow.Ticks);
+                var newReport = CreateTestReport(photo.Id, ContentType.Photo, ReportReason.Spam, newUser.UserId);
+                var reportResult = await _repository.InsertReport(newReport, newUser.RegistrationReference);
+                var updatedPhoto = await _repository.GetPhoto(photo.Id);
+                // Sanity checks
+                Assert.AreEqual(PhotoStatus.Active, updatedPhoto.Status);
+                Assert.AreEqual(i + 1, updatedPhoto.Reports.Count);
+            }
+
+            var user2 = await _repository.CreateUser("test user " + System.DateTime.UtcNow.Ticks);
+            var finalReport = CreateTestReport(photo.Id, ContentType.Photo, ReportReason.Spam, user2.UserId);
+            var finalReportResult = await _repository.InsertReport(finalReport, user2.RegistrationReference);
+            var finalUpdatedPhoto = await _repository.GetPhoto(photo.Id);
+
+            // Verify
+            Assert.AreEqual(maxReports, finalUpdatedPhoto.Reports.Count, "Reports count mismatch.");
+            Assert.AreEqual(PhotoStatus.UnderReview, finalUpdatedPhoto.Status, "Photo is not under review.");
         }
 
         /// <summary>
