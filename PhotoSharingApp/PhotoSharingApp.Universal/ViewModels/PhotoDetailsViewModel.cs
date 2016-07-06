@@ -205,6 +205,30 @@ namespace PhotoSharingApp.Universal.ViewModels
         }
 
         /// <summary>
+        /// Determines if user can report the photo.
+        /// </summary>
+        public bool IsUserAbleToReportPhoto
+        {
+            get
+            {
+                if (AppEnvironment.Instance.CurrentUser == null ||
+                    AppEnvironment.Instance.CurrentUser.UserId == _photo.User.UserId)
+                {
+                    return false;
+                }
+
+                foreach (var report in _photo.Reports)
+                {
+                    if (report.ReporterUserId == AppEnvironment.Instance.CurrentUser.UserId)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+
+        /// <summary>
         /// Determines if user can update the photo.
         /// </summary>
         public bool IsUserAbleToUpdatePhoto

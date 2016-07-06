@@ -168,6 +168,16 @@ namespace PhotoSharingApp.AppService.Shared.Repositories
         }
 
         /// <summary>
+        /// Gets the list of photos with a specific status.
+        /// </summary>
+        /// <param name="status">The photo status.</param>
+        /// <returns>A list of photos with provided status.</returns>
+        public async Task<PagedResponse<PhotoContract>> GetPhotosWithStatus(PhotoStatus status)
+        {
+            return await _repository.GetPhotosWithStatus(status);
+        }
+
+        /// <summary>
         /// Gets the user by an existing app user id OR registrationReference
         /// from Azure App Services auth mechanism as the userId may not be known
         /// at time of entry.

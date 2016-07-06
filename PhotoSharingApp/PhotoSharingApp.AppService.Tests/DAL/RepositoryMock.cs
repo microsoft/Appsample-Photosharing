@@ -107,6 +107,11 @@ namespace PhotoSharingApp.AppService.Tests.DAL
             throw new NotImplementedException();
         }
 
+        public Task<PagedResponse<PhotoContract>> GetPhotosWithStatus(PhotoStatus status)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<UserContract> GetUser(string userId, string registrationReference = null)
         {
             throw new NotImplementedException();

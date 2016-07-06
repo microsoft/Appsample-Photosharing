@@ -106,10 +106,10 @@ namespace PhotoSharingApp.AppService.Shared.Models.DocumentDB
         public string OSPlatform { get; set; }
 
         /// <summary>
-        /// The report for this photo.
+        /// The reports for this photo.
         /// </summary>
-        [JsonProperty(PropertyName = "Report")]
-        public ReportDocument Report { get; set; }
+        [JsonProperty(PropertyName = "Reports")]
+        public List<ReportDocument> Reports { get; set; } = new List<ReportDocument>();
 
         /// <summary>
         /// The standard-sized image url.
@@ -202,6 +202,7 @@ namespace PhotoSharingApp.AppService.Shared.Models.DocumentDB
                 NumberOfGoldVotes = GoldCount,
                 NumberOfAnnotations = Annotations.Count,
                 OSPlatform = OSPlatform,
+                Reports = Reports.Select(r => r.ToContract(Id, ContentType.Photo)).ToList(),
                 Status = Status
             };
         }

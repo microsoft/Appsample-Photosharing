@@ -96,6 +96,11 @@ namespace PhotoSharingApp.Portable.DataContracts
         public long Rank { get; set; }
 
         /// <summary>
+        /// The reports for this photo
+        /// </summary>
+        public List<ReportContract> Reports { get; set; } = new List<ReportContract>();
+
+        /// <summary>
         /// The standard-sized image url.
         /// </summary>
         public string StandardUrl { get; set; }

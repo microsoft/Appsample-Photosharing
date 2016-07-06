@@ -23,6 +23,7 @@
 //  ---------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using PhotoSharingApp.Portable.DataContracts;
 using PhotoSharingApp.Universal.ComponentModel;
@@ -162,6 +163,11 @@ namespace PhotoSharingApp.Universal.Models
         /// Gets or sets the number of comments.
         /// </summary>
         public int NumberOfAnnotations { get; set; }
+
+        /// <summary>
+        /// The reports for this photo.
+        /// </summary>
+        public List<ReportContract> Reports { get; set; } = new List<ReportContract>();
 
         /// <summary>
         /// Gets or sets the standard image URL.

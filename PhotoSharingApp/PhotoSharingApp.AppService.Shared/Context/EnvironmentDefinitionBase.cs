@@ -37,6 +37,7 @@ namespace PhotoSharingApp.AppService.Shared.Context
         private const int FirstProfilePhotoUpdateGoldAwardCount = 5;
         private const string IapCertificateValidationContainer = "validation";
         private const string IapPublicCertificateName = "IapReceiptProduction.cer";
+        private const int MaxReportsPermitted = 3;
         private const int NewUserGoldAwardCount = 40;
         private CloudStorageAccount _storageAccount;
 
@@ -95,6 +96,14 @@ namespace PhotoSharingApp.AppService.Shared.Context
         /// The Application Insights instrumentation key. This value is read from the app.config file.
         /// </summary>
         public abstract string InstrumentationKey { get; }
+
+        /// <summary>
+        /// Maximum number of reports permitted until photo is "under review"
+        /// </summary>
+        public virtual int MaxReports
+        {
+            get { return MaxReportsPermitted; }
+        }
 
         /// <summary>
         /// Default new user gold balance.

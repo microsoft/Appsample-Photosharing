@@ -52,6 +52,11 @@ namespace PhotoSharingApp.Portable.DataContracts
         /// <summary>
         /// Photo is hidden.
         /// </summary>
-        Hidden = 5
+        Hidden = 5,
+
+        /// <summary>
+        /// Photo is under review.
+        /// </summary>
+        UnderReview = 6
     }
 }
