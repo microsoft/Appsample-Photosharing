@@ -35,38 +35,6 @@ namespace PhotoSharingApp.AppService.Notifications
     public class NotificationHandler : INotificationHandler
     {
         /// <summary>
-        /// Sends a Push notification for receiving Gold to a specified registered user.
-        /// The thumbnail of the photo receiving gold is also sent.
-        /// Photo id of the photo is sent to enable launching of the photo on the client on
-        /// clicking the notification.
-        /// </summary>
-        /// <param name="platform">The platform specific notification service to use.</param>
-        /// <param name="userNotificationTag">The user notification tag to send notification to.</param>
-        /// <param name="message">The message to display on the notification toast.</param>
-        /// <param name="thumbnailUrl">The thumbnail Url of the photo to display in notification.</param>
-        /// <param name="photoId">The photoId of the photo to send as activation argument.</param>
-        /// <returns>HttpStatusCode of the request.</returns>
-        public async Task<HttpStatusCode> PushGoldReceivedNotificationAsync(PushNotificationPlatform platform,
-            string userNotificationTag, string message,
-            string thumbnailUrl, string photoId)
-        {
-            return await SendPush(platform, userNotificationTag, message, thumbnailUrl, photoId);
-        }
-
-        /// <summary>
-        /// Send a text push notification to a specified registered user.
-        /// </summary>
-        /// <param name="platform">The platform specific notification service to use.</param>
-        /// <param name="userNotificationTag">The user notification tag to send notification to.</param>
-        /// <param name="message">The message to display on the notification toast.</param>
-        /// <returns>HttpStatusCode of the request.</returns>
-        public async Task<HttpStatusCode> PushMessageNotificationAsync(PushNotificationPlatform platform,
-            string userNotificationTag, string message)
-        {
-            return await SendPush(platform, userNotificationTag, message);
-        }
-
-        /// <summary>
         /// Sends a rich push notification message with a thumbnail image and arguments to lauch the image
         /// if the optional parameters are passed.
         /// Otherwise, only a simple text push message is sent.
@@ -77,7 +45,7 @@ namespace PhotoSharingApp.AppService.Notifications
         /// <param name="thumbnailUrl">Optional - The thumbnail Url of the photo to display in notification.</param>
         /// <param name="photoId">Optional - The photoId of the photo to send as activation argument.</param>
         /// <returns>HttpStatusCode of the request.</returns>
-        private async Task<HttpStatusCode> SendPush(PushNotificationPlatform platform, string userNotificationTag,
+        public async Task<HttpStatusCode> SendPushAsync(PushNotificationPlatform platform, string userNotificationTag,
             string message,
             string thumbnailUrl = "", string photoId = "")
         {
