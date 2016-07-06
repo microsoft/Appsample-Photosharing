@@ -197,8 +197,9 @@ namespace PhotoSharingApp.AppService.Tests.DAL
             {
                 var newUser = await _repository.CreateUser("test user " + System.DateTime.UtcNow.Ticks);
                 var newReport = CreateTestReport(photo.Id, ContentType.Photo, ReportReason.Spam, newUser.UserId);
-                var reportResult = await _repository.InsertReport(newReport, newUser.RegistrationReference);
+                await _repository.InsertReport(newReport, newUser.RegistrationReference);
                 var updatedPhoto = await _repository.GetPhoto(photo.Id);
+
                 // Sanity checks
                 Assert.AreEqual(PhotoStatus.Active, updatedPhoto.Status);
                 Assert.AreEqual(i + 1, updatedPhoto.Reports.Count);
@@ -206,7 +207,7 @@ namespace PhotoSharingApp.AppService.Tests.DAL
 
             var user2 = await _repository.CreateUser("test user " + System.DateTime.UtcNow.Ticks);
             var finalReport = CreateTestReport(photo.Id, ContentType.Photo, ReportReason.Spam, user2.UserId);
-            var finalReportResult = await _repository.InsertReport(finalReport, user2.RegistrationReference);
+            await _repository.InsertReport(finalReport, user2.RegistrationReference);
             var finalUpdatedPhoto = await _repository.GetPhoto(photo.Id);
 
             // Verify
