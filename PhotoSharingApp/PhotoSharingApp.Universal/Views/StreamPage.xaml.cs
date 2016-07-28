@@ -30,6 +30,7 @@ using PhotoSharingApp.Universal.Unity;
 using PhotoSharingApp.Universal.ViewModels;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Navigation;
+using System.Linq;
 
 namespace PhotoSharingApp.Universal.Views
 {
@@ -38,8 +39,11 @@ namespace PhotoSharingApp.Universal.Views
     /// </summary>
     public sealed partial class StreamPage : BasePage
     {
-        private const double MaxPictureWidth = 700;
+        private const int ItemMargin = 6;
+        private double PreferredImageWidth = 300;
         private bool _firstTimeLoadingFinished;
+        private Thickness _imageMargin;
+        private double _imageWidth;
         private double _imageHeight;
         private StreamViewModel _viewModel;
 
@@ -47,6 +51,7 @@ namespace PhotoSharingApp.Universal.Views
         {
             InitializeComponent();
 
+            UpdateImageWidth();
             UpdateImageHeight();
 
             SizeChanged += StreamPage_SizeChanged;
@@ -60,17 +65,61 @@ namespace PhotoSharingApp.Universal.Views
         /// <summary>
         /// Gets or sets the height of images in the stream.
         /// </summary>
-        public double ImageHeight
+        public double ImageHeight 
+         { 
+             get { return _imageHeight; } 
+             set 
+             { 
+                 if (Math.Abs(value - _imageHeight) > 
+                     AppEnvironment.FloatingComparisonTolerance) 
+                 { 
+                     _imageHeight = value; 
+                     NotifyPropertyChanged(nameof(ImageHeight)); 
+                 } 
+             } 
+         }
+
+        /// <summary>
+        /// Gets or sets the margin of images in the stream.
+        /// </summary>
+        public Thickness ImageMargin
         {
-            get { return _imageHeight; }
+            get { return _imageMargin; }
             set
             {
-                if (Math.Abs(value - _imageHeight) >
+                if (_imageMargin != value)
+                {
+                    _imageMargin = value;
+                    NotifyPropertyChanged(nameof(ImageMargin));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the width of images in the stream.
+        /// </summary>
+        public double ImageWidth
+        {
+            get { return _imageWidth; }
+            set
+            {
+                if (Math.Abs(value - _imageWidth) >
                     AppEnvironment.FloatingComparisonTolerance)
                 {
-                    _imageHeight = value;
-                    NotifyPropertyChanged();
+                    _imageWidth = value;
+                    NotifyPropertyChanged(nameof(ImageWidth));
                 }
+            }
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+
+            var hightlightedPhoto = _viewModel.Photos.FirstOrDefault(p => p.IsHighlighted);
+            if (hightlightedPhoto != null)
+            {
+                hightlightedPhoto.IsHighlighted = false;
             }
         }
 
@@ -100,11 +149,16 @@ namespace PhotoSharingApp.Universal.Views
 
                     await _viewModel.LoadState(args);
                 }
-            }
+            }      
         }
 
         private void Photos_LoadingFinished(object sender, EventArgs e)
         {
+            if (_viewModel?.SelectedPhoto != null)
+            {
+                _viewModel.SelectedPhoto.IsHighlighted = true;
+            }
+
             if (!_firstTimeLoadingFinished)
             {
                 UpdateScrollPosition();
@@ -114,13 +168,51 @@ namespace PhotoSharingApp.Universal.Views
 
         private void StreamPage_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            UpdateImageWidth();
             UpdateImageHeight();
         }
 
         private void UpdateImageHeight()
         {
-            var min = Math.Min(pageRoot.ActualWidth, MaxPictureWidth);
-            ImageHeight = min;
+            // Calculating the additional height needed per item
+            // depending on the overall page width.
+            int additionalHeightPerItem;
+
+            if (pageRoot.ActualWidth < 720)
+            {
+                additionalHeightPerItem = (int)(ImageWidth / 3.25);
+            }
+            else if (pageRoot.ActualWidth > 1900)
+            {
+                additionalHeightPerItem = (int)(ImageWidth / 2);
+            }
+            else
+            {
+                additionalHeightPerItem = (int)(ImageWidth / 2.75);
+            }
+
+            ImageHeight = ImageWidth + additionalHeightPerItem;
+        }
+
+        private void UpdateImageWidth()
+        {
+            if (pageRoot.ActualWidth < 720)
+            {
+                ImageWidth = pageRoot.ActualWidth;
+                ImageMargin = new Thickness(0, 0, 0, 6);
+            }
+            else
+            {
+                // Calculating how many items per row we get with preferred with + image margin
+                var itemsPerRow = (int)(pageRoot.ActualWidth / (PreferredImageWidth + ItemMargin + 6));
+
+                // Calculating rest and distribute among items
+                var rest = (int)(pageRoot.ActualWidth % (PreferredImageWidth + ItemMargin + 6));
+                var additionalWidthPerItem = rest / itemsPerRow;
+
+                ImageWidth = PreferredImageWidth + additionalWidthPerItem;
+                ImageMargin = new Thickness(0, 0, ItemMargin, ItemMargin);
+            }
         }
 
         private void UpdateScrollPosition()
@@ -130,7 +222,7 @@ namespace PhotoSharingApp.Universal.Views
             if (_viewModel?.SelectedPhoto != null)
             {
                 photosList.ScrollIntoView(_viewModel.SelectedPhoto);
-            }
+            }            
         }
     }
 }
