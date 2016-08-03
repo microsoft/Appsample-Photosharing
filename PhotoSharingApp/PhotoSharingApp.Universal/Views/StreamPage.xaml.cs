@@ -149,7 +149,7 @@ namespace PhotoSharingApp.Universal.Views
 
                     await _viewModel.LoadState(args);
                 }
-            }      
+            }
         }
 
         private void Photos_LoadingFinished(object sender, EventArgs e)
@@ -222,7 +222,7 @@ namespace PhotoSharingApp.Universal.Views
             if (_viewModel?.SelectedPhoto != null)
             {
                 photosList.ScrollIntoView(_viewModel.SelectedPhoto);
-            }            
+            }
         }
     }
 }

@@ -153,12 +153,12 @@
                                         </Border.Transitions>
                                         <Viewbox Width="70" Height="70" HorizontalAlignment="Left">
                                             <controls:UserProfilePictureControl
-                                        Width="70"
-                                        Height="70"
-                                        ShowBorder="true"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Top"
-                                        Source="{Binding User.ProfilePictureUrl}">
+                                                Width="70"
+                                                Height="70"
+                                                ShowBorder="true"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Top"
+                                                Source="{Binding User.ProfilePictureUrl}">
                                                 <interactivity:Interaction.Behaviors>
                                                     <core:EventTriggerBehavior EventName="Tapped">
                                                         <core:InvokeCommandAction
@@ -173,10 +173,10 @@
                                     <Viewbox Width="50" Height="50" Margin="0,-35,0,0" Grid.Column="2" Canvas.ZIndex="1"
                                          HorizontalAlignment="Right">
                                         <controls:GoldButton
-                                     Command="{Binding DataContext.GiveGoldCommand, ElementName=layoutRoot}" 
-                                     CommandParameter="{Binding}"
-                                     IsEnabled="{Binding CanGiveGold}" FontSize="18"
-                                     Content="{Binding GoldCount}" VerticalAlignment="Top" />
+                                             Command="{Binding DataContext.GiveGoldCommand, ElementName=layoutRoot}" 
+                                             CommandParameter="{Binding}"
+                                             IsEnabled="{Binding CanGiveGold}" FontSize="18"
+                                             Content="{Binding GoldCount}" VerticalAlignment="Top" />
                                     </Viewbox>
 
                                     <TextBlock Grid.Row="1" Grid.ColumnSpan="3" Margin="0,12"
@@ -199,7 +199,7 @@
                     </DataTemplate>
                 </GridView.ItemTemplate>
             </GridView>
-            
+
             <ProgressRing IsActive="{Binding IsBusy}"
                         Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Grid>
