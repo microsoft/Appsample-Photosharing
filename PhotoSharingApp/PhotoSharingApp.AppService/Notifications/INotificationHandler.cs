@@ -34,27 +34,18 @@ namespace PhotoSharingApp.AppService.Notifications
     public interface INotificationHandler
     {
         /// <summary>
-        /// Sends a Push notification for receiving Gold to a specified registered user.
-        /// The thumbnail of the photo receiving gold is also sent.
+        /// Sends a rich push notification message with a thumbnail image and arguments to lauch the image 
+        /// if the optional parameters are passed.
+        /// Otherwise, only a simple text push message is sent. 
         /// </summary>
         /// <param name="platform">The platform specific notification service to use.</param>
         /// <param name="userNotificationTag">The user notification tag to send notification to.</param>
         /// <param name="message">The message to display on the notification toast.</param>
-        /// <param name="thumbnailUrl">The thumbnail Url of the photo to display in notification.</param>
-        /// <param name="photoId">The photoId of the photo to send as activation argument.</param>
+        /// <param name="thumbnailUrl">Optional - The thumbnail Url of the photo to display in notification.</param>
+        /// <param name="photoId">Optional - The photoId of the photo to send as activation argument.</param>
         /// <returns>HttpStatusCode of the request.</returns>
-        Task<HttpStatusCode> PushGoldReceivedNotificationAsync(PushNotificationPlatform platform,
-            string userNotificationTag, string message,
-            string thumbnailUrl, string photoId);
-
-        /// <summary>
-        /// Send a text push notification to a specified registered user.
-        /// </summary>
-        /// <param name="platform">The platform specific notification service to use.</param>
-        /// <param name="userNotificationTag">The user notification tag to send notification to.</param>
-        /// <param name="message">The message to display on the notification toast.</param>
-        /// <returns>HttpStatusCode of the request.</returns>
-        Task<HttpStatusCode> PushMessageNotificationAsync(PushNotificationPlatform platform, string userNotificationTag,
-            string message);
+        Task<HttpStatusCode> SendPushAsync(PushNotificationPlatform platform, string userNotificationTag,
+        string message,
+        string thumbnailUrl = "", string photoId = "");
     }
 }

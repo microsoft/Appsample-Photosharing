@@ -148,6 +148,9 @@
       <DependentUpon>AnimatedImage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\CropControl.cs" />
+    <Compile Include="Controls\FeaturedPhotoControl.xaml.cs">
+      <DependentUpon>FeaturedPhotoControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\GoldButton.cs" />
     <Compile Include="Controls\GoldPurchasePromptControl.xaml.cs">
       <DependentUpon>GoldPurchasePromptControl.xaml</DependentUpon>
@@ -414,6 +417,10 @@
     <Page Include="Controls\AnimatedImage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\FeaturedPhotoControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\GoldPurchasePromptControl.xaml">
       <SubType>Designer</SubType>

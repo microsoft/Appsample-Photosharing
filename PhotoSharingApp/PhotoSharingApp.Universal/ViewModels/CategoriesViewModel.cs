@@ -42,6 +42,11 @@ namespace PhotoSharingApp.Universal.ViewModels
     public class CategoriesViewModel : ViewModelBase
     {
         /// <summary>
+        /// The interval of the hero image scroll timer.
+        /// </summary>
+        private const int HeroImageScrollTimerInterval = 7;
+
+        /// <summary>
         /// The number of hero images to show
         /// </summary>
         private const int NumberOfHeroImages = 5;
@@ -54,7 +59,7 @@ namespace PhotoSharingApp.Universal.ViewModels
         private readonly IDialogService _dialogService;
 
         /// <summary>
-        /// The hero iamges
+        /// The hero images
         /// </summary>
         private ObservableCollection<Photo> _heroImages;
 
@@ -159,6 +164,16 @@ namespace PhotoSharingApp.Universal.ViewModels
                 }
             }
         }
+
+
+        /// <summary>
+        /// Gets the hero image scroll timer.
+        /// </summary>
+        public DispatcherTimer HeroImageScrollTimer
+        {
+            get { return _heroImageScrollTimer; }
+        }
+
 
         /// <summary>
         /// Gets the hero image selected command.
@@ -375,33 +390,32 @@ namespace PhotoSharingApp.Universal.ViewModels
         }
 
         /// <summary>
-        /// Starts the hero image slide show.
+        /// Instantiates the hero image slideshow timer.
         /// </summary>
-        public void StartHeroImageSlideShow()
+        public void InstantiateHeroImageSlideShowTimer()
         {
-            // Only start slideshow if we were able to get
+            // Only instantiate slideshow timer if we were able to get
             // any hero images
             if (HeroImages != null && HeroImages.Any())
             {
-                _heroImageScrollTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(7) };
-                StartHeroImageSlideshowTimer();
+                _heroImageScrollTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(HeroImageScrollTimerInterval) };
+
+                _heroImageScrollTimer.Tick += (s, e) =>
+                {
+                    var selectedIndex = HeroImages.IndexOf(SelectedHeroImage);
+                    selectedIndex = (selectedIndex + 1) % HeroImages.Count;
+
+                    SelectedHeroImage = HeroImages[selectedIndex];
+                };
             }
         }
 
         /// <summary>
         /// Starts a timer which cycles through hero images.
         /// </summary>
-        private void StartHeroImageSlideshowTimer()
+        public void StartHeroImageSlideShow()
         {
             _heroImageScrollTimer.Start();
-
-            _heroImageScrollTimer.Tick += (s, e) =>
-            {
-                var selectedIndex = HeroImages.IndexOf(SelectedHeroImage);
-                selectedIndex = (selectedIndex + 1) % HeroImages.Count;
-
-                SelectedHeroImage = HeroImages[selectedIndex];
-            };
         }
 
         /// <summary>

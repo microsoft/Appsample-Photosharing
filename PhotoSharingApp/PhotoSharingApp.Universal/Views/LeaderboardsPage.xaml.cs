@@ -23,9 +23,12 @@
 //  ---------------------------------------------------------------------------------
 
 using Microsoft.Practices.ServiceLocation;
+using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.Unity;
 using PhotoSharingApp.Universal.ViewModels;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Navigation;
+using System;
 
 namespace PhotoSharingApp.Universal.Views
 {
@@ -34,14 +37,67 @@ namespace PhotoSharingApp.Universal.Views
     /// </summary>
     public sealed partial class LeaderboardsPage : BasePage
     {
+        private double _leaderboardsControlWidthAndHeight;
+        private double _hubSectionHeaderFontSize = 1;
+        private const double NavMenuWidth = 48;
+
         private LeaderboardViewModel _viewModel;
 
         /// <summary>
-        /// The constructor
+        /// The constructor.
         /// </summary>
         public LeaderboardsPage()
         {
             InitializeComponent();
+
+            SizeChanged += LeaderboardsPage_SizeChanged;
+            Loaded += LeaderboardsPage_Loaded;
+        }
+
+        /// <summary>
+        /// The font size of each hub section header.
+        /// </summary>
+        public double HubSectionHeaderFontSize
+        {
+            get { return _hubSectionHeaderFontSize; }
+            set
+            {
+                if (Math.Abs(value - _hubSectionHeaderFontSize) >
+                    AppEnvironment.FloatingComparisonTolerance)
+                {
+                    _hubSectionHeaderFontSize = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        /// <summary>
+        /// The width and height of each LeaderboardsControl.
+        /// </summary>
+        public double LeaderboardsControlWidthAndHeight
+        {
+            get { return _leaderboardsControlWidthAndHeight; }
+            set
+            {
+                if (Math.Abs(value - _leaderboardsControlWidthAndHeight) >
+                    AppEnvironment.FloatingComparisonTolerance)
+                {
+                    _leaderboardsControlWidthAndHeight = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        private void LeaderboardsPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            UpdateLeaderboardsControlWidthAndHeight();
+            UpdateHubSectionHeaderFontSize();
+        }
+
+        private void LeaderboardsPage_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            UpdateLeaderboardsControlWidthAndHeight();
+            UpdateHubSectionHeaderFontSize();
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
@@ -55,6 +111,38 @@ namespace PhotoSharingApp.Universal.Views
             if (loadData)
             {
                 await _viewModel.LoadState();
+            }
+        }
+
+        private void UpdateHubSectionHeaderFontSize()
+        {
+            if (leaderboardHubControl.Orientation == Windows.UI.Xaml.Controls.Orientation.Vertical)
+            {
+                HubSectionHeaderFontSize = 30;
+            }
+            else if (ActualWidth + NavMenuWidth >= 1400)
+            {
+                HubSectionHeaderFontSize = 25;
+            }
+            else if (ActualWidth + NavMenuWidth >= 900)
+            {
+                HubSectionHeaderFontSize = 19;
+            }
+            else
+            {
+                HubSectionHeaderFontSize = 15;
+            }
+        }
+
+        private void UpdateLeaderboardsControlWidthAndHeight()
+        {
+            if (leaderboardHubControl.Orientation == Windows.UI.Xaml.Controls.Orientation.Vertical)
+            {
+                LeaderboardsControlWidthAndHeight = pageRoot.ActualWidth * .9;
+            }
+            else
+            {
+                LeaderboardsControlWidthAndHeight = pageRoot.ActualWidth * .2;
             }
         }
     }

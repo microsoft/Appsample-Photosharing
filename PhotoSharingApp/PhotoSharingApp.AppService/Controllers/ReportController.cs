@@ -27,6 +27,7 @@ using System.Web.Http;
 using Microsoft.ApplicationInsights;
 using Microsoft.Azure.Mobile.Server.Config;
 using PhotoSharingApp.AppService.Helpers;
+using PhotoSharingApp.AppService.Notifications;
 using PhotoSharingApp.AppService.ServiceCore;
 using PhotoSharingApp.AppService.Shared;
 using PhotoSharingApp.AppService.Shared.Repositories;
@@ -40,19 +41,23 @@ namespace PhotoSharingApp.AppService.Controllers
     [MobileAppController]
     public class ReportController : BaseController
     {
+        private readonly INotificationHandler _notificationHandler;
         private readonly IRepository _repository;
         private readonly TelemetryClient _telemetryClient;
 
         /// <summary>
         /// Report controller constructor.
         /// </summary>
+        /// <param name="notificationHandler">The notification handler.</param>
         /// <param name="repository">The repository interface.</param>
         /// <param name="telemetryClient">The telemetry client.</param>
         /// <param name="userRegistrationReferenceProvider">The user registration reference provider.</param>
         public ReportController(IRepository repository, TelemetryClient telemetryClient,
+            INotificationHandler notificationHandler,
             IUserRegistrationReferenceProvider userRegistrationReferenceProvider)
             : base(userRegistrationReferenceProvider)
         {
+            _notificationHandler = notificationHandler;
             _repository = repository;
             _telemetryClient = telemetryClient;
         }
@@ -71,7 +76,18 @@ namespace PhotoSharingApp.AppService.Controllers
             try
             {
                 var registrationReference = await ValidateAndReturnCurrentUserId();
-                return await _repository.InsertReport(report, registrationReference);
+                var reportContract = await _repository.InsertReport(report, registrationReference);
+                var photoContract = await _repository.GetPhoto(reportContract.ContentId);
+
+                if (photoContract.Status == PhotoStatus.UnderReview)
+                {
+                    await _notificationHandler.SendPushAsync(PushNotificationPlatform.Windows,
+                    "user:" + photoContract.User.UserId,
+                    "Your photo has been placed under review.",
+                    photoContract.ThumbnailUrl, photoContract.Id);
+                }
+
+                return reportContract;
             }
             catch (DataLayerException ex)
             {

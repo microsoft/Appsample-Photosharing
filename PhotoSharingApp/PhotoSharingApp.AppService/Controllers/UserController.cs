@@ -130,7 +130,7 @@ namespace PhotoSharingApp.AppService.Controllers
                 }
 
                 // Refreshing profile photo url
-                user.ProfilePhotoUrl = photo.ThumbnailUrl;
+                user.ProfilePhotoUrl = photo.StandardUrl;
 
                 var existingUser = await _repository.UpdateUser(user);
 
