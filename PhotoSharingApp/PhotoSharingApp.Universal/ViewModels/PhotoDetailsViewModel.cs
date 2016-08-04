@@ -59,9 +59,19 @@ namespace PhotoSharingApp.Universal.ViewModels
         private bool _isBusy;
 
         /// <summary>
+        /// Is photo deletion canceled.
+        /// </summary>
+        private bool _isDeletePhotoCanceled;
+
+        /// <summary>
         /// Is Photo already loaded from service.
         /// </summary>
         private bool _isPhotoLoadedFromService;
+
+        /// <summary>
+        /// Is setting the profile photo canceled.
+        /// </summary>
+        private bool _isSetProfilePhotoCanceled;
 
         /// <summary>
         /// The Navigation Facade.
@@ -82,6 +92,11 @@ namespace PhotoSharingApp.Universal.ViewModels
         /// Selected annotation
         /// </summary>
         private Annotation _selectedAnnotation;
+
+        /// <summary>
+        /// The user
+        /// </summary>
+        private User _user;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PhotoDetailsViewModel" /> class.
@@ -106,6 +121,10 @@ namespace PhotoSharingApp.Universal.ViewModels
             ReportAnnotationCommand = new RelayCommand(OnReportAnnotation);
             EditPhotoCommand = new RelayCommand(OnEditPhoto);
             UserSelectedCommand = new RelayCommand<User>(OnUserSelected);
+            DeletePhotoCommand = new RelayCommand(OnDeletePhoto);
+            CancelDeletePhotoCommand = new RelayCommand(OnCancelDeletePhoto);
+            SetProfilePhotoCommand = new RelayCommand(OnSetProfilePhoto);
+            CancelSetProfileCommand = new RelayCommand(OnCancelSetProfile);
         }
 
         /// <summary>
@@ -136,9 +155,24 @@ namespace PhotoSharingApp.Universal.ViewModels
         }
 
         /// <summary>
+        /// Gets the cancel delete photo command.
+        /// </summary>
+        public RelayCommand CancelDeletePhotoCommand { get; private set; }
+
+        /// <summary>
+        /// Gets the cancel set profile photo command.
+        /// </summary>
+        public RelayCommand CancelSetProfileCommand { get; private set; }
+
+        /// <summary>
         /// Gets the delete Annotation command.
         /// </summary>
         public RelayCommand DeleteAnnotationCommand { get; private set; }
+
+        /// <summary>
+        /// Gets the delete photo command.
+        /// </summary>
+        public RelayCommand DeletePhotoCommand { get; private set; }
 
         /// <summary>
         /// Gets the edit photo command.
@@ -156,6 +190,21 @@ namespace PhotoSharingApp.Universal.ViewModels
         public RelayCommand GotoCameraCommand { get; private set; }
 
         /// <summary>
+        /// Gets the set profile photo command.
+        /// </summary>
+        public RelayCommand SetProfilePhotoCommand { get; private set; }
+
+        /// <summary>
+        /// Determines if photo can be set as user's profile pic.
+        /// </summary>
+        public bool CanSetProfilePicture => IsCurrentUsersPhoto && IsPhotoActive;
+
+        /// <summary>
+        /// Gets or sets a value indicating if photo has been reported.
+        /// </summary>
+        public bool HasReported { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this instance is busy.
         /// </summary>
         /// <value>
@@ -170,6 +219,62 @@ namespace PhotoSharingApp.Universal.ViewModels
                 {
                     _isBusy = value;
                     NotifyPropertyChanged(nameof(IsBusy));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Determines if the photo belongs to the current user.
+        /// </summary>
+        public bool IsCurrentUsersPhoto => AppEnvironment.Instance.CurrentUser != null && AppEnvironment.Instance.CurrentUser.UserId == Photo.User.UserId;
+
+        /// <summary>
+        /// Determines if the photo is active.
+        /// </summary>
+        public bool IsPhotoActive => _photo.HasActiveStatus;
+
+        /// <summary>
+        /// Determines if user canceled setting a profile photo.
+        /// </summary>
+        public bool IsSetProfilePhotoCanceled
+        {
+            get
+            {
+                return _isSetProfilePhotoCanceled;
+            }
+            set
+            {
+                _isSetProfilePhotoCanceled = value;
+                NotifyPropertyChanged(nameof(IsSetProfilePhotoCanceled));
+
+                // When IsDeletePhotoCanceled is set to true, the CloseMenuFlyoutAction is triggered. 
+                // We then re-set it to false, making the CloseMenuFlyoutAction possible to trigger again.
+                if (value)
+                {
+                    IsSetProfilePhotoCanceled = false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Determines if user canceled deleting a photo.
+        /// </summary>
+        public bool IsDeletePhotoCanceled
+        {
+            get
+            {
+                return _isDeletePhotoCanceled;
+            }
+            set
+            {
+                _isDeletePhotoCanceled = value;
+                NotifyPropertyChanged(nameof(IsDeletePhotoCanceled));
+
+                // When IsDeletePhotoCanceled is set to true, the CloseMenuFlyoutAction is triggered. 
+                // We then re-set it to false, making the CloseMenuFlyoutAction possible to trigger again.
+                if (value)
+                {
+                    IsDeletePhotoCanceled = false;
                 }
             }
         }
@@ -224,6 +329,12 @@ namespace PhotoSharingApp.Universal.ViewModels
                         return false;
                     }
                 }
+
+                if (HasReported == true)
+                {
+                    return false;
+                }
+
                 return true;
             }
         }
@@ -300,6 +411,22 @@ namespace PhotoSharingApp.Universal.ViewModels
         }
 
         /// <summary>
+        /// Gets the current user;
+        /// </summary>
+        public User User
+        {
+            get { return _user; }
+            private set
+            {
+                if (value != _user)
+                {
+                    _user = value;
+                    NotifyPropertyChanged(nameof(User));
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets the user selected command.
         /// </summary>
         public RelayCommand<User> UserSelectedCommand { get; private set; }
@@ -316,7 +443,7 @@ namespace PhotoSharingApp.Universal.ViewModels
             Photo = args.Photo;
             _isPhotoLoadedFromService = false;
 
-            await ShowAnnotations();
+            await ShowDetails();
         }
 
         /// <summary>
@@ -330,7 +457,18 @@ namespace PhotoSharingApp.Universal.ViewModels
             Photo = await _photoService.GetPhotoDetails(args.PhotoId);
             _isPhotoLoadedFromService = true;
 
-            await ShowAnnotations();
+            await ShowDetails();
+        }
+
+        private void OnCancelDeletePhoto()
+        {
+            IsDeletePhotoCanceled = true;
+        }
+
+
+        private void OnCancelSetProfile()
+        {
+            IsSetProfilePhotoCanceled = true;
         }
 
         private async void OnDeleteAnnotation()
@@ -349,6 +487,31 @@ namespace PhotoSharingApp.Universal.ViewModels
             catch (ServiceException)
             {
                 await _dialogService.ShowNotification("DeleteCommentErrorMessage", "GenericErrorTitle");
+            }
+        }
+
+        private async void OnDeletePhoto()
+        {
+            if (AppEnvironment.Instance.CurrentUser.ProfilePictureId == Photo.Id)
+            {
+                await _dialogService.ShowNotification("DeleteProfilePicture_Message", "DeleteProfilePicture_Title");
+                return;
+            }
+
+            try
+            {
+                IsBusy = true;
+                await _photoService.DeletePhoto(Photo);
+
+                _navigationFacade.NavigateToProfileView();
+            }
+            catch (ServiceException)
+            {
+                await _dialogService.ShowGenericServiceErrorNotification();
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 
@@ -384,6 +547,27 @@ namespace PhotoSharingApp.Universal.ViewModels
             _navigationFacade.NavigateToCameraView(Category);
         }
 
+        private async void OnSetProfilePhoto()
+        {
+            try
+            {
+                IsBusy = true;
+                await _photoService.UpdateUserProfilePhoto(Photo);
+
+                _navigationFacade.NavigateToProfileView();
+
+                User = AppEnvironment.Instance.CurrentUser;
+            }
+            catch (ServiceException)
+            {
+                await _dialogService.ShowGenericServiceErrorNotification();
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
         private async void OnReportAnnotation()
         {
             try
@@ -411,7 +595,6 @@ namespace PhotoSharingApp.Universal.ViewModels
                 IsBusy = false;
             }
         }
-
         private async void OnReportPhoto(ReportReason reason)
         {
             try
@@ -423,8 +606,11 @@ namespace PhotoSharingApp.Universal.ViewModels
                 if (result)
                 {
                     await _photoService.ReportPhoto(_photo, reason);
+                    HasReported = true;
+                    NotifyPropertyChanged(nameof(IsUserAbleToReportPhoto));
                 }
             }
+
             catch (SignInRequiredException)
             {
                 // Swallow exception.  User canceled the Sign-in dialog.
@@ -445,9 +631,9 @@ namespace PhotoSharingApp.Universal.ViewModels
         }
 
         /// <summary>
-        /// Load annotations for a photo.
+        /// Load details for a photo.
         /// </summary>
-        private async Task ShowAnnotations()
+        private async Task ShowDetails()
         {
             try
             {
@@ -476,6 +662,14 @@ namespace PhotoSharingApp.Universal.ViewModels
                 {
                     Annotations.Add(annotation);
                 }
+
+                Photo.Reports.Clear();
+                foreach (var report in photoWithAnnotations.Reports)
+                {
+                    Photo.Reports.Add(report);
+                }
+
+                NotifyPropertyChanged(nameof(IsUserAbleToReportPhoto));
             }
             catch (ServiceException)
             {

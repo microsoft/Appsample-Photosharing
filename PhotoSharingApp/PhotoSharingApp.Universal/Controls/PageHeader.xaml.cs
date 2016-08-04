@@ -26,8 +26,10 @@ using System;
 using Microsoft.Practices.ServiceLocation;
 using PhotoSharingApp.Universal.ViewModels;
 using PhotoSharingApp.Universal.Views;
+using Windows.Data.Xml.Dom;
 using Windows.Foundation;
 using Windows.UI.Core;
+using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
@@ -143,6 +145,14 @@ namespace PhotoSharingApp.Universal.Controls
                         () => action());
                 }
             }
+
+            var badgeXml = BadgeUpdateManager.GetTemplateContent(BadgeTemplateType.BadgeNumber);
+
+            // Set the value of the badge in the XML to user gold balance.
+            XmlElement badgeElement = badgeXml.SelectSingleNode("/badge") as XmlElement;
+            badgeElement.SetAttribute("value", GoldBalance.ToString());
+            BadgeNotification badge = new BadgeNotification(badgeXml);
+            BadgeUpdateManager.CreateBadgeUpdaterForApplication().Update(badge);
         }
     }
 }

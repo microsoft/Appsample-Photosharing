@@ -61,7 +61,6 @@ namespace PhotoSharingApp.Universal.Views
 
             // Set the data context
             _viewModel = new AppShellViewModel();
-
             DataContext = _viewModel;
 
             Loaded += (sender, args) =>
@@ -208,13 +207,16 @@ namespace PhotoSharingApp.Universal.Views
         {
             var item = (INavigationBarMenuItem)((NavMenuListView)sender).ItemFromContainer(listViewItem);
 
-            // We navigate only if current page is different to target page
-            // or if navigation arguments are available.
-            if ((item.DestPage != null
-                && item.DestPage != AppFrame.CurrentSourcePageType)
-                || _lastSourcePageEventArgs.Item2 != null)
+            if (item != null)
             {
-                AppFrame.Navigate(item.DestPage, item.Arguments);
+                // We navigate only if current page is different to target page
+                // or if navigation arguments are available.
+                if ((item.DestPage != null 
+                    && item.DestPage != AppFrame.CurrentSourcePageType)
+                    || _lastSourcePageEventArgs.Item2 != null)
+                {
+                    AppFrame.Navigate(item.DestPage, item.Arguments);
+                }
             }
         }
 

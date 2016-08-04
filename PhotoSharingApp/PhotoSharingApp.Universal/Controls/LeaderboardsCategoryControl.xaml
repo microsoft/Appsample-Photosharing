@@ -41,7 +41,7 @@
         <valueConverters:RankConverter x:Key="RankConverter" />
     </UserControl.Resources>
 
-    <Grid x:Name="layoutRoot" Margin="0,0,0,0" Background="Transparent">
+    <Grid x:Name="layoutRoot" Background="Transparent">
         <interactivity:Interaction.Behaviors>
             <core:EventTriggerBehavior EventName="Tapped">
                 <core:InvokeCommandAction
@@ -50,24 +50,83 @@
             </core:EventTriggerBehavior>
         </interactivity:Interaction.Behaviors>
 
-        <Grid x:Name="LeaderboardItem" Grid.Column="1" Background="{StaticResource AppAccentBackgroundColorBrush}">
+        <Grid x:Name="LeaderboardItem" Background="{StaticResource AppAccentBackgroundColorBrush}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="10*" />
+                <ColumnDefinition Width="5*" />
+            </Grid.ColumnDefinitions>
 
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="4*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="10*" />
+                <RowDefinition Height="5*" />
+            </Grid.RowDefinitions>
+            
+            <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <local:MyControl x:Name="myIcon" Margin="0,0,0,6" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
                        FontWeight="SemiBold" FontSize="16"
                        Text="{Binding CategoryEntry.Model.Name}"/>
             </StackPanel>
-            <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Background="{StaticResource AppAccentColorBrush}" Width="50" Height="50" Margin="6,6,0,0">
+            <Grid Grid.Column="0" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{StaticResource AppAccentColorBrush}" 
+                  Margin="6,6,0,0">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
-                    <TextBlock FontSize="18" Text="{Binding CategoryEntry.Rank}" />
-                    <TextBlock FontSize="15" Margin="0,-3,0,0"
+                    <TextBlock x:Name="rankTextBlock" Text="{Binding CategoryEntry.Rank}" />
+                    <TextBlock x:Name="rankSuperScriptTextBlock" Margin="0,-3,0,0"
                        Text="{Binding CategoryEntry.Rank, Converter={StaticResource RankConverter}}" />
                 </StackPanel>
             </Grid>
-            <local:GoldButton Grid.Column="3" Margin="0,0,6,6" VerticalAlignment="Bottom"
-                          HorizontalAlignment="Right"
-                          Content="{Binding CategoryEntry.Value}" IsTabStop="False" />
+            <Viewbox Grid.Column="3" Grid.Row="3" Margin="0,0,6,6" x:Name="goldButtonContainer">
+                <local:GoldButton Content="{Binding CategoryEntry.Value}" IsTabStop="False" />
+            </Viewbox>
         </Grid>
+        
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1400" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="rankTextBlock.FontSize" Value="21" />
+                        <Setter Target="rankSuperScriptTextBlock.FontSize" Value="18" />
+                        <Setter Target="layoutRoot.Margin" Value="0,0,0,12" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="900" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="rankTextBlock.FontSize" Value="14" />
+                        <Setter Target="rankSuperScriptTextBlock.FontSize" Value="12" />
+                        <Setter Target="layoutRoot.Margin" Value="0,0,0,9" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="720" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="rankTextBlock.FontSize" Value="10" />
+                        <Setter Target="rankSuperScriptTextBlock.FontSize" Value="8" />
+                        <Setter Target="layoutRoot.Margin" Value="0,0,0,6" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="rankTextBlock.FontSize" Value="28" />
+                        <Setter Target="rankSuperScriptTextBlock.FontSize" Value="23" />
+                        <Setter Target="layoutRoot.Margin" Value="0,0,0,18" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </Grid>
 </UserControl>

@@ -193,7 +193,7 @@ namespace PhotoSharingApp.AppService.Tests.DAL
             var maxReports = _environmentDefinition.MaxReports;
 
             // Verify that every report before maxReports does not change photo status.
-            for (int i = 0; i < maxReports - 1; i++)
+            for (int i = 0; i < maxReports-1; i++)
             {
                 var newUser = await _repository.CreateUser("test user " + System.DateTime.UtcNow.Ticks);
                 var newReport = CreateTestReport(photo.Id, ContentType.Photo, ReportReason.Spam, newUser.UserId);
@@ -202,7 +202,7 @@ namespace PhotoSharingApp.AppService.Tests.DAL
 
                 // Sanity checks
                 Assert.AreEqual(PhotoStatus.Active, updatedPhoto.Status);
-                Assert.AreEqual(i + 1, updatedPhoto.Reports.Count);
+                Assert.AreEqual(i+1, updatedPhoto.Reports.Count);
             }
 
             var user2 = await _repository.CreateUser("test user " + System.DateTime.UtcNow.Ticks);

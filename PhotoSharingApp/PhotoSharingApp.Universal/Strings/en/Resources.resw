@@ -160,7 +160,7 @@
     <value>Please change your profile picture before deleting it.</value>
   </data>
   <data name="DeleteProfilePicture_Title" xml:space="preserve">
-    <value>Can not delete current profile picture</value>
+    <value>Unable to delete current profile picture</value>
   </data>
   <data name="CroppingError_Message" xml:space="preserve">
     <value>The photo could not be cropped. Please select a different one and try again.</value>

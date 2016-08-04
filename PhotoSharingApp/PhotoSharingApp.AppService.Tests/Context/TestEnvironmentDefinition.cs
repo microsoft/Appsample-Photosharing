@@ -22,7 +22,6 @@
 //  THE SOFTWARE.
 //  ---------------------------------------------------------------------------------
 
-using System.Web.Configuration;
 using PhotoSharingApp.AppService.Shared.Context;
 
 namespace PhotoSharingApp.AppService.Tests.Context
@@ -45,13 +44,10 @@ namespace PhotoSharingApp.AppService.Tests.Context
                 {
                     _documentDbStorage = new DocumentDbStorage
                     {
-                        // We have supplied a default DatabaseId and CollectionId here, feel free to configure your own.
-                        // On first time startup, the service will create a DocumentDB database and collection for you
-                        // if none exist with these names.
-                        DataBaseId = "photosharing-database",
-                        CollectionId = "photosharing-document-data",
-                        EndpointUrl = "[Your Azure DocumentDB Endpoint URL]",
-                        AuthorizationKey = "[Your Azure DocumentDB Authorization Id]"
+                        DataBaseId = "snapgold-database-test",
+                        CollectionId = "snapgold-document-data",
+                        EndpointUrl = "https://snapgold-documentdb.documents.azure.com:443/",
+                        AuthorizationKey = "M26QUV0Z64jgk8QTn/AOpI93BW3YdACdCpBC70462t6DTJBtrd9hHWiEda2rmw4TBduUtrrCe+29IhWlykNzQw=="
                     };
                 }
 
@@ -64,10 +60,7 @@ namespace PhotoSharingApp.AppService.Tests.Context
         /// </summary>
         public override string HubFullSharedAccessSignature
         {
-            get
-            {
-                return "[Your Notification Hub's Full Shared Access Signature]";
-            }
+            get { return "Endpoint=sb://snapgoldtesthub-ns.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=s3w/ZpKE/n0lSHiz2nsY5+y69BwnU8NITJFyRnMdjPE="; }
         }
 
         /// <summary>
@@ -75,7 +68,7 @@ namespace PhotoSharingApp.AppService.Tests.Context
         /// </summary>
         public override string HubName
         {
-            get { return "[Your Notification Hub Name]"; }
+            get { return "snapgoldtesthub"; }
         }
 
         /// <summary>
@@ -83,7 +76,7 @@ namespace PhotoSharingApp.AppService.Tests.Context
         /// </summary>
         public override string InstrumentationKey
         {
-            get { return WebConfigurationManager.AppSettings["instrumentationKeyTest"]; }
+            get { return "c9462f72-1480-4157-836a-843595a153de"; }
         }
 
         /// <summary>
@@ -92,7 +85,7 @@ namespace PhotoSharingApp.AppService.Tests.Context
         /// </summary>
         public override string StorageAccessKey
         {
-            get { return "[Your Azure Storage access key]"; }
+            get { return "1Tp6Nrm/VqHUmcmWhZoNgPTpzhblGgBYyOZ+JVe/wIzCwZyo5wGDA7GWWuWxJaGIOv3BwWeq6+Inj2eowvtSoA=="; }
         }
 
         /// <summary>
@@ -101,7 +94,7 @@ namespace PhotoSharingApp.AppService.Tests.Context
         /// </summary>
         public override string StorageAccountName
         {
-            get { return "[Your Azure Storage account name]"; }
+            get { return "canaryappstorage"; }
         }
     }
 }

@@ -220,7 +220,7 @@
                                        TextTrimming="CharacterEllipsis" MaxLines="2" />
 
                             <HyperlinkButton Foreground="{StaticResource AppAccentLightColorBrush}"
-                                             Visibility="{Binding DataContext.IsShowingCurrentUser, ElementName=layoutRoot, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                             Visibility="Collapsed"
                                              Command="{Binding DataContext.SetProfilePhotoCommand, ElementName=layoutRoot}"
                                              CommandParameter="{Binding}"
                                              Grid.Row="0" Grid.ColumnSpan="3" Content="Set as profile picture" />

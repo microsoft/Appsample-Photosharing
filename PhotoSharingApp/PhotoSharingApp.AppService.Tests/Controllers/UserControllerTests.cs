@@ -29,8 +29,8 @@ using Microsoft.ApplicationInsights;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PhotoSharingApp.AppService.Controllers;
 using PhotoSharingApp.AppService.Shared.Repositories;
-using PhotoSharingApp.AppService.Tests.Helpers;
 using PhotoSharingApp.AppService.Tests.Context;
+using PhotoSharingApp.AppService.Tests.Helpers;
 
 namespace PhotoSharingApp.AppService.Tests.Controllers
 {

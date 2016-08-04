@@ -31,7 +31,7 @@
     xmlns:controls="using:PhotoSharingApp.Universal.Controls"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
-    xmlns:design="using:PhotoSharingApp.Universal.ViewModels.Design"
+    xmlns:design="using:PhotoSharingApp.Universal.ViewModels.Design"    
     mc:Ignorable="d"
     x:Name="pageRoot"
     d:DataContext="{d:DesignInstance design:StreamDesignViewModel, IsDesignTimeCreatable=True}">
@@ -39,7 +39,7 @@
     <Page.Resources>
         <valueConverters:RelativeTimeConverter x:Key="RelativeTimeConverter" />
         <valueConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <Style x:Key="ListViewItemContainerStyle" TargetType="ListViewItem">
+        <Style x:Key="GridViewItemContainerStyle" TargetType="GridViewItem">
             <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
             <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
             <Setter Property="Background" Value="White" />
@@ -47,19 +47,18 @@
             <Setter Property="TabNavigation" Value="Local" />
             <Setter Property="IsHoldingEnabled" Value="True" />
             <Setter Property="Padding" Value="0,0,0,0" />
-            <Setter Property="Margin" Value="0,0,0,24" />
-            <Setter Property="MaxWidth" Value="700" />
-            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Margin" Value="0,0,0,6" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Setter Property="MinWidth" Value="{ThemeResource ListViewItemMinWidth}" />
-            <Setter Property="MinHeight" Value="{ThemeResource ListViewItemMinHeight}" />
+            <Setter Property="MinWidth" Value="{ThemeResource GridViewItemMinWidth}" />
+            <Setter Property="MinHeight" Value="{ThemeResource GridViewItemMinHeight}" />
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate TargetType="ListViewItem">
+                    <ControlTemplate TargetType="GridViewItem">
                         <ListViewItemPresenter
                             CheckBrush="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
                             ContentMargin="{TemplateBinding Padding}"
-                            CheckMode="Inline"
+                            CheckMode="Overlay"
                             ContentTransitions="{TemplateBinding ContentTransitions}"
                             CheckBoxBrush="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
                             DragForeground="{ThemeResource ListViewItemDragForegroundThemeBrush}"
@@ -89,7 +88,7 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" x:Name="layoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
@@ -104,19 +103,27 @@
             <AppBarButton Icon="Refresh" Label="Refresh" Command="{Binding RefreshCommand}" />
         </CommandBar>
 
-        <Grid x:Name="contentRoot" Margin="0" Row="1">
-            <ListView ItemsSource="{Binding Photos}" IsItemClickEnabled="True" SelectionMode="None"
-                      d:IsHidden="False" ItemContainerStyle="{StaticResource ListViewItemContainerStyle}"
+        <Grid x:Name="contentRoot" Margin="0" Grid.Row="1">
+            <GridView ItemsSource="{Binding Photos}" IsItemClickEnabled="True" SelectionMode="None" 
+                      d:IsHidden="False" ItemContainerStyle="{StaticResource GridViewItemContainerStyle}"
                       Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"
                       x:Name="photosList">
-                <ListView.ItemTemplate>
+                <GridView.ItemTemplate>
                     <DataTemplate>
-                        <RelativePanel Margin="0,0,0,0">
-                            <Grid x:Name="imageRoot"
-                                  Height="{Binding ImageHeight, ElementName=pageRoot}"
-                                  RelativePanel.AlignLeftWithPanel="True"
-                                  RelativePanel.AlignRightWithPanel="True">
-                                <controls:AnimatedImage Source="{Binding ImageUrl}" PlaceHolder="../Assets/PlaceHolder.jpg" x:Name="PhotoImage">
+                        <Border BorderBrush="Transparent" BorderThickness="2" Margin="{Binding ImageMargin, ElementName=pageRoot}">
+                            <Grid x:Name="imageRoot" 
+                                  Width="{Binding ImageWidth, ElementName=pageRoot}"
+                                  Height="{Binding ImageHeight, ElementName=pageRoot}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <controls:AnimatedImage Grid.Row ="0" PlaceHolder="../Assets/PlaceHolder.jpg" 
+                                                    VerticalAlignment="Top"
+                                                    Source="{Binding ImageUrl}" x:Name="PhotoImage" d:DesignHeight="300"
+                                                    d:DesignWidth="300" 
+                                                    Canvas.ZIndex="0">
                                     <interactivity:Interaction.Behaviors>
                                         <core:EventTriggerBehavior EventName="Tapped">
                                             <core:InvokeCommandAction
@@ -125,71 +132,76 @@
                                         </core:EventTriggerBehavior>
                                     </interactivity:Interaction.Behaviors>
                                 </controls:AnimatedImage>
-                            </Grid>
 
-                            <Grid Margin="12,0,12,0" HorizontalAlignment="Stretch"
-                                  RelativePanel.Below="{Binding ElementName=imageRoot}"
-                                  RelativePanel.AlignRightWithPanel="True"
-                                  RelativePanel.AlignLeftWithPanel="True">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition />
-                                    <RowDefinition />
-                                    <RowDefinition />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <Border Margin="0,-65,9.5,0">
-                                    <Border.Transitions>
-                                        <TransitionCollection>
-                                            <PopupThemeTransition></PopupThemeTransition>
-                                        </TransitionCollection>
-                                    </Border.Transitions>
-                                    <controls:UserProfilePictureControl
-                                        Width="130"
-                                        Height="130"
-                                        ShowBorder="true"
-                                        Source="{Binding User.ProfilePictureUrl}">
-                                        <interactivity:Interaction.Behaviors>
-                                            <core:EventTriggerBehavior EventName="Tapped">
-                                                <core:InvokeCommandAction
+                                <Grid Row="1" Margin="12,0,12,12" x:Name="photoSummary">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <Border Margin="0,-35,0,0">
+                                        <Border.Transitions>
+                                            <TransitionCollection>
+                                                <PopupThemeTransition></PopupThemeTransition>
+                                            </TransitionCollection>
+                                        </Border.Transitions>
+                                        <Viewbox Width="70" Height="70" HorizontalAlignment="Left">
+                                            <controls:UserProfilePictureControl
+                                                Width="70"
+                                                Height="70"
+                                                ShowBorder="true"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Top"
+                                                Source="{Binding User.ProfilePictureUrl}">
+                                                <interactivity:Interaction.Behaviors>
+                                                    <core:EventTriggerBehavior EventName="Tapped">
+                                                        <core:InvokeCommandAction
                                                     Command="{Binding DataContext.UserSelectedCommand, ElementName=layoutRoot}"
                                                     CommandParameter="{Binding User}" />
-                                            </core:EventTriggerBehavior>
-                                        </interactivity:Interaction.Behaviors>
-                                    </controls:UserProfilePictureControl>
-                                </Border>
+                                                    </core:EventTriggerBehavior>
+                                                </interactivity:Interaction.Behaviors>
+                                            </controls:UserProfilePictureControl>
+                                        </Viewbox>
+                                    </Border>
 
-                                <controls:GoldButton Margin="0,-35,0,0"
-                                    Command="{Binding DataContext.GiveGoldCommand, ElementName=layoutRoot}"
-                                    CommandParameter="{Binding}"
-                                    IsEnabled="{Binding CanGiveGold}"
-                                    Grid.Column="2" Content="{Binding GoldCount}" VerticalAlignment="Top"/>
+                                    <Viewbox Width="50" Height="50" Margin="0,-35,0,0" Grid.Column="2" Canvas.ZIndex="1"
+                                         HorizontalAlignment="Right">
+                                        <controls:GoldButton
+                                             Command="{Binding DataContext.GiveGoldCommand, ElementName=layoutRoot}" 
+                                             CommandParameter="{Binding}"
+                                             IsEnabled="{Binding CanGiveGold}" FontSize="18"
+                                             Content="{Binding GoldCount}" VerticalAlignment="Top" />
+                                    </Viewbox>
 
-                                <TextBlock Grid.Row="1" Margin="0,12" Grid.ColumnSpan="3" Text="{Binding Caption}" TextWrapping="WrapWholeWords" />
+                                    <TextBlock Grid.Row="1" Grid.ColumnSpan="3" Margin="0,12"
+                                           Text="{Binding Caption}" TextWrapping="WrapWholeWords"
+                                           TextTrimming="CharacterEllipsis" MaxLines="1" />
 
-                                <Grid Grid.Row="2" Grid.ColumnSpan="3" VerticalAlignment="Center">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                        <ColumnDefinition Width="*"></ColumnDefinition>
-                                    </Grid.ColumnDefinitions>
+                                    <TextBlock FontSize="14" FontWeight="Medium" Grid.Row="2" Grid.ColumnSpan="3" 
+                                       Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}"
+                                       Text="{Binding CreatedAt, Converter={StaticResource RelativeTimeConverter}}" 
+                                       TextWrapping="WrapWholeWords" />
 
-                                    <TextBlock FontSize="14" FontWeight="Normal"
-                                               Text="{Binding CreatedAt, Converter={StaticResource RelativeTimeConverter}}"
-                                               Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}"
-                                               Margin="0,0,0,12"
-                                               TextWrapping="WrapWholeWords" />
                                 </Grid>
                             </Grid>
-                        </RelativePanel>
+                            <interactivity:Interaction.Behaviors>
+                                <core:DataTriggerBehavior Binding="{Binding IsHighlighted}" Value="True">
+                                    <core:ChangePropertyAction PropertyName="BorderBrush" Value="{StaticResource AppAccentLightColorBrush}" />
+                                </core:DataTriggerBehavior>
+                            </interactivity:Interaction.Behaviors>
+                        </Border>
                     </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                </GridView.ItemTemplate>
+            </GridView>
 
             <ProgressRing IsActive="{Binding IsBusy}"
-                          Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Grid>
     </Grid>
 </local:BasePage>

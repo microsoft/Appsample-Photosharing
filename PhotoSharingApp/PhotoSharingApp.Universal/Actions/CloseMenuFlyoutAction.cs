@@ -22,31 +22,42 @@
 //  THE SOFTWARE.
 //  ---------------------------------------------------------------------------------
 
-using System.Net;
-using System.Threading.Tasks;
-using PhotoSharingApp.Portable.DataContracts;
+using Microsoft.Xaml.Interactivity;
+using System;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
-namespace PhotoSharingApp.AppService.Notifications
+namespace PhotoSharingApp.Universal.Actions
 {
     /// <summary>
-    /// Sends Push notification to registered tag.
+    /// Closes the attached flyout.
     /// </summary>
-    public interface INotificationHandler
+    public class CloseMenuFlyoutAction : DependencyObject, IAction
     {
         /// <summary>
-        /// Sends a rich push notification message with a thumbnail image and arguments to lauch the image
-        /// if the optional parameters are passed.
-        /// Otherwise, only a simple text push message is sent.
+        /// Executes the action.
         /// </summary>
-        /// <param name="platform">The platform specific notification service to use.</param>
-        /// <param name="userNotificationTag">The user notification tag to send notification to.</param>
-        /// <param name="message">The message to display on the notification toast.</param>
-        /// <param name="thumbnailUrl">Optional - The thumbnail Url of the photo to display in notification.</param>
-        /// <param name="photoId">Optional - The photoId of the photo to send as activation argument.</param>
-        /// <param name="goldCount">Optional - The goldCount of the photo's user.</param>
-        /// <returns>HttpStatusCode of the request.</returns>
-        Task<HttpStatusCode> SendPushAsync(PushNotificationPlatform platform, string userNotificationTag,
-            string message,
-            string thumbnailUrl = "", string photoId = "", int goldCount = 0);
+        /// <param name="sender">
+        /// The <see cref="T:System.Object" /> that is passed to the action by the behavior. Generally this is
+        /// <seealso cref="P:Microsoft.Xaml.Interactivity.IBehavior.AssociatedObject" /> or a target object.
+        /// </param>
+        /// <param name="parameter">The value of this parameter is determined by the caller.</param>
+        /// <remarks>
+        /// An example of parameter usage is EventTriggerBehavior, which passes the EventArgs as a parameter to its actions.
+        /// </remarks>
+        /// <returns>
+        /// Returns the result of the action.
+        /// </returns>
+        public object Execute(object sender, object parameter)
+        {
+            var flyout = sender as Flyout;
+            if (flyout == null)
+            {
+                throw new ArgumentException("CloseMenuFlyoutAction can be used only with Flyout");
+            }
+            flyout.Hide();
+
+            return null;
+        }
     }
 }

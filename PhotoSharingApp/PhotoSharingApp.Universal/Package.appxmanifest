@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="78cd9283-885a-402d-85cb-660a9d57f405" Publisher="CN=sampleCode" Version="1.0.0.0" />
-  <mp:PhoneIdentity PhoneProductId="78cd9283-885a-402d-85cb-660a9d57f405" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <Identity Name="21624UniversalStoreQualit.SnapGoldBetaApp" Publisher="CN=1424076E-18C6-45C0-8B88-3EEA79F19056" Version="1.1.42.0" />
+  <mp:PhoneIdentity PhoneProductId="b9d7df11-df94-41a3-b05c-0c784cc80847" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>SnapGold Beta App</DisplayName>
-    <PublisherDisplayName>sampleCode</PublisherDisplayName>
+    <PublisherDisplayName>Universal Store Quality</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Dependencies>
