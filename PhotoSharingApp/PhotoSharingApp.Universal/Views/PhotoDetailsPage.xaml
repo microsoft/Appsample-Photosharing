@@ -40,6 +40,91 @@
         <valueConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <valueConverters:RelativeTimeConverter x:Key="RelativeTimeConverter" />
         <valueConverters:EnumDisplayNameToStringConverter x:Key="EnumDisplayNameToStringConverter" />
+        <Style x:Key="DeleteButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontSize" Value="9" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <StackPanel Orientation="Vertical">
+                                <Grid  Margin="0,14,0,5" >
+                                    <Ellipse x:Name="ButtonEllipse" Height="40" Width="40" Fill="#FFFDFCFC" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                             Stroke="{StaticResource AppAccentLightColorBrush}" StrokeThickness="2" />
+                                    <TextBlock x:Name="Glyph" Text="&#xE107;" FontSize="18" FontFamily="Segoe UI Symbol" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Grid>
+                                <TextBlock x:Name="Content" Text="{TemplateBinding Content}" HorizontalAlignment="Center" FontFamily="Segoe UI" FontSize="12" />
+                            </StackPanel>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="PointerOver">
+                                        <Storyboard>
+                                            <ColorAnimation Duration="0" To="{Binding Source={StaticResource AppAccentColorBrush}, Path=Color}" 
+                                                            Storyboard.TargetProperty="(Rectangle.Fill).(SolidColorBrush.Color)" 
+                                                            Storyboard.TargetName="ButtonEllipse" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <ColorAnimation Duration="0" To="#eeeeee" 
+                                                            Storyboard.TargetProperty="(Rectangle.Fill).(SolidColorBrush.Color)" 
+                                                            Storyboard.TargetName="ButtonEllipse" />
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style x:Key="ProfileButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="9"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <StackPanel Orientation="Vertical">
+                                <Grid  Margin="0,14,0,5" >
+                                    <Ellipse x:Name="ButtonShape" Height="40" Width="40" Fill="#FFFDFCFC" HorizontalAlignment="Center"
+                                        Stroke="{StaticResource AppAccentLightColorBrush}" StrokeThickness="2" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="Icon" Text="&#xE13D;" FontFamily="Segoe UI Symbol" FontSize="18" HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"/>
+                                </Grid>
+                                <TextBlock x:Name="ButtonContent" Text="{TemplateBinding Content}" HorizontalAlignment="Center"
+                                    FontFamily="Segoe UI" FontSize="12"/>
+                            </StackPanel>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="PointerOver">
+                                        <Storyboard>
+                                            <ColorAnimation Duration="0" To="{Binding Source={StaticResource AppAccentColorBrush}, Path=Color}" 
+                                                            Storyboard.TargetProperty="(Rectangle.Fill).(SolidColorBrush.Color)" 
+                                                            Storyboard.TargetName="ButtonShape" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="ButtonPressed">
+                                        <Storyboard>
+                                            <ColorAnimation Duration="0" To="#eeeeee" 
+                                                            Storyboard.TargetProperty="(Rectangle.Fill).(SolidColorBrush.Color)" 
+                                                            Storyboard.TargetName="ButtonEllipse" />
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style x:Key="AnnotationItemContainerStyle" TargetType="ListViewItem">
             <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
             <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />

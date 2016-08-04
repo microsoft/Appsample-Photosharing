@@ -152,6 +152,11 @@ namespace PhotoSharingApp.Universal.Models
         }
 
         /// <summary>
+        /// Determines whether an image should be highlighted. Defaults to false, unless a photo is clicked.
+        /// </summary>
+        public bool IsHighlighted { get; set; }
+
+        /// <summary>
         /// Returns true if this picture is the owner's profile picture
         /// </summary>
         public bool IsProfilePicture
