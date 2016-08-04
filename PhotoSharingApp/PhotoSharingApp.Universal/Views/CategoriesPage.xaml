@@ -179,7 +179,7 @@
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-
+        
         <controls:PageHeader>
             <controls:PageHeader.HeaderContent>
                 <TextBlock Text="Categories" Style="{ThemeResource PageTitleTextBlockStyle}" />
@@ -312,7 +312,7 @@
                         <Setter Target="featuredPhotos.Visibility" Value="Visible" />
                         <Setter Target="heroImagesFlipView.Visibility" Value="Collapsed" />
                         <Setter Target="heroImagesStateIndicator.Visibility" Value="Collapsed" />
-
+                        
                         <Setter Target="categoriesList.(RelativePanel.Below)" Value="featuredPhotos" />
                     </VisualState.Setters>
                 </VisualState>
@@ -331,7 +331,7 @@
                         <Setter Target="featuredPhotos.Visibility" Value="Visible" />
                         <Setter Target="heroImagesFlipView.Visibility" Value="Collapsed" />
                         <Setter Target="heroImagesStateIndicator.Visibility" Value="Collapsed" />
-
+                        
                         <Setter Target="categoriesList.(RelativePanel.Below)" Value="featuredPhotos" />
                     </VisualState.Setters>
                 </VisualState>
@@ -343,7 +343,7 @@
                         <Setter Target="featuredPhotos.Visibility" Value="Collapsed" />
                         <Setter Target="heroImagesFlipView.Visibility" Value="Visible" />
                         <Setter Target="heroImagesStateIndicator.Visibility" Value="Visible" />
-
+                        
                         <Setter Target="categoriesList.(RelativePanel.Below)" Value="heroImagesStateIndicator" />
                     </VisualState.Setters>
                 </VisualState>

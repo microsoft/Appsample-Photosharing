@@ -42,7 +42,7 @@
     </UserControl.Resources>
 
     <Grid x:Name="layoutRoot" Background="Transparent">
-
+        
         <interactivity:Interaction.Behaviors>
             <core:EventTriggerBehavior EventName="Tapped">
                 <core:InvokeCommandAction
@@ -65,11 +65,11 @@
                 <RowDefinition Height="10*" />
                 <RowDefinition Height="5*" />
             </Grid.RowDefinitions>
-
+            
             <local:AnimatedImage x:Name="photoImage" Grid.ColumnSpan="4" Grid.RowSpan="4" PlaceHolder="../Assets/PlaceHolder.jpg">
                 <local:AnimatedImage.Source>
                     <BitmapImage DecodePixelWidth="1000" DecodePixelHeight="1000" UriSource="{Binding PhotoEntry.Model.HighResolutionUrl}" />
-                </local:AnimatedImage.Source>
+                </local:AnimatedImage.Source>                
             </local:AnimatedImage>
 
             <Grid Grid.Column="0" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{StaticResource AppAccentColorBrush}" 

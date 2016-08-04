@@ -104,7 +104,7 @@
              Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=True}">
 
             <HubSection x:Name="userNetWorthHubSection" Padding="0">
-
+                
                 <HubSection.HeaderTemplate>
                     <DataTemplate>
                         <TextBlock FontSize="{Binding HubSectionHeaderFontSize, ElementName=pageRoot}" Text="User Net Worth" Foreground="Black" Margin="0,0,0,-5" />
@@ -132,13 +132,13 @@
             </HubSection>
 
             <HubSection x:Name="mostGoldGivenHubSection" Padding="0">
-
+                
                 <HubSection.HeaderTemplate>
                     <DataTemplate>
                         <TextBlock FontSize="{Binding HubSectionHeaderFontSize, ElementName=pageRoot}" Text="Most Gold Given" Foreground="Black" Margin="0,0,0,-5" />
                     </DataTemplate>
                 </HubSection.HeaderTemplate>
-
+                
                 <DataTemplate>
 
                     <ListView ItemsSource="{Binding Leaderboard.MostGivingUsers}" IsItemClickEnabled="False" SelectionMode="None"
@@ -165,7 +165,7 @@
                         <TextBlock FontSize="{Binding HubSectionHeaderFontSize, ElementName=pageRoot}" Text="Photo Net Worth" Foreground="Black" Margin="0,0,0,-5" />
                     </DataTemplate>
                 </HubSection.HeaderTemplate>
-
+                
                 <DataTemplate>
 
                     <ListView ItemsSource="{Binding Leaderboard.MostGoldPhotos}" IsItemClickEnabled="False" SelectionMode="None"
@@ -192,7 +192,7 @@
                         <TextBlock FontSize="{Binding HubSectionHeaderFontSize, ElementName=pageRoot}" Text="Category Net Worth" Foreground="Black" Margin="0,0,0,-5" />
                     </DataTemplate>
                 </HubSection.HeaderTemplate>
-
+                
                 <DataTemplate>
 
                     <ListView ItemsSource="{Binding Leaderboard.MostGoldCategories}" IsItemClickEnabled="False" SelectionMode="None"
@@ -245,7 +245,7 @@
                     <VisualState.Setters>
                         <Setter Target="leaderboardHubControl.Orientation" Value="Horizontal" />
                         <Setter Target="leaderboardHubControl.HorizontalAlignment" Value="Center" />
-
+                        
                         <Setter Target="userNetWorthHubSection.Margin" Value="6" />
                         <Setter Target="mostGoldGivenHubSection.Margin" Value="6" />
                         <Setter Target="photoNetWorthHubSection.Margin" Value="6" />
@@ -264,6 +264,6 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-
+        
     </Grid>
 </local:BasePage>
