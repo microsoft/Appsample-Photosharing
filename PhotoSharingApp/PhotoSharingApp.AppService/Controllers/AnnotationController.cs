@@ -128,7 +128,7 @@ namespace PhotoSharingApp.AppService.Controllers
 
                     // Send push notification to the user receiving Gold
                     await
-                        _notificationHandler.PushGoldReceivedNotificationAsync(PushNotificationPlatform.Windows,
+                        _notificationHandler.SendPushAsync(PushNotificationPlatform.Windows,
                             "user:" + annotation.PhotoOwnerId,
                             "You have received GOLD!",
                             photoContract.ThumbnailUrl, annotation.PhotoId);

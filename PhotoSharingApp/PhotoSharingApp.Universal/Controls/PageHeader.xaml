@@ -68,7 +68,7 @@
 
             <Grid HorizontalAlignment="Right" VerticalAlignment="Center"
                 Visibility="{Binding ViewModel.CurrentUser, ElementName=controlRoot, Converter={StaticResource NullToVisibilityConverter}}" >
-                <Grid x:Name="goldBalanceContainer">
+                <Grid x:Name="goldBalanceContainer" Margin="0,0,12,0">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right"
                             Margin="12,6">
                         <TextBlock Text="Your Balance:" Margin="0,0,6,0"
@@ -78,7 +78,7 @@
                         </Viewbox>
                         <TextBlock Text="{Binding ViewModel.CurrentUser.GoldBalance, ElementName=controlRoot}"
                                Foreground="{StaticResource AppAccentForegroundColorBrush}"
-                               Margin="12,0,0,0" FontWeight="SemiBold"
+                               Margin="6,0,0,0" FontWeight="SemiBold" 
                                VerticalAlignment="Center"
                                x:Name="goldCounterTextBlock">
                             <TextBlock.Resources>

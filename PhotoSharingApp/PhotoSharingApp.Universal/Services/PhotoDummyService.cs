@@ -755,7 +755,7 @@ namespace PhotoSharingApp.Universal.Services
         {
             await SimulateWaitAndError();
 
-            AppEnvironment.Instance.CurrentUser.ProfilePictureUrl = photo.ThumbnailUrl;
+            AppEnvironment.Instance.CurrentUser.ProfilePictureUrl = photo.StandardUrl;
 
             return AppEnvironment.Instance.CurrentUser;
         }

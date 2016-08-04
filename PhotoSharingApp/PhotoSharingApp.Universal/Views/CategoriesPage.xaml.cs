@@ -76,6 +76,7 @@ namespace PhotoSharingApp.Universal.Views
         private void CategoriesPage_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             UpdateThumbnailSize();
+            UpdateSlideShowTimer();
         }
 
         private void OnCategoriesListLoaded(object sender, RoutedEventArgs e)
@@ -121,7 +122,23 @@ namespace PhotoSharingApp.Universal.Views
                 await _viewModel.LoadState();
             }
 
-            _viewModel.StartHeroImageSlideShow();
+            _viewModel.InstantiateHeroImageSlideShowTimer();
+            UpdateSlideShowTimer();
+        }
+
+        private void UpdateSlideShowTimer()
+        {
+            if (_viewModel?.HeroImageScrollTimer != null)
+            {
+                if (ActualWidth <= 900 && !_viewModel.HeroImageScrollTimer.IsEnabled)
+                {
+                    _viewModel.StartHeroImageSlideShow();
+                }
+                else if (ActualWidth > 900 && _viewModel.HeroImageScrollTimer.IsEnabled)
+                {
+                    _viewModel.StopHeroImageSlideShow();
+                }
+            }
         }
 
         private void UpdateThumbnailSize()

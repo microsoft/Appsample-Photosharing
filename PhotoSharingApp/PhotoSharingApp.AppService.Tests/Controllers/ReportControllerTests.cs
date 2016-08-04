@@ -27,6 +27,7 @@ using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PhotoSharingApp.AppService.Controllers;
+using PhotoSharingApp.AppService.Notifications;
 using PhotoSharingApp.AppService.Shared.Repositories;
 using PhotoSharingApp.AppService.Tests.Context;
 using PhotoSharingApp.AppService.Tests.Helpers;
@@ -37,6 +38,7 @@ namespace PhotoSharingApp.AppService.Tests.Controllers
     [TestClass]
     public class ReportControllerTests : BaseTest
     {
+        private INotificationHandler _notificationHandler;
         private ReportController _reportController;
         private IRepository _repository;
         private UserRegistrationReferenceProviderMock _userRegistrationReferenceProviderMock;
@@ -44,11 +46,12 @@ namespace PhotoSharingApp.AppService.Tests.Controllers
         [TestInitialize]
         public void Init()
         {
+            _notificationHandler = new NotificationHandler();
             _repository = new DocumentDbRepository(new TestEnvironmentDefinition());
             _userRegistrationReferenceProviderMock = new UserRegistrationReferenceProviderMock();
 
             _reportController = new ReportController(_repository, new TelemetryClient(),
-                _userRegistrationReferenceProviderMock);
+            _notificationHandler, _userRegistrationReferenceProviderMock);
         }
 
         [TestMethod]
