@@ -121,6 +121,8 @@ namespace PhotoSharingApp.AppService.Controllers
                 var insertedAnnotation = await _repository.InsertAnnotation(annotation);
 
                 var photoContract = await _repository.GetPhoto(annotation.PhotoId);
+                var receiver = await _repository.GetUser(photoContract.User.UserId);
+                var goldBalance = receiver.GoldBalance;
 
                 try
                 {
@@ -128,10 +130,10 @@ namespace PhotoSharingApp.AppService.Controllers
 
                     // Send push notification to the user receiving Gold
                     await
-                        _notificationHandler.PushGoldReceivedNotificationAsync(PushNotificationPlatform.Windows,
+                        _notificationHandler.SendPushAsync(PushNotificationPlatform.Windows,
                             "user:" + annotation.PhotoOwnerId,
                             "You have received GOLD!",
-                            photoContract.ThumbnailUrl, annotation.PhotoId);
+                            photoContract.ThumbnailUrl, annotation.PhotoId, goldBalance);
                 }
                 catch (Exception e)
                 {

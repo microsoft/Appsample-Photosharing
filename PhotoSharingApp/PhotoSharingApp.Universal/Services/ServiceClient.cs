@@ -70,7 +70,7 @@ namespace PhotoSharingApp.Universal.Services
         {
             try
             {
-                var result = await _mobileServiceClient.InvokeApiAsync<CategoryContract>($"category/{categoryName}", 
+                var result = await _mobileServiceClient.InvokeApiAsync<CategoryContract>($"category/{categoryName}",
                     HttpMethod.Post,
                     null);
 
@@ -84,7 +84,7 @@ namespace PhotoSharingApp.Universal.Services
                 if (invalidOperationException.Response.StatusCode == HttpStatusCode.Forbidden
                     && serviceFault?.Code == 3750)
                 {
-                    throw new CategoryMatchedException($"Category {categoryName} already exists", 
+                    throw new CategoryMatchedException($"Category {categoryName} already exists",
                         invalidOperationException);
                 }
 
@@ -179,7 +179,7 @@ namespace PhotoSharingApp.Universal.Services
         {
             try
             {
-                var result = await _mobileServiceClient.InvokeApiAsync<ConfigContract>("config", 
+                var result = await _mobileServiceClient.InvokeApiAsync<ConfigContract>("config",
                     HttpMethod.Get,
                     null);
 
@@ -199,7 +199,7 @@ namespace PhotoSharingApp.Universal.Services
         {
             try
             {
-                var result = await _mobileServiceClient.InvokeApiAsync<UserContract>("user", 
+                var result = await _mobileServiceClient.InvokeApiAsync<UserContract>("user",
                     HttpMethod.Get,
                     null);
 
@@ -753,7 +753,7 @@ namespace PhotoSharingApp.Universal.Services
                 var responsePhotoContract =
                     await _mobileServiceClient.InvokeApiAsync<PhotoContract, PhotoContract>("Photo",
                         photoContract,
-                        HttpMethod.Post, 
+                        HttpMethod.Post,
                         null);
 
                 return responsePhotoContract.ToDataModel();

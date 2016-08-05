@@ -49,8 +49,8 @@ namespace PhotoSharingApp.AppService.Tests.Controllers
             _userRegistrationReferenceProviderMock = new UserRegistrationReferenceProviderMock();
 
             _annotationController = new AnnotationController(
-              _repository,
-              new TelemetryClient(),
+                _repository,
+                new TelemetryClient(),
                 new NotificationHandler(),
                 _userRegistrationReferenceProviderMock
                 );

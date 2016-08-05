@@ -423,7 +423,7 @@ namespace PhotoSharingApp.AppService.Shared.Repositories
                     numberOfThumbnails,
                     _currentDocumentVersion);
 
-
+            
             var mostRecentCategoryPhotos = photosQuery.Response;
 
             if (mostRecentCategoryPhotos != null && mostRecentCategoryPhotos.Any())
@@ -1059,8 +1059,16 @@ namespace PhotoSharingApp.AppService.Shared.Repositories
                     photoDocument.Reports.Add(reportDocument);
 
                     if (photoDocument.Reports.Count >= _maxReportsPermitted)
-                    {
+                    { 
                         photoDocument.Status = PhotoStatus.UnderReview;
+
+                        var user = GetUserDocumentByUserId(photoDocument.UserId);
+                        if (user.ProfilePhotoId == photoDocument.Id)
+                        {
+                            user.ProfilePhotoId = null;
+                            user.ProfilePhotoUrl = null;
+                            await UpdateUser(user.ToContract());
+                        }
                     }
 
                     await ReplacePhotoDocument(photoDocument);

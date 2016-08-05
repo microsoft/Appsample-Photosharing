@@ -31,8 +31,8 @@ using PhotoSharingApp.AppService.Controllers;
 using PhotoSharingApp.AppService.Notifications;
 using PhotoSharingApp.AppService.Shared.Repositories;
 using PhotoSharingApp.AppService.Shared.Validation;
-using PhotoSharingApp.AppService.Tests.Helpers;
 using PhotoSharingApp.AppService.Tests.Context;
+using PhotoSharingApp.AppService.Tests.Helpers;
 
 namespace PhotoSharingApp.AppService.Tests.E2E
 {

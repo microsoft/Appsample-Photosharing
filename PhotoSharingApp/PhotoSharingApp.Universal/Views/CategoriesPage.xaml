@@ -188,95 +188,64 @@
 
         <ScrollViewer Grid.Row="2" x:Name="mainScrollViewer" IsTabStop="False">
             <RelativePanel>
-                <Grid x:Name="heroImages" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
+                <Grid x:Name="featuredPhotos" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True" 
+                      Margin="24,0,24,0" MinHeight="300">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="3*" />
-                        <ColumnDefinition Width="4*" />
+                        <ColumnDefinition Width="2.1*" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
 
-                    <Grid Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"
-                          x:Name="heroImageExpansionContainer">
-                        <Border Padding="36">
-                            <Grid VerticalAlignment="Center">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
+                    <controls:FeaturedPhotoControl DataContext="{Binding}" x:Name="featuredPhoto1" PhotoSource="{Binding HeroImages[0]}" 
+                                                   Grid.Column="0" Grid.RowSpan="2" Margin="0,0,24,0" CaptionFontSize="20" />
+                    <controls:FeaturedPhotoControl DataContext="{Binding}" x:Name="featuredPhoto2" PhotoSource="{Binding HeroImages[1]}" 
+                                                   Grid.Column="1" Grid.Row="0" Margin="0,0,0,24" CaptionFontSize="15" />
+                    <controls:FeaturedPhotoControl DataContext="{Binding}" x:Name="featuredPhoto3" PhotoSource="{Binding HeroImages[2]}" 
+                                                   Grid.Column="1" Grid.Row="1" CaptionFontSize="15" />
+                </Grid>
 
-                                <TextBlock Text="Featured" Foreground="Black"
-                                       FontWeight="Light" HorizontalAlignment="Center"
-                                       FontSize="32" />
-
-                                <controls:UserProfilePictureControl
-                                    Width="130" Height="130" Grid.Row="1" Margin="24"
-                                    Source="{Binding Path=SelectedHeroImage.User.ProfilePictureUrl}">
-                                    <interactivity:Interaction.Behaviors>
-                                        <core:EventTriggerBehavior EventName="Tapped">
-                                            <core:InvokeCommandAction
-                                            Command="{Binding DataContext.UserSelectedCommand, ElementName=LayoutRoot}"
-                                            CommandParameter="{Binding SelectedHeroImage.User}" />
-                                        </core:EventTriggerBehavior>
-                                    </interactivity:Interaction.Behaviors>
-                                </controls:UserProfilePictureControl>
-
-                                <TextBlock MaxLines="2" x:Name="caption" HorizontalAlignment="Center" 
-                                           Text="{Binding SelectedHeroImage.Caption}" Grid.Row="2" 
-                                           FontWeight="Thin" FontSize="20" TextTrimming="WordEllipsis" 
-                                           Foreground="{ThemeResource SystemControlHighlightBaseMediumHighBrush}" />
-                            </Grid>
-                        </Border>
-                    </Grid>
-
-                    <FlipView VerticalAlignment="Top" MaxHeight="400" Grid.Column="1"
+                <FlipView VerticalAlignment="Top" MaxHeight="400" Grid.Column="1"
                               ItemsSource="{Binding HeroImages}" SelectedItem="{Binding SelectedHeroImage, Mode=TwoWay}"
                               Style="{StaticResource HeroFlipViewStyle}" x:Name="heroImagesFlipView">
-                        <FlipView.ItemTemplate>
-                            <DataTemplate>
-                                <!--Using a UserControl here to make adaptive triggers work-->
-                                <controls:HeroImageControl>
-                                    <interactivity:Interaction.Behaviors>
-                                        <core:EventTriggerBehavior EventName="Tapped">
-                                            <core:InvokeCommandAction
+                    <FlipView.ItemTemplate>
+                        <DataTemplate>
+                            <!--Using a UserControl here to make adaptive triggers work-->
+                            <controls:HeroImageControl>
+                                <interactivity:Interaction.Behaviors>
+                                    <core:EventTriggerBehavior EventName="Tapped">
+                                        <core:InvokeCommandAction
                                             Command="{Binding DataContext.HeroImageSelectedCommand, ElementName=LayoutRoot}"
                                             CommandParameter="{Binding}" />
-                                        </core:EventTriggerBehavior>
-                                    </interactivity:Interaction.Behaviors>
-                                </controls:HeroImageControl>
-                            </DataTemplate>
-                        </FlipView.ItemTemplate>
-                    </FlipView>
+                                    </core:EventTriggerBehavior>
+                                </interactivity:Interaction.Behaviors>
+                            </controls:HeroImageControl>
+                        </DataTemplate>
+                    </FlipView.ItemTemplate>
+                </FlipView>
 
-                    <Viewbox Width="50" Grid.Column="1" HorizontalAlignment="Right"
-                             VerticalAlignment="Bottom" Margin="48,24" x:Name="goldButtonContainer">
-                        <controls:GoldButton Content="{Binding SelectedHeroImage.GoldCount}"
-                                             Command="{Binding GiveGoldCommand}"
-                                             IsEnabled="{Binding SelectedHeroImage.CanGiveGold}"
-                                             CommandParameter="{Binding SelectedHeroImage}" />
-                    </Viewbox>
-
-                    <Grid Background="{StaticResource AppAccentBackgroundColorBrush}"
-                          Padding="38" Grid.ColumnSpan="2"
-                          Visibility="{Binding IsStatusContainerVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                            <ProgressBar IsIndeterminate="True"
-                                         Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                            <TextBlock Text="No data available. Upload some photos!" FontSize="32" 
-                                       Visibility="{Binding IsEmptyDataMessageVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                       FontWeight="Light" TextWrapping="WrapWholeWords" />
-                        </StackPanel>
-                    </Grid>
+                <Grid Padding="38" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True" 
+                      Visibility="{Binding IsStatusContainerVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                        <ProgressBar IsIndeterminate="True"
+                                     Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <TextBlock Text="No data available. Upload some photos!" FontSize="32" HorizontalAlignment="Center"
+                                   Visibility="{Binding IsEmptyDataMessageVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                   FontWeight="Light" TextWrapping="WrapWholeWords" />
+                    </StackPanel>
                 </Grid>
 
                 <GridView x:Name="heroImagesStateIndicator" ItemsSource="{Binding HeroImages}"
-                          RelativePanel.Below="heroImages"
+                          RelativePanel.Below="heroImagesFlipView"
                           RelativePanel.AlignHorizontalCenterWithPanel="True"
                           SelectedItem="{Binding SelectedHeroImage, Mode=TwoWay}"
                           ItemContainerStyle="{StaticResource HeroImagesLegendItemContainerStyle}" />
 
-                <ListView ItemsSource="{Binding TopCategories}" RelativePanel.Below="heroImagesStateIndicator"
+                <ListView ItemsSource="{Binding TopCategories}" RelativePanel.Below="featuredPhotos"
                           IsItemClickEnabled="True" SelectionMode="None"
-                          Margin="12,0"
+                          Margin="12"
                           ItemTemplate="{StaticResource CategoryListItemTemplate}"
                           ItemContainerStyle="{StaticResource ListViewItemContainerStyle}"
                           x:Name="categoriesList" RelativePanel.AlignLeftWithPanel="True"
@@ -313,23 +282,18 @@
             <VisualStateGroup>
                 <VisualState>
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="0" />
+                        <AdaptiveTrigger MinWindowWidth="1600" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="heroImageExpansionContainer.Visibility" Value="Collapsed" />
-                        <Setter Target="goldButtonContainer.Visibility" Value="Collapsed" />
-                        <Setter Target="heroImages.ColumnDefinitions[0].Width" Value="Auto" />
-                        <Setter Target="heroImagesFlipView.MaxHeight" Value="360" />
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState>
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="900" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="heroImageExpansionContainer.Visibility" Value="Visible" />
-                        <Setter Target="goldButtonContainer.Visibility" Value="Visible" />
-                        <Setter Target="heroImagesFlipView.MaxHeight" Value="400" />
+                        <Setter Target="featuredPhoto1.PhotoDetailsContainerMargin" Value="80,120" />
+                        <Setter Target="featuredPhoto2.PhotoDetailsContainerMargin" Value="30,50" />
+                        <Setter Target="featuredPhoto3.PhotoDetailsContainerMargin" Value="30,50" />
+
+                        <Setter Target="featuredPhotos.Visibility" Value="Visible" />
+                        <Setter Target="heroImagesFlipView.Visibility" Value="Collapsed" />
+                        <Setter Target="heroImagesStateIndicator.Visibility" Value="Collapsed" />
+
+                        <Setter Target="categoriesList.(RelativePanel.Below)" Value="featuredPhotos" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState>
@@ -337,8 +301,50 @@
                         <AdaptiveTrigger MinWindowWidth="1300" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="heroImageExpansionContainer.Visibility" Value="Visible" />
-                        <Setter Target="heroImagesFlipView.MaxHeight" Value="500" />
+                        <Setter Target="featuredPhoto1.PhotoDetailsContainerMargin" Value="40,80" />
+                        <Setter Target="featuredPhoto2.PhotoDetailsContainerMargin" Value="20,30" />
+                        <Setter Target="featuredPhoto3.PhotoDetailsContainerMargin" Value="20,30" />
+
+                        <Setter Target="featuredPhoto1.CaptionFontSize" Value="18" />
+                        <Setter Target="featuredPhoto2.CaptionFontSize" Value="14" />
+                        <Setter Target="featuredPhoto3.CaptionFontSize" Value="14" />
+
+                        <Setter Target="featuredPhotos.Visibility" Value="Visible" />
+                        <Setter Target="heroImagesFlipView.Visibility" Value="Collapsed" />
+                        <Setter Target="heroImagesStateIndicator.Visibility" Value="Collapsed" />
+                        
+                        <Setter Target="categoriesList.(RelativePanel.Below)" Value="featuredPhotos" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="900" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="featuredPhoto1.Margin" Value="0,0,12,0" />
+                        <Setter Target="featuredPhoto2.Margin" Value="0,0,0,12" />
+
+                        <Setter Target="featuredPhoto1.CaptionFontSize" Value="16" />
+                        <Setter Target="featuredPhoto2.CaptionFontSize" Value="11" />
+                        <Setter Target="featuredPhoto3.CaptionFontSize" Value="11" />
+
+                        <Setter Target="featuredPhotos.Visibility" Value="Visible" />
+                        <Setter Target="heroImagesFlipView.Visibility" Value="Collapsed" />
+                        <Setter Target="heroImagesStateIndicator.Visibility" Value="Collapsed" />
+                        
+                        <Setter Target="categoriesList.(RelativePanel.Below)" Value="featuredPhotos" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="featuredPhotos.Visibility" Value="Collapsed" />
+                        <Setter Target="heroImagesFlipView.Visibility" Value="Visible" />
+                        <Setter Target="heroImagesStateIndicator.Visibility" Value="Visible" />
+                        
+                        <Setter Target="categoriesList.(RelativePanel.Below)" Value="heroImagesStateIndicator" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>

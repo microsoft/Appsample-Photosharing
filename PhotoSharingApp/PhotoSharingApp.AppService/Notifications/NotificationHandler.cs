@@ -22,9 +22,12 @@
 //  THE SOFTWARE.
 //  ---------------------------------------------------------------------------------
 
+using System;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Azure.NotificationHubs;
+using NotificationsExtensions.Badges;
+using NotificationsExtensions.Tiles;
 using PhotoSharingApp.Portable.DataContracts;
 
 namespace PhotoSharingApp.AppService.Notifications
@@ -35,39 +38,79 @@ namespace PhotoSharingApp.AppService.Notifications
     public class NotificationHandler : INotificationHandler
     {
         /// <summary>
-        /// Sends a Push notification for receiving Gold to a specified registered user.
-        /// The thumbnail of the photo receiving gold is also sent.
-        /// Photo id of the photo is sent to enable launching of the photo on the client on
-        /// clicking the notification.
+        /// Generates badge notification of goldCount change for receiver.
         /// </summary>
-        /// <param name="platform">The platform specific notification service to use.</param>
-        /// <param name="userNotificationTag">The user notification tag to send notification to.</param>
-        /// <param name="message">The message to display on the notification toast.</param>
-        /// <param name="thumbnailUrl">The thumbnail Url of the photo to display in notification.</param>
-        /// <param name="photoId">The photoId of the photo to send as activation argument.</param>
-        /// <returns>HttpStatusCode of the request.</returns>
-        public async Task<HttpStatusCode> PushGoldReceivedNotificationAsync(PushNotificationPlatform platform,
-            string userNotificationTag, string message,
-            string thumbnailUrl, string photoId)
+        /// <param name="goldCount">The goldCount of the user.</param>
+        /// <returns>String representation of badge object.</returns>
+        private string GenerateBadgeNotification(uint goldCount)
         {
-            return await SendPush(platform, userNotificationTag, message, thumbnailUrl, photoId);
+            BadgeNumericNotificationContent badgeContent = new BadgeNumericNotificationContent(goldCount);
+            return badgeContent.GetContent();
         }
 
         /// <summary>
-        /// Send a text push notification to a specified registered user.
+        /// Generates tile notification of gold notification using the receiver's picture
         /// </summary>
-        /// <param name="platform">The platform specific notification service to use.</param>
-        /// <param name="userNotificationTag">The user notification tag to send notification to.</param>
-        /// <param name="message">The message to display on the notification toast.</param>
-        /// <returns>HttpStatusCode of the request.</returns>
-        public async Task<HttpStatusCode> PushMessageNotificationAsync(PushNotificationPlatform platform,
-            string userNotificationTag, string message)
+        /// <param name="thumbnailUrl">Image that received gold.</param>
+        /// <returns>String representation of tile object.</returns>
+        private string GenerateTileNotification(string thumbnailUrl)
         {
-            return await SendPush(platform, userNotificationTag, message);
+            var content = new TileContent()
+            {
+                Visual = new TileVisual()
+                {
+                    TileSmall = new TileBinding()
+                    {
+                        Content = new TileBindingContentAdaptive()
+                        {
+                            BackgroundImage = new TileBackgroundImage()
+                            {
+                                Source = thumbnailUrl
+                            }
+                        }
+                    },
+
+                    TileMedium = new TileBinding()
+                    {
+                        Content = new TileBindingContentAdaptive()
+                        {
+                            BackgroundImage = new TileBackgroundImage()
+                            {
+                                Source = thumbnailUrl
+                            }
+                        }
+                    },
+
+                    TileLarge = new TileBinding()
+                    {
+                        Content = new TileBindingContentAdaptive()
+                        {
+                            BackgroundImage = new TileBackgroundImage()
+                            {
+                                Source = thumbnailUrl
+                            }
+                        }
+                    },
+
+                    TileWide = new TileBinding()
+                    {
+                        Content = new TileBindingContentAdaptive()
+                        {
+                            BackgroundImage = new TileBackgroundImage
+                            {
+                                Source = thumbnailUrl
+                            }
+                        }
+                    }
+                }
+            };
+
+            return content.GetContent();
         }
 
         /// <summary>
-        /// Sends a rich push notification message with a thumbnail image and arguments to lauch the image
+        /// Sends a rich push notification message with a thumbnail image and arguments to launch the image.
+        /// Also sends live tile and badge notification 
         /// if the optional parameters are passed.
         /// Otherwise, only a simple text push message is sent.
         /// </summary>
@@ -76,10 +119,11 @@ namespace PhotoSharingApp.AppService.Notifications
         /// <param name="message">The message to display on the notification toast.</param>
         /// <param name="thumbnailUrl">Optional - The thumbnail Url of the photo to display in notification.</param>
         /// <param name="photoId">Optional - The photoId of the photo to send as activation argument.</param>
+        /// <param name="goldCount">Optional - The goldCount of the photo's owner.</param>
         /// <returns>HttpStatusCode of the request.</returns>
-        private async Task<HttpStatusCode> SendPush(PushNotificationPlatform platform, string userNotificationTag,
+        public async Task<HttpStatusCode> SendPushAsync(PushNotificationPlatform platform, string userNotificationTag,
             string message,
-            string thumbnailUrl = "", string photoId = "")
+            string thumbnailUrl = "", string photoId = "", int goldCount = 0)
         {
             NotificationOutcome outcome = null;
             var statusCode = HttpStatusCode.InternalServerError;
@@ -106,9 +150,19 @@ namespace PhotoSharingApp.AppService.Notifications
                                     </visual>
                                    </toast>";
 
+                    var tile = GenerateTileNotification(thumbnailUrl);
+                    var badge = GenerateBadgeNotification(Convert.ToUInt32(goldCount));
                     outcome =
                         await
                             Models.NotificationsHubModel.Instance.Hub.SendWindowsNativeNotificationAsync(toast,
+                                userNotificationTag);
+                    outcome =
+                        await
+                            Models.NotificationsHubModel.Instance.Hub.SendWindowsNativeNotificationAsync(tile,
+                                userNotificationTag);
+                    outcome =
+                        await
+                            Models.NotificationsHubModel.Instance.Hub.SendWindowsNativeNotificationAsync(badge,
                                 userNotificationTag);
                     break;
 

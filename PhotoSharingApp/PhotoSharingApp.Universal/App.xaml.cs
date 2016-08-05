@@ -34,6 +34,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Resources;
 using Windows.Globalization;
+using Windows.UI.Notifications;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Navigation;
@@ -155,6 +156,10 @@ namespace PhotoSharingApp.Universal
         /// <param name="e">Details about the launch request and process.</param>
         protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
+            // Enable the tile queue on the primary tile (enables medium/wide/large tile queues)
+            TileUpdateManager.CreateTileUpdaterForApplication().EnableNotificationQueue(true);
+            BadgeUpdateManager.CreateBadgeUpdaterForApplication();
+
             var shell = await Initialize();
 
             // Place our app shell in the current Window

@@ -61,7 +61,7 @@ function getRecentPhotosForCategories(numberOfPhotos, currentDocumentVersion) {
 
         if (!result.isAccepted) {
             throw new Error("Sproc is too close to violating resource limit, aborting.");
-    }
+        }
     }
 
     function getRecentPhotosForCategory(categoryId) {

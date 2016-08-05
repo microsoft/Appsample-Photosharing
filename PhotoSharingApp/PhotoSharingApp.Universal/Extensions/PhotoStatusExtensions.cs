@@ -50,7 +50,7 @@ namespace PhotoSharingApp.Universal.Extensions
                 case PhotoStatus.ObjectionableContent:
                     return "Objectionable content";
                 case PhotoStatus.UnderReview:
-                    return "Under review";
+                    return "Under Review";
                 default:
                     return "Unknown";
             }

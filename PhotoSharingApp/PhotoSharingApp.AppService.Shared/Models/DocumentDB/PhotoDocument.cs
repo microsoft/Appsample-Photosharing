@@ -202,7 +202,7 @@ namespace PhotoSharingApp.AppService.Shared.Models.DocumentDB
                 NumberOfGoldVotes = GoldCount,
                 NumberOfAnnotations = Annotations.Count,
                 OSPlatform = OSPlatform,
-                Reports = Reports.Select(r => r.ToContract(Id, ContentType.Photo)).ToList(),
+                Reports = Reports.Select( r => r.ToContract(Id, ContentType.Photo)).ToList(),
                 Status = Status
             };
         }

@@ -1,0 +1,162 @@
+﻿<!--  
+//  Copyright (c) Microsoft Corporation.  All rights reserved.
+// 
+//  The MIT License (MIT)
+// 
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+// 
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+// 
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE. -->
+<UserControl
+    x:Class="PhotoSharingApp.Universal.Controls.FeaturedPhotoControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PhotoSharingApp.Universal.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:valueConverters="using:PhotoSharingApp.Universal.ValueConverters"
+    xmlns:controls="using:PhotoSharingApp.Universal.Controls"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:stateTriggers="using:PhotoSharingApp.Universal.StateTriggers"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400"
+    x:Name="controlRoot">
+    
+    <UserControl.Resources>
+        <valueConverters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+        <valueConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
+
+    <Grid Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"
+          Visibility="{Binding Path=PhotoSource, ElementName=controlRoot, Converter={StaticResource NullToVisibilityConverter}}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="4*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0" x:Name="photoDetailsContainer" Margin="{Binding PhotoDetailsContainerMargin, ElementName=controlRoot}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="2.5*" />
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*" />
+                <RowDefinition Height="5*" />
+                <RowDefinition Height="3*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Viewbox Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock x:Name="featuredText" Text="Featured" Foreground="Black" FontWeight="Light" />
+            </Viewbox>
+
+            <Viewbox Margin="3" Grid.Column="1" Grid.Row="1">
+                <controls:UserProfilePictureControl Source="{Binding PhotoSource.User.ProfilePictureUrl, ElementName=controlRoot}" Width="100" Height="100">
+                    <interactivity:Interaction.Behaviors>
+                        <core:EventTriggerBehavior EventName="Tapped">
+                            <core:InvokeCommandAction
+                                Command="{Binding UserSelectedCommand}"
+                                CommandParameter="{Binding PhotoSource.User, ElementName=controlRoot}" />
+                        </core:EventTriggerBehavior>
+                    </interactivity:Interaction.Behaviors>
+                </controls:UserProfilePictureControl>
+            </Viewbox>
+
+            <TextBlock Grid.Row="2" Grid.Column="1" MaxLines="2" HorizontalAlignment="Center" VerticalAlignment="Center"
+                       Text="{Binding PhotoSource.Caption, ElementName=controlRoot}"
+                       FontWeight="Thin" FontSize="{Binding CaptionFontSize, ElementName=controlRoot}" TextTrimming="WordEllipsis" 
+                       Foreground="{ThemeResource SystemControlHighlightBaseMediumHighBrush}" TextWrapping="Wrap"
+                       TextAlignment="Center">
+            </TextBlock>
+        </Grid>
+
+        <Grid Grid.Column="1">
+            <Image Source="{Binding PhotoSource.ImageUrl, ElementName=controlRoot}" Stretch="UniformToFill" VerticalAlignment="Stretch" />
+            <Grid>
+                <Grid.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#CC000000" Offset="1" />
+                        <GradientStop Offset="0.647" />
+                    </LinearGradientBrush>
+                </Grid.Background>
+            </Grid>
+            <interactivity:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="Tapped">
+                    <core:InvokeCommandAction
+                            Command="{Binding DataContext.HeroImageSelectedCommand, ElementName=controlRoot}"
+                            CommandParameter="{Binding PhotoSource, ElementName=controlRoot}" />
+                </core:EventTriggerBehavior>
+            </interactivity:Interaction.Behaviors>
+        </Grid>
+
+
+        <Viewbox Grid.Column="1" HorizontalAlignment="Right"
+                 VerticalAlignment="Bottom" x:Name="goldButtonContainer">
+            <controls:GoldButton Content="{Binding PhotoSource.GoldCount, ElementName=controlRoot}"
+                                 Command="{Binding GiveGoldCommand}"
+                                 IsEnabled="{Binding PhotoSource.CanGiveGold, ElementName=controlRoot}"
+                                 CommandParameter="{Binding PhotoSource, ElementName=controlRoot}" />
+        </Viewbox>
+        
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1300" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="goldButtonContainer.Height" Value="50" />
+                        <Setter Target="goldButtonContainer.Width" Value="50" />
+                        <Setter Target="goldButtonContainer.Margin" Value="0,0,12,12" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="900" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="goldButtonContainer.Height" Value="40" />
+                        <Setter Target="goldButtonContainer.Width" Value="40" />
+                        <Setter Target="goldButtonContainer.Margin" Value="0,0,12,12" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="700" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="goldButtonContainer.Height" Value="35" />
+                        <Setter Target="goldButtonContainer.Width" Value="35" />
+                        <Setter Target="goldButtonContainer.Margin" Value="0,0,6,6" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="goldButtonContainer.Height" Value="25" />
+                        <Setter Target="goldButtonContainer.Width" Value="25" />
+                        <Setter Target="goldButtonContainer.Margin" Value="0,0,6,6" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+    </Grid>
+</UserControl>

@@ -32,6 +32,7 @@
     xmlns:valueConverters="using:PhotoSharingApp.Universal.ValueConverters"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:actions="using:PhotoSharingApp.Universal.Actions"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance design:PhotoDetailsDesignViewModel, IsDesignTimeCreatable=True}">
 
@@ -182,12 +183,57 @@
         <ScrollViewer Grid.Row="1">
             <RelativePanel HorizontalAlignment="Center" MaxWidth="700">
 
-                <Image HorizontalAlignment="Left"
+                <Image HorizontalAlignment="Left" 
                        VerticalAlignment="Stretch"
                        x:Name="imageRoot"
                        Source="{Binding Photo.ImageUrl}"
                        MaxHeight="{StaticResource HighResolutionImageSideLength}"
-                       MaxWidth="{StaticResource HighResolutionImageSideLength}" />
+                       MaxWidth="{StaticResource HighResolutionImageSideLength}" />                
+                <Button Margin="10,0,0,0" x:Name="DeletePhoto" Style="{StaticResource DeleteButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                        Visibility="{Binding DataContext.IsCurrentUsersPhoto, ElementName=layoutRoot,Converter={StaticResource BooleanToVisibilityConverter}}" >
+                    <Button.Flyout>
+                        <Flyout x:Name="deletePhotoFlyout">
+                            <Grid>
+                                <RelativePanel Width="150">
+                                    <TextBlock x:Name="txtActivationError" Text="Are you sure you want to delete this photo?" RelativePanel.AlignTopWithPanel="True" TextWrapping="Wrap" />
+                                    
+                                    <Button x:Name="cmdYes"  Content="Yes"  Margin="0,6,0,0" RelativePanel.Below="txtActivationError" 
+                                            Command="{Binding DeletePhotoCommand}" />
+                                    <Button x:Name="cmdNo" Content="No" Margin="6,6,0,0" RelativePanel.RightOf ="cmdYes" RelativePanel.Below="txtActivationError"
+                                            Command="{Binding CancelDeletePhotoCommand}" />
+                                </RelativePanel>
+                            </Grid>
+                            <interactivity:Interaction.Behaviors>
+                                <core:DataTriggerBehavior Binding="{Binding IsDeletePhotoCanceled}" Value="True">
+                                    <actions:CloseMenuFlyoutAction />
+                                </core:DataTriggerBehavior>
+                            </interactivity:Interaction.Behaviors>
+                        </Flyout>
+                    </Button.Flyout>
+                </Button>                
+
+                <Button Margin="60,0,0,0" x:Name="SetProfilePhoto" Style="{StaticResource ProfileButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                        Visibility="{Binding DataContext.CanSetProfilePicture, ElementName=layoutRoot, Converter={StaticResource BooleanToVisibilityConverter}}" >
+                    <Button.Flyout>
+                        <Flyout x:Name="ProfileFlyout">
+                            <Grid>
+                                <RelativePanel Width="150">
+                                    <TextBlock x:Name="ProfileConfirmation" Text="Do you want to set this photo as your profile picture?" RelativePanel.AlignTopWithPanel="True" TextWrapping="Wrap" />
+                                    <Button x:Name="buttonYes" Content="Yes" Margin="0,6,0,0" RelativePanel.Below="ProfileConfirmation" 
+                                            Command="{Binding SetProfilePhotoCommand}" />
+                                    <Button x:Name="buttonNo" Content="No" Margin="6,6,0,0" RelativePanel.RightOf="buttonYes" RelativePanel.Below="ProfileConfirmation" 
+                                            Command="{Binding CancelSetProfileCommand}" />
+                                </RelativePanel>
+                            </Grid>
+                            <interactivity:Interaction.Behaviors>
+                                <core:DataTriggerBehavior Binding="{Binding IsSetProfilePhotoCanceled}" Value="True">
+                                    <actions:CloseMenuFlyoutAction />
+                                </core:DataTriggerBehavior>
+                            </interactivity:Interaction.Behaviors>
+                        </Flyout>
+                    </Button.Flyout>
+                </Button>
+                
                 <Grid Margin="12,0,12,12" x:Name="photoDetails"
                       RelativePanel.Below="{Binding ElementName=imageRoot}"
                       RelativePanel.AlignRightWithPanel="True"
