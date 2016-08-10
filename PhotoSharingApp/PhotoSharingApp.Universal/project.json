@@ -1,10 +1,10 @@
 ﻿{
   "dependencies": {
-    "Microsoft.Azure.Mobile.Client": "2.0.1",
+    "Microsoft.Azure.Mobile.Client": "2.1.1",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
-    "Unity": "3.5.1404",
+    "Unity": "4.0.1",
     "WindowsAzure.Messaging.Managed": "0.1.7.9",
-    "WindowsAzure.Storage": "5.0.0"
+    "WindowsAzure.Storage": "7.1.2"
   },
   "frameworks": {
     "uap10.0": {}

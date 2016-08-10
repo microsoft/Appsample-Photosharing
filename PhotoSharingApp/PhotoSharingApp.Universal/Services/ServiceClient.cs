@@ -730,7 +730,7 @@ namespace PhotoSharingApp.Universal.Services
                         stream.AsRandomAccessStream(), sideLength,
                         sideLength);
 
-                    await blob.UploadFromStreamAsync(resizedStream);
+                    await blob.UploadFromStreamAsync(resizedStream.AsStream());
                 }
 
                 var photoContract = new PhotoContract
