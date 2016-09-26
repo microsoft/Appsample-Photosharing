@@ -46,7 +46,7 @@ You need an [Azure account](https://azure.microsoft.com) to create an Azure App 
 
 #### Create Azure Blob storage
 
- 1. Create an Azure storage account following the instructions at [Create a storage account](https://azure.microsoft.com/documentation/articles/storage-create-storage-account/).
+ 1. Create an Azure storage account following the instructions at [Create a storage account](https://azure.microsoft.com/documentation/articles/storage-create-storage-account/). Create a 'General Storage' account.
  2. Once the creation has completed, navigate to your storage account and click on *Access keys* to note the storage account name and one of the access keys. Enter these values in [PhotoSharingApp\PhotoSharingApp.AppService.Shared\Context\EnvironmentDefinition.cs](PhotoSharingApp/PhotoSharingApp.AppService.Shared/Context/EnvironmentDefinition.cs)
   - `string StorageAccountName`
   - `string StorageAccessKey`
