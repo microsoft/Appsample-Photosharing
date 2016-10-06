@@ -1,3 +1,6 @@
+<!---
+category: AudioVideoAndCamera ControlsLayoutAndText Data FilesFoldersAndLibraries IdentitySecurityAndEncryption Navigation NetworkingAndWebServices TrialsAdsAndInAppPurchases
+-->
 # Appsample-Photosharing
 
 **PhotoSharingApp** is a Universal Windows Platform (UWP) app sample that demonstrates real-world social media experiences around photo sharing.
