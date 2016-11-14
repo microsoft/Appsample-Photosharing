@@ -283,6 +283,10 @@ namespace PhotoSharingApp.Universal.Services
 
             var stream = PhotoStreams.FirstOrDefault();
 
+            var photos = stream.Photos.Where(photo => photo.User.UserId == User.UserId);
+
+            stream.Photos = photos.ToList();
+
             if (stream != null)
             {
                 // Found the first photo stream, return photos
@@ -613,9 +617,9 @@ namespace PhotoSharingApp.Universal.Services
         {
             User = new User
             {
-                ProfilePictureUrl = "https://canaryappstorage.blob.core.windows.net/dummy-container/a11_tn.jpg",
+                ProfilePictureUrl = _sampleUsers[0].ProfilePictureUrl,
                 GoldBalance = 50,
-                UserId = "a71a39ee-8d81-4d1a-8209-903a2444acf5"
+                UserId = _sampleUsers[0].UserId
             };
         }
 
