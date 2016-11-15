@@ -90,7 +90,7 @@
 
         <controls:PageHeader Grid.ColumnSpan="3">
             <controls:PageHeader.HeaderContent>
-                <TextBlock Text="Leaderboards" Style="{ThemeResource PageTitleTextBlockStyle}" />
+                <TextBlock Text="{Binding PageHeaderText}" Style="{ThemeResource PageTitleTextBlockStyle}" />
             </controls:PageHeader.HeaderContent>
         </controls:PageHeader>
 
@@ -107,7 +107,7 @@
                 
                 <HubSection.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock FontSize="{Binding HubSectionHeaderFontSize, ElementName=pageRoot}" Text="User Net Worth" Foreground="Black" Margin="0,0,0,-5" />
+                        <TextBlock FontSize="{Binding HubSectionHeaderFontSize, ElementName=pageRoot}" Text="{Binding FirstHubHeaderText}" Foreground="Black" Margin="0,0,0,-5" />
                     </DataTemplate>
                 </HubSection.HeaderTemplate>
 
@@ -135,7 +135,7 @@
                 
                 <HubSection.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock FontSize="{Binding HubSectionHeaderFontSize, ElementName=pageRoot}" Text="Most Gold Given" Foreground="Black" Margin="0,0,0,-5" />
+                        <TextBlock FontSize="{Binding HubSectionHeaderFontSize, ElementName=pageRoot}" Text="{Binding SecondHubHeaderText}" Foreground="Black" Margin="0,0,0,-5" />
                     </DataTemplate>
                 </HubSection.HeaderTemplate>
                 
@@ -162,7 +162,7 @@
 
                 <HubSection.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock FontSize="{Binding HubSectionHeaderFontSize, ElementName=pageRoot}" Text="Photo Net Worth" Foreground="Black" Margin="0,0,0,-5" />
+                        <TextBlock FontSize="{Binding HubSectionHeaderFontSize, ElementName=pageRoot}" Text="{Binding ThirdHubHeaderText}" Foreground="Black" Margin="0,0,0,-5" />
                     </DataTemplate>
                 </HubSection.HeaderTemplate>
                 
@@ -189,7 +189,7 @@
 
                 <HubSection.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock FontSize="{Binding HubSectionHeaderFontSize, ElementName=pageRoot}" Text="Category Net Worth" Foreground="Black" Margin="0,0,0,-5" />
+                        <TextBlock FontSize="{Binding HubSectionHeaderFontSize, ElementName=pageRoot}" Text="{Binding FourthHubHeaderText}" Foreground="Black" Margin="0,0,0,-5" />
                     </DataTemplate>
                 </HubSection.HeaderTemplate>
                 

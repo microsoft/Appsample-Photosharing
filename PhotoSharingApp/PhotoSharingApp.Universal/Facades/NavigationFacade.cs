@@ -72,6 +72,8 @@ namespace PhotoSharingApp.Universal.Facades
         {
             if (ViewViewModelDictionary.ContainsKey(viewModel))
             {
+                // Globalization note: Yes, this is a literal string. But it's a string that only developers would be interested in, 
+                // and their language of choice appears to be English. There's no reason to make this string a localized resource.
                 throw new ArgumentException("The ViewModel has already been added and is only allowed once.");
             }
 
@@ -443,16 +445,6 @@ namespace PhotoSharingApp.Universal.Facades
             await dialog.ShowAsync();
 
             return dialog.ViewModel.SelectedCategory;
-        }
-
-        /// <summary>
-        /// Displays a dialog that lets the user create
-        /// a new category.
-        /// </summary>
-        public async Task ShowCreateCategoryDialog()
-        {
-            var dialog = new CreateCategoryDialog();
-            await dialog.ShowAsync();
         }
 
         /// <summary>

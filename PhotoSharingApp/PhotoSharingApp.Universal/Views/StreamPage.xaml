@@ -99,8 +99,8 @@
         </controls:PageHeader>
 
         <CommandBar Grid.Row="2">
-            <AppBarButton Icon="Camera" Label="Upload" Command="{Binding ContributeCommand}" />
-            <AppBarButton Icon="Refresh" Label="Refresh" Command="{Binding RefreshCommand}" />
+            <AppBarButton Icon="Camera" x:Uid="StreamPage_CameraButton" Label="Upload" Command="{Binding ContributeCommand}" />
+            <AppBarButton Icon="Refresh" x:Uid="StreamPage_RefreshButton" Label="Refresh" Command="{Binding RefreshCommand}" />
         </CommandBar>
 
         <Grid x:Name="contentRoot" Margin="0" Grid.Row="1">

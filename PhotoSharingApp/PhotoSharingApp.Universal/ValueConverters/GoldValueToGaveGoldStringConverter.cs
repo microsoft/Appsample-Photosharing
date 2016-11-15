@@ -23,6 +23,7 @@
 //  ---------------------------------------------------------------------------------
 
 using System;
+using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml.Data;
 
 namespace PhotoSharingApp.Universal.ValueConverters
@@ -36,8 +37,19 @@ namespace PhotoSharingApp.Universal.ValueConverters
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
+            var resourceLoader = ResourceLoader.GetForCurrentView();
+            string result;
+
             var goldCount = (int) value;
-            return $"Gave {goldCount} {(goldCount == 1 ? "Piece" : "Pieces")} of Gold";
+            if (goldCount == 1)
+            {
+                result = resourceLoader.GetString("GaveOneGold");
+            }
+            else
+            {
+                result = string.Format(resourceLoader.GetString("GaveMultipleGold"), goldCount);
+            }
+            return result;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

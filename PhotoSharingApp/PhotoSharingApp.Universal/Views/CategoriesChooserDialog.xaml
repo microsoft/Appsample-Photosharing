@@ -31,6 +31,7 @@
     xmlns:valueConverters="using:PhotoSharingApp.Universal.ValueConverters"
     xmlns:controls="using:PhotoSharingApp.Universal.Controls"
     mc:Ignorable="d"
+    x:Uid="CategoriesChooser_Dialog"
     Title="Choose Category"
     PrimaryButtonText="ok"
     SecondaryButtonText="cancel"
@@ -62,7 +63,7 @@
                 <SymbolIcon Symbol="Add" />
             </Button>
 
-            <TextBox x:Name="searchTextBox" PlaceholderText="Search"
+            <TextBox x:Uid="CatgoriesChooser_searchTextBox" x:Name="searchTextBox" PlaceholderText="Search"
                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                      IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"
                      Margin="0,0,12,0" />

@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PhotoSharingApp.Universal</RootNamespace>
     <AssemblyName>PhotoSharingApp.Universal</AssemblyName>
-    <DefaultLanguage>en</DefaultLanguage>
+    <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
@@ -127,7 +127,12 @@
     <Content Include="Assets\Wide310x150Logo.scale-400.png" />
     <Content Include="Store\Simulation\app-listing.xml" />
     <None Include="project.json" />
-    <PRIResource Include="Strings\en\Resources.resw" />
+    <PRIResource Include="Strings\fr-fr\Resources.resw">
+      <SubType>Designer</SubType>
+    </PRIResource>
+    <PRIResource Include="Strings\en\Resources.resw">
+      <SubType>Designer</SubType>
+    </PRIResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\CloseMenuFlyoutAction.cs" />
@@ -287,8 +292,6 @@
     <Compile Include="ValueConverters\AuthProviderToStringConverter.cs" />
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\NullToBoolConverter.cs" />
-    <Compile Include="ValueConverters\RankConverter.cs" />
-    <Compile Include="ViewModels\CreateCategoryViewModel.cs" />
     <Compile Include="ValueConverters\InverseBooleanConverter.cs" />
     <Compile Include="ValueConverters\NullToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\RelativeTimeConverter.cs" />
@@ -353,9 +356,6 @@
     </Compile>
     <Compile Include="Views\CategoriesPage.xaml.cs">
       <DependentUpon>CategoriesPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\CreateCategoryDialog.xaml.cs">
-      <DependentUpon>CreateCategoryDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CropPage.xaml.cs">
       <DependentUpon>CropPage.xaml</DependentUpon>
@@ -489,10 +489,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\CreateCategoryDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\CropPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -551,6 +547,9 @@
       <Project>{f2be2125-5344-4f5c-bf06-87e0455c5af9}</Project>
       <Name>PhotoSharingApp.Portable</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Strings\qps-ploc\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

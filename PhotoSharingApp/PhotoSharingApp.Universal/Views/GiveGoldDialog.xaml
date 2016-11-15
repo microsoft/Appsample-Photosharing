@@ -29,6 +29,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:valueConverters="using:PhotoSharingApp.Universal.ValueConverters"
     mc:Ignorable="d"
+    x:Uid="GiveGoldDialog"
     Title="Give Gold"
     PrimaryButtonText="submit"
     PrimaryButtonClick="GiveGoldDialog_OnPrimaryButtonClick"
@@ -52,10 +53,11 @@
         </Grid.RowDefinitions>
 
         <Grid Row="0">
-            <TextBlock Text="Awarding one piece of gold." TextAlignment="Center" HorizontalAlignment="Left" />
+            <TextBlock x:Uid="GiveGoldDialog_CaptionBlock" Text="Awarding one piece of gold." TextAlignment="Center" HorizontalAlignment="Left" />
         </Grid>
         <Grid Row="1"  Margin="0,12,0,0">
-            <TextBox PlaceholderText="leave a comment (optional)"
+            <TextBox x:Uid="GiveGoldDialog_CommentBox" 
+                     PlaceholderText="leave a comment (optional)"
                      Text="{Binding AnnotationText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                      IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"
                      MinHeight="75" TextWrapping="Wrap" />

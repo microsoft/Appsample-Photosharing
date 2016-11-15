@@ -34,16 +34,12 @@
     <Grid>
         <Border Margin="20" Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}" Padding="20">
             <RelativePanel>
-                <TextBlock x:Name="uploadText" Text="Upload a photo now to get some Gold!"
+                <TextBlock x:Uid="UploadPhoto_UploadText" x:Name="uploadText" Text="Upload a photo now to get some Gold!"
                            TextWrapping="Wrap" />
-                <Button x:Name="takePhotoButton" RelativePanel.Below="uploadText" Margin="0,18,0,0"
-                        Command="{Binding TakePhotoCommand}">
-                    Take Photo
-                </Button>
-                <Button RelativePanel.RightOf="takePhotoButton" RelativePanel.Below="uploadText" Margin="18,18,0,0"
-                        Command="{Binding BrowsePicturesLibraryCommand}">
-                    Browse Pictures
-                </Button>
+                <Button x:Uid="UploadPhoto_TakePhoto" x:Name="takePhotoButton" RelativePanel.Below="uploadText" Margin="0,18,0,0"
+                        Command="{Binding TakePhotoCommand}" Content="Take photo"/>
+                <Button x:Uid="UploadPhoto_BrowsePictures" RelativePanel.RightOf="takePhotoButton" RelativePanel.Below="uploadText" Margin="18,18,0,0"
+                        Command="{Binding BrowsePicturesLibraryCommand}" Content="Browse pictures"/>
             </RelativePanel>
         </Border>
     </Grid>

@@ -44,6 +44,9 @@ namespace PhotoSharingApp.Universal.Models
         {
             get
             {
+                // Globalization note: Yes, there's a literal string here, but it's coming from the model, and the view models
+                // both depend on this specific string being present, and remove this string from any data being displayed to the user.
+                // There's no need to localize it for the user's benefit.
                 return string.IsNullOrWhiteSpace(_name)
                        || _name.Length < 2
                        || _name.StartsWith("my", StringComparison.CurrentCultureIgnoreCase);

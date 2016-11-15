@@ -12,6 +12,7 @@
   </Dependencies>
   <Resources>
     <Resource Language="en" />
+    <Resource Language="fr-fr" />
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="PhotoSharingApp.Universal.App">

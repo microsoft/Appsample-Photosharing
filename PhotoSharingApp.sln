@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoSharingApp.Universal", "PhotoSharingApp\PhotoSharingApp.Universal\PhotoSharingApp.Universal.csproj", "{DB2DBC6A-D86A-4D5E-871D-29951C2A603D}"
 EndProject
@@ -29,6 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		ProjectOverview.md = ProjectOverview.md
 		README.md = README.md
 		TechnicalDeepDive.md = TechnicalDeepDive.md
+		GlobalizationNotes.md = GlobalizationNotes.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Screenshots", "Screenshots", "{820E6093-46DC-4461-85E1-F1D5ECB7BDF1}"

@@ -34,6 +34,7 @@ using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.Services;
 using PhotoSharingApp.Universal.Views;
 using Windows.UI.Xaml;
+using Windows.ApplicationModel.Resources;
 
 namespace PhotoSharingApp.Universal.ViewModels
 {
@@ -93,6 +94,18 @@ namespace PhotoSharingApp.Universal.ViewModels
             // we want to prevent an initial notification showing up
             // that the user has no pictures.
             ArePhotosEmpty = false;
+        }
+
+        /// <summary>
+        /// loads the page header caption string from the resource file
+        /// </summary>
+        public string PageHeaderText
+        {
+            get
+            {
+                var resourceLoader = ResourceLoader.GetForCurrentView();
+                return resourceLoader.GetString("ProfilePage_PageHeader");
+            }
         }
 
         /// <summary>

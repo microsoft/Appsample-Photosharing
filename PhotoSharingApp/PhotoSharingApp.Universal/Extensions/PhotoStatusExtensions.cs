@@ -22,6 +22,7 @@
 //  ---------------------------------------------------------------------------------
 
 using PhotoSharingApp.Portable.DataContracts;
+using Windows.ApplicationModel.Resources;
 
 namespace PhotoSharingApp.Universal.Extensions
 {
@@ -37,22 +38,23 @@ namespace PhotoSharingApp.Universal.Extensions
         /// <returns>The human readable string.</returns>
         public static string ToReadableString(this PhotoStatus photoStatus)
         {
+            var resourceLoader = ResourceLoader.GetForCurrentView();
             switch (photoStatus)
             {
                 case PhotoStatus.Active:
-                    return "Active";
+                    return resourceLoader.GetString("PhotoStatus_Active");
                 case PhotoStatus.Deleted:
-                    return "Deleted";
+                    return resourceLoader.GetString("PhotoStatus_Deleted");
                 case PhotoStatus.DoesntFitCategory:
-                    return "Does not fit category";
+                    return resourceLoader.GetString("PhotoStatus_DoesntFitCategory");
                 case PhotoStatus.Hidden:
-                    return "Hidden";
+                    return resourceLoader.GetString("PhotoStatus_Hidden");
                 case PhotoStatus.ObjectionableContent:
-                    return "Objectionable content";
+                    return resourceLoader.GetString("PhotoStatus_ObjectionableContent");
                 case PhotoStatus.UnderReview:
-                    return "Under Review";
+                    return resourceLoader.GetString("PhotoStatus_UnderReview");
                 default:
-                    return "Unknown";
+                    return resourceLoader.GetString("PhotoStatus_Unknown");
             }
         }
     }

@@ -34,8 +34,8 @@
     <Grid>
         <Border Margin="20" Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}" Padding="20">
             <StackPanel Orientation="Vertical">
-                <TextBlock Text="Sign in to see your Gold balance!" VerticalAlignment="Center" />
-                <Button Margin="0,12,0,0" Command="{Binding SignInCommand}">Sign in</Button>
+                <TextBlock x:Uid="SignInPrompt_Prompt" Text="Sign in to see your Gold balance!" VerticalAlignment="Center" />
+                <Button x:Uid="SignInPrompt_Button"  Margin="0,12,0,0" Command="{Binding SignInCommand}" Content="Sign in"/>
             </StackPanel>
         </Border>
     </Grid>

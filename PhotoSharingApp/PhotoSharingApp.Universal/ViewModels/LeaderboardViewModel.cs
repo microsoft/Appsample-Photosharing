@@ -28,6 +28,7 @@ using PhotoSharingApp.Universal.Facades;
 using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.Services;
 using PhotoSharingApp.Universal.Views;
+using Windows.ApplicationModel.Resources;
 
 namespace PhotoSharingApp.Universal.ViewModels
 {
@@ -41,6 +42,8 @@ namespace PhotoSharingApp.Universal.ViewModels
         private bool _isBusy;
 
         private Leaderboard _leaderboard;
+
+        private ResourceLoader _resourceLoader;
 
         /// <summary>
         /// The navigation facade
@@ -64,10 +67,51 @@ namespace PhotoSharingApp.Universal.ViewModels
             _navigationFacade = navigationFacade;
             _photoService = photoService;
             _dialogService = dialogService;
+            _resourceLoader = ResourceLoader.GetForCurrentView();
 
             PhotoSelectedCommand = new RelayCommand<Photo>(OnPhotoSelected);
             CategorySelectedCommand = new RelayCommand<Category>(OnCategorySelected);
             UserSelectedCommand = new RelayCommand<User>(OnUserSelected);
+        }
+
+        public string PageHeaderText
+        {
+            get
+            {
+                return _resourceLoader.GetString("LeaderboardsPage_PageHeader");
+            }
+        }
+
+        public string FirstHubHeaderText
+        {
+            get
+            {
+                return _resourceLoader.GetString("LeaderboardsPage_FirstHubHeaderText");
+            }
+        }
+
+        public string SecondHubHeaderText
+        {
+            get
+            {
+                return _resourceLoader.GetString("LeaderboardsPage_SecondHubHeaderText");
+            }
+        }
+
+        public string ThirdHubHeaderText
+        {
+            get
+            {
+                return _resourceLoader.GetString("LeaderboardsPage_ThirdHubHeaderText");
+            }
+        }
+
+        public string FourthHubHeaderText
+        {
+            get
+            {
+                return _resourceLoader.GetString("LeaderboardsPage_FourthHubHeaderText");
+            }
         }
 
         /// <summary>

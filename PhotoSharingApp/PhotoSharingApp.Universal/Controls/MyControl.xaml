@@ -41,8 +41,11 @@
         <Grid x:Name="contentRoot">
             <Rectangle Fill="{StaticResource AppAccentLightColorBrush}" Width="32" Height="32"/>
 
-            <TextBlock Text="My" VerticalAlignment="Center"
+            <!-- Globalization: the "My" thing won't work in other languages. This is an attempt to render the app's logo using a similar font. -->
+            <!-- It would probably be better to use an appropriately-colored version of the logo as a graphic rather than text, but I'm no artist. -->
+            <TextBlock Text="G" VerticalAlignment="Center"
                        FontWeight="Bold"
+                       FontFamily="Century Gothic"
                        CharacterSpacing="75"
                        HorizontalAlignment="Center"
                        Foreground="{StaticResource AppAccentForegroundColorBrush}"

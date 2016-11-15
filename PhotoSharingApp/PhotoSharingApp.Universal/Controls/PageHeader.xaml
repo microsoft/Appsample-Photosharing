@@ -61,6 +61,8 @@
                                   Content="{Binding HeaderContent, ElementName=controlRoot}" />
                 <Border Grid.Column="2" VerticalAlignment="Center" Background="Red"
                         Padding="6,3" Visibility="{Binding ViewModel.IsDummyServiceEnabled, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=controlRoot}">
+                    <!-- The "Dummy Service" text is filled at runtime with a string from the relevant ViewModel, and was localized as appropriate there. -->
+                    <!-- So we do nothing here about localization for this control. It's already done for us. -->
                     <TextBlock Text="DUMMY SERVICE" Foreground="White" FontWeight="Bold"
                                FontSize="9"></TextBlock>
                 </Border>
@@ -71,7 +73,7 @@
                 <Grid x:Name="goldBalanceContainer" Margin="0,0,12,0">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right"
                             Margin="12,6">
-                        <TextBlock Text="Your Balance:" Margin="0,0,6,0"
+                        <TextBlock x:Uid="PageHeader_Balance" Text="Your Balance:" Margin="0,0,6,0"
                                FontWeight="Normal" VerticalAlignment="Center" Foreground="{StaticResource AppAccentForegroundColorBrush}"/>
                         <Viewbox Width="25" VerticalAlignment="Center">
                             <local:GoldButton x:Name="goldButton" IsTabStop="False" />

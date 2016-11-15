@@ -47,7 +47,10 @@ namespace PhotoSharingApp.Universal.NavigationBar
         /// </summary>
         public string Label
         {
-            get { return "Settings"; }
+            get {
+                var loader = new Windows.ApplicationModel.Resources.ResourceLoader();
+                return loader.GetString("SettingsNavigationBar_Label");
+            }
         }
 
         /// <summary>

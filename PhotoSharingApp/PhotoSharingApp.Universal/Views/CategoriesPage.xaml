@@ -67,7 +67,7 @@
                             Style="{ThemeResource TextBlockButtonStyle}"
                             Command="{Binding DataContext.CategorySelectedCommand, ElementName=LayoutRoot}"
                             CommandParameter="{Binding}">
-                        <TextBlock 
+                        <TextBlock x:Uid="CategoriesPage_ShowAllTextBlock"
                                Foreground="{StaticResource AppAccentForegroundColorBrush}" FontSize="16"
                                Text="Show all"
                                Style="{ThemeResource SubheaderTextBlockStyle}" />
@@ -179,10 +179,9 @@
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        
         <controls:PageHeader>
             <controls:PageHeader.HeaderContent>
-                <TextBlock Text="Categories" Style="{ThemeResource PageTitleTextBlockStyle}" />
+                <TextBlock Text="{Binding PageHeaderText}" Style="{ThemeResource PageTitleTextBlockStyle}" />
             </controls:PageHeader.HeaderContent>
         </controls:PageHeader>
 
@@ -231,7 +230,7 @@
                     <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                         <ProgressBar IsIndeterminate="True"
                                      Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                        <TextBlock Text="No data available. Upload some photos!" FontSize="32" HorizontalAlignment="Center"
+                        <TextBlock x:Uid="CategoriesPage_NoDataBlock"  Text="No data available. Upload some photos!" FontSize="32" HorizontalAlignment="Center"
                                    Visibility="{Binding IsEmptyDataMessageVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
                                    FontWeight="Light" TextWrapping="WrapWholeWords" />
                     </StackPanel>

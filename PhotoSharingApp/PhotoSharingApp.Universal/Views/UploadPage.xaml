@@ -71,8 +71,8 @@
 
     <Page.BottomAppBar>
         <CommandBar>
-            <AppBarButton Icon="Edit" Label="Choose category" Command="{Binding ChooseCategoryCommand}" />
-            <AppBarButton Icon="Send" Label="Upload" Command="{Binding UploadCommand}" />
+            <AppBarButton x:Uid="Upload_EditButton" Icon="Edit" Label="Choose category" Command="{Binding ChooseCategoryCommand}" />
+            <AppBarButton x:Uid="Upload_UploadButton" Icon="Send" Label="Upload" Command="{Binding UploadCommand}" />
             <CommandBar.Content>
                 <TextBlock Margin="12,14" />
             </CommandBar.Content>

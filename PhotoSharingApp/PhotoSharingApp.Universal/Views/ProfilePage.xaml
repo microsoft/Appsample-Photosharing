@@ -93,7 +93,7 @@
 
         <controls:PageHeader>
             <controls:PageHeader.HeaderContent>
-                <TextBlock Text="Profile" Style="{ThemeResource PageTitleTextBlockStyle}" />
+                <TextBlock Text="{Binding PageHeaderText}" Style="{ThemeResource PageTitleTextBlockStyle}" />
             </controls:PageHeader.HeaderContent>
         </controls:PageHeader>
 
@@ -123,7 +123,7 @@
                 <TextBlock x:Name="photosUploadedCounter" Text="{Binding PhotosCount}" HorizontalAlignment="Center"
                            FontWeight="Bold"
                            FontSize="36" />
-                <TextBlock x:Name="photosUploadedTitle" TextWrapping="WrapWholeWords" Text="Photos"
+                <TextBlock x:Name="photosUploadedTitle" x:Uid="ProfilePage_photosUploadedTitle" Text="Photos" TextWrapping="WrapWholeWords" 
                            HorizontalAlignment="Center" FontWeight="Light" />
             </StackPanel>
 
@@ -131,7 +131,7 @@
                 <TextBlock x:Name="goldBalanceCounter" Text="{Binding GoldBalance}" HorizontalAlignment="Center"
                            FontWeight="Bold"
                            FontSize="36" />
-                <TextBlock x:Name="goldBalanceTitle" Text="Gold" TextWrapping="WrapWholeWords"
+                <TextBlock x:Name="goldBalanceTitle" x:Uid="ProfilePage_goldBalanceTitle" Text="Gold" TextWrapping="WrapWholeWords"
                            HorizontalAlignment="Center" FontWeight="Light" />
             </StackPanel>
         </Grid>
@@ -150,7 +150,7 @@
             <Viewbox Height="80">
                 <SymbolIcon Symbol="Camera" />
             </Viewbox>
-            <TextBlock TextWrapping="Wrap" TextAlignment="Center" Grid.Row="1" FontWeight="Normal"
+            <TextBlock x:Uid="ProfilePage_NoPhotoPrompt" TextWrapping="Wrap" TextAlignment="Center" Grid.Row="1" FontWeight="Normal"
                 Text="You don't have any photos yet, upload some and earn some Gold!"/>
         </Grid>
 
