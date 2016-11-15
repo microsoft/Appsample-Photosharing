@@ -617,9 +617,9 @@ namespace PhotoSharingApp.Universal.Services
         {
             User = new User
             {
-                ProfilePictureUrl = _sampleUsers[0].ProfilePictureUrl,
+                ProfilePictureUrl = _sampleUsers.First().ProfilePictureUrl,
                 GoldBalance = 50,
-                UserId = _sampleUsers[0].UserId
+                UserId = _sampleUsers.First().UserId
             };
         }
 
