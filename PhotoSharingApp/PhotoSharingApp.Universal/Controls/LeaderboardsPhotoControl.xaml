@@ -87,7 +87,6 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="rankTextBlock.FontSize" Value="21" />
-                        <Setter Target="rankSuperScriptTextBlock.FontSize" Value="18" />
                         <Setter Target="layoutRoot.Margin" Value="0,0,0,12" />
                     </VisualState.Setters>
                 </VisualState>
@@ -97,7 +96,6 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="rankTextBlock.FontSize" Value="14" />
-                        <Setter Target="rankSuperScriptTextBlock.FontSize" Value="12" />
                         <Setter Target="layoutRoot.Margin" Value="0,0,0,9" />
                     </VisualState.Setters>
                 </VisualState>
@@ -107,7 +105,6 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="rankTextBlock.FontSize" Value="10" />
-                        <Setter Target="rankSuperScriptTextBlock.FontSize" Value="8" />
                         <Setter Target="layoutRoot.Margin" Value="0,0,0,6" />
                     </VisualState.Setters>
                 </VisualState>
@@ -117,7 +114,6 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="rankTextBlock.FontSize" Value="28" />
-                        <Setter Target="rankSuperScriptTextBlock.FontSize" Value="23" />
                         <Setter Target="layoutRoot.Margin" Value="0,0,0,18" />
                     </VisualState.Setters>
                 </VisualState>
