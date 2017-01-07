@@ -26,6 +26,7 @@ using System;
 using PhotoSharingApp.Portable.DataContracts;
 using PhotoSharingApp.Universal.Extensions;
 using Windows.UI.Xaml.Data;
+using Windows.ApplicationModel.Resources;
 
 namespace PhotoSharingApp.Universal.ValueConverters
 {
@@ -38,8 +39,31 @@ namespace PhotoSharingApp.Universal.ValueConverters
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             var photoStatus = (PhotoStatus)value;
+            var resourceLoader = ResourceLoader.GetForCurrentView();
+            string result = string.Empty;
 
-            return photoStatus.ToReadableString();
+            switch (photoStatus)
+            {
+                case PhotoStatus.Active:
+                    result = resourceLoader.GetString("PhotoStatus_Active");
+                    break;
+                case PhotoStatus.Deleted:
+                    result = resourceLoader.GetString("PhotoStatus_Deleted");
+                    break;
+                case PhotoStatus.ObjectionableContent:
+                    result = resourceLoader.GetString("PhotoStatus_ObjectionableContent");
+                    break;
+                case PhotoStatus.DoesntFitCategory:
+                    result = resourceLoader.GetString("PhotoStatus_DoesntFitCategory");
+                    break;
+                case PhotoStatus.Hidden:
+                    result = resourceLoader.GetString("PhotoStatus_Hidden");
+                    break;
+                case PhotoStatus.UnderReview:
+                    result = resourceLoader.GetString("PhotoStatus_UnderReview");
+                    break;
+            }
+            return result;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

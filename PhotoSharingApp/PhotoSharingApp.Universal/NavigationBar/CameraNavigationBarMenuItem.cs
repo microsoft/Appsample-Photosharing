@@ -48,7 +48,11 @@ namespace PhotoSharingApp.Universal.NavigationBar
         /// </summary>
         public string Label
         {
-            get { return "Upload"; }
+            get
+            {
+                var loader = new Windows.ApplicationModel.Resources.ResourceLoader();
+                return loader.GetString("CameraNavigationBar_Label");
+            }
         }
 
         /// <summary>

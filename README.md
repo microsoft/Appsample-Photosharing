@@ -1,5 +1,5 @@
 <!---
-category: AudioVideoAndCamera ControlsLayoutAndText Data FilesFoldersAndLibraries IdentitySecurityAndEncryption Navigation NetworkingAndWebServices TrialsAdsAndInAppPurchases
+category: AudioVideoAndCamera ControlsLayoutAndText Data FilesFoldersAndLibraries IdentitySecurityAndEncryption Navigation NetworkingAndWebServices TrialsAdsAndInAppPurchases GlobalizationAndLocalization 
 -->
 # Appsample-Photosharing
 

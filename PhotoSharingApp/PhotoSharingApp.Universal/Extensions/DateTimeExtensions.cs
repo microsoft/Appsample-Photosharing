@@ -22,6 +22,7 @@
 //  ---------------------------------------------------------------------------------
 
 using System;
+using Windows.ApplicationModel.Resources;
 
 namespace PhotoSharingApp.Universal.Extensions
 {
@@ -38,6 +39,7 @@ namespace PhotoSharingApp.Universal.Extensions
         internal static string ToRelativeTime(this DateTime dateTime)
         {
             var s = DateTime.Now.Subtract(dateTime);
+            var resourceLoader = ResourceLoader.GetForCurrentView();
 
             var dayDifference = (int)s.TotalDays;
 
@@ -52,56 +54,56 @@ namespace PhotoSharingApp.Universal.Extensions
             {
                 if (secondDifference < 60)
                 {
-                    return "just now";
+                    return resourceLoader.GetString("DateTime_JustNow");
                 }
 
                 if (secondDifference < 120)
                 {
-                    return "1 minute ago";
+                    return resourceLoader.GetString("DateTime_OneMinute");
                 }
 
                 if (secondDifference < 3600)
                 {
-                    return $"{secondDifference / 60} minutes ago";
+                    return string.Format(resourceLoader.GetString("DateTime_MinutesAgo"), secondDifference/60);
                 }
 
                 if (secondDifference < 7200)
                 {
-                    return "1 hour ago";
+                    return resourceLoader.GetString("DateTime_OneHour");
                 }
 
                 if (secondDifference < 86400)
                 {
-                    return $"{secondDifference / 3600} hours ago";
+                    return string.Format(resourceLoader.GetString("DateTime_HoursAgo"), secondDifference / 3600);
                 }
             }
 
             if (dayDifference == 1)
             {
-                return "yesterday";
+                return resourceLoader.GetString("DateTime_Yesterday");
             }
 
             if (dayDifference < 7)
             {
-                return $"{dayDifference} days ago";
+                return String.Format(resourceLoader.GetString("DateTime_DaysAgo"), dayDifference);
             }
 
             if (dayDifference < 14)
             {
-                return "1 week ago";
+                return resourceLoader.GetString("DateTime_OneWeekAgo");
             }
 
             if (dayDifference < 31)
             {
-                return $"{dayDifference / 7} weeks ago";
+                return String.Format(resourceLoader.GetString("DateTime_WeeksAgo"), dayDifference / 7);
             }
 
             if (dayDifference < 62)
             {
-                return "1 month ago";
+                return resourceLoader.GetString("DateTime_OneMonthAgo");
             }
 
-            return $"{dayDifference / 31} months ago";
+            return String.Format(resourceLoader.GetString("DateTime_MonthsAgo"), dayDifference / 31);
         }
     }
 }

@@ -36,10 +36,10 @@
         <Border Margin="20" Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}" Padding="20">
             <RelativePanel>
                 <StackPanel Orientation="Horizontal" x:Name="stackPanel">
-                    <TextBlock Text="Gold Balance: " x:Name="balanceText" VerticalAlignment="Center" />
+                    <TextBlock x:Uid="GoldPurchasePrompt_Balance" Text="Gold Balance: " x:Name="balanceText" VerticalAlignment="Center" />
                     <local:GoldButton Content="{Binding CurrentUser.GoldBalance}" x:Name="goldButton" Margin="12,0,0,0" IsTabStop="False"/>
                 </StackPanel>
-                <Button Command="{Binding BuyGoldCommand}" x:Name="buyGoldButton">Buy Gold!</Button>
+                <Button Command="{Binding BuyGoldCommand}" x:Uid="GoldPurchasePrompt_BuyGold" x:Name="buyGoldButton" Content="Buy Gold!"/>
             </RelativePanel>
         </Border>
 

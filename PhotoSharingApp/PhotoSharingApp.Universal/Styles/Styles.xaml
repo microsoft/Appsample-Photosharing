@@ -24,7 +24,10 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:PhotoSharingApp.Universal"
-    xmlns:controls="using:PhotoSharingApp.Universal.Controls">
+    xmlns:controls="using:PhotoSharingApp.Universal.Controls" 
+    xmlns:unity="using:PhotoSharingApp.Universal.Unity">
+
+    <unity:DesignTimeUnityBootstrapper x:Key="DesignTimeUnityBootstrapper" />
 
     <Color x:Key="AppAccentColor">#FFFAA819</Color>
     <SolidColorBrush x:Key="AppAccentColorBrush" Color="{StaticResource AppAccentColor}" />

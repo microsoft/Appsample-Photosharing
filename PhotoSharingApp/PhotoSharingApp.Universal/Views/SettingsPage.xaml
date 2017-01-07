@@ -56,9 +56,9 @@
                                                  FromVerticalOffset="100" />
                     </TransitionCollection>
                 </ItemsControl.ItemContainerTransitions>
-                <Button Content="Privacy and terms" Command="{Binding PrivacyCommand}" />
-                <Button Content="About" Command="{Binding AboutCommand}" />
-                <Button Content="Sign out" Command="{Binding SignOutCommand}"
+                <Button x:Uid="Settings_PrivacyButton" Content="Privacy and terms" Command="{Binding PrivacyCommand}" />
+                <Button x:Uid="Settings_AboutButton" Content="About" Command="{Binding AboutCommand}" />
+                <Button x:Uid="Settings_SignOutButton" Content="Sign out" Command="{Binding SignOutCommand}"
                         Visibility="{Binding IsUserSignedIn, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </ItemsControl>
         </RelativePanel>

@@ -47,7 +47,11 @@ namespace PhotoSharingApp.Universal.NavigationBar
         /// </summary>
         public string Label
         {
-            get { return "Debug"; }
+            get
+            {
+                var loader = new Windows.ApplicationModel.Resources.ResourceLoader();
+                return loader.GetString("DebugNavigationBar_Label");
+            }
         }
 
         /// <summary>

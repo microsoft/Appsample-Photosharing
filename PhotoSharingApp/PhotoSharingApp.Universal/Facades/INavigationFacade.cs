@@ -167,12 +167,6 @@ namespace PhotoSharingApp.Universal.Facades
         Task<Category> ShowCategoryChooserDialog();
 
         /// <summary>
-        /// Displays a dialog that lets the user create
-        /// a new category.
-        /// </summary>
-        Task ShowCreateCategoryDialog();
-
-        /// <summary>
         /// Displays a dialog that lets the user give gold
         /// </summary>
         /// <returns>The annotation. If dialog is being canceled, null is returned.</returns>

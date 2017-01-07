@@ -37,9 +37,6 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d" Width="300" Height="300">
 
-    <UserControl.Resources>
-        <valueConverters:RankConverter x:Key="RankConverter" />
-    </UserControl.Resources>
 
     <Grid x:Name="layoutRoot" Background="Transparent">
         <interactivity:Interaction.Behaviors>
@@ -75,8 +72,6 @@
                   Margin="6,6,0,0">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
                     <TextBlock x:Name="rankTextBlock" Text="{Binding CategoryEntry.Rank}" />
-                    <TextBlock x:Name="rankSuperScriptTextBlock" Margin="0,-3,0,0"
-                       Text="{Binding CategoryEntry.Rank, Converter={StaticResource RankConverter}}" />
                 </StackPanel>
             </Grid>
             <Viewbox Grid.Column="3" Grid.Row="3" Margin="0,0,6,6" x:Name="goldButtonContainer">
@@ -92,7 +87,6 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="rankTextBlock.FontSize" Value="21" />
-                        <Setter Target="rankSuperScriptTextBlock.FontSize" Value="18" />
                         <Setter Target="layoutRoot.Margin" Value="0,0,0,12" />
                     </VisualState.Setters>
                 </VisualState>
@@ -102,7 +96,6 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="rankTextBlock.FontSize" Value="14" />
-                        <Setter Target="rankSuperScriptTextBlock.FontSize" Value="12" />
                         <Setter Target="layoutRoot.Margin" Value="0,0,0,9" />
                     </VisualState.Setters>
                 </VisualState>
@@ -112,7 +105,6 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="rankTextBlock.FontSize" Value="10" />
-                        <Setter Target="rankSuperScriptTextBlock.FontSize" Value="8" />
                         <Setter Target="layoutRoot.Margin" Value="0,0,0,6" />
                     </VisualState.Setters>
                 </VisualState>
@@ -122,7 +114,6 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="rankTextBlock.FontSize" Value="28" />
-                        <Setter Target="rankSuperScriptTextBlock.FontSize" Value="23" />
                         <Setter Target="layoutRoot.Margin" Value="0,0,0,18" />
                     </VisualState.Setters>
                 </VisualState>

@@ -33,6 +33,8 @@ namespace PhotoSharingApp.Universal.ValueConverters
     /// better readable string.
     /// E.g. "MicrosoftAccount" -> "Microsoft Account"
     /// </summary>
+    // Localization note: this isn't particularly robust for localization (is it still "Microsoft Account" in Swedish, or Japanese?)
+    // A more robust solution would load a resource string for each supported enum value with a localized name.
     public class AuthProviderToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

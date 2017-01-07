@@ -41,8 +41,9 @@
         <Grid x:Name="contentRoot">
             <Rectangle Fill="{StaticResource AppAccentLightColorBrush}" Width="32" Height="32"/>
 
-            <TextBlock Text="My" VerticalAlignment="Center"
+            <TextBlock Text="G" VerticalAlignment="Center"
                        FontWeight="Bold"
+                       FontFamily="Century Gothic"
                        CharacterSpacing="75"
                        HorizontalAlignment="Center"
                        Foreground="{StaticResource AppAccentForegroundColorBrush}"

@@ -33,6 +33,7 @@ using PhotoSharingApp.Universal.Models;
 using PhotoSharingApp.Universal.Services;
 using PhotoSharingApp.Universal.Views;
 using Windows.UI.Xaml;
+using Windows.ApplicationModel.Resources;
 
 namespace PhotoSharingApp.Universal.ViewModels
 {
@@ -129,6 +130,15 @@ namespace PhotoSharingApp.Universal.ViewModels
             UserSelectedCommand = new RelayCommand<User>(OnUserSelected);
 
             IsUserSignedIn = AppEnvironment.Instance.CurrentUser != null;
+        }
+
+        public string PageHeaderText
+        {
+            get
+            {
+                var resourceLoader = ResourceLoader.GetForCurrentView();
+                return resourceLoader.GetString("CategoriesPage_PageHeader");
+            }
         }
 
         /// <summary>

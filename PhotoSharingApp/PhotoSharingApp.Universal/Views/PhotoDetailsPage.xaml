@@ -54,6 +54,7 @@
                                 <Grid  Margin="0,14,0,5" >
                                     <Ellipse x:Name="ButtonEllipse" Height="40" Width="40" Fill="#FFFDFCFC" HorizontalAlignment="Center" VerticalAlignment="Center"
                                              Stroke="{StaticResource AppAccentLightColorBrush}" StrokeThickness="2" />
+                                    <!-- This glyph is the Discard (trash can) glyph. -->
                                     <TextBlock x:Name="Glyph" Text="&#xE107;" FontSize="18" FontFamily="Segoe UI Symbol" HorizontalAlignment="Center" VerticalAlignment="Center" />
                                 </Grid>
                                 <TextBlock x:Name="Content" Text="{TemplateBinding Content}" HorizontalAlignment="Center" FontFamily="Segoe UI" FontSize="12" />
@@ -96,6 +97,7 @@
                                 <Grid  Margin="0,14,0,5" >
                                     <Ellipse x:Name="ButtonShape" Height="40" Width="40" Fill="#FFFDFCFC" HorizontalAlignment="Center"
                                         Stroke="{StaticResource AppAccentLightColorBrush}" StrokeThickness="2" VerticalAlignment="Center"/>
+                                    <!--This glyph is the Contact (head and shoulders silhouette) glyph. -->
                                     <TextBlock x:Name="Icon" Text="&#xE13D;" FontFamily="Segoe UI Symbol" FontSize="18" HorizontalAlignment="Center"
                                         VerticalAlignment="Center"/>
                                 </Grid>
@@ -177,6 +179,7 @@
         </Grid.RowDefinitions>
         <controls:PageHeader>
             <controls:PageHeader.HeaderContent>
+                <!-- No localization for category name here, as it was entered by the user. -->
                 <TextBlock Text="{Binding Category.Name}" Style="{ThemeResource PageTitleTextBlockStyle}" />
             </controls:PageHeader.HeaderContent>
         </controls:PageHeader>
@@ -195,11 +198,11 @@
                         <Flyout x:Name="deletePhotoFlyout">
                             <Grid>
                                 <RelativePanel Width="150">
-                                    <TextBlock x:Name="txtActivationError" Text="Are you sure you want to delete this photo?" RelativePanel.AlignTopWithPanel="True" TextWrapping="Wrap" />
+                                    <TextBlock x:Name="txtActivationError" x:Uid="PhotoDetails_txtActivationError" Text="Are you sure you want to delete this photo?" RelativePanel.AlignTopWithPanel="True" TextWrapping="Wrap" />
                                     
-                                    <Button x:Name="cmdYes"  Content="Yes"  Margin="0,6,0,0" RelativePanel.Below="txtActivationError" 
+                                    <Button x:Name="cmdYes" x:Uid="PhotoDetails_cmdYes" Content="Yes"  Margin="0,6,0,0" RelativePanel.Below="txtActivationError" 
                                             Command="{Binding DeletePhotoCommand}" />
-                                    <Button x:Name="cmdNo" Content="No" Margin="6,6,0,0" RelativePanel.RightOf ="cmdYes" RelativePanel.Below="txtActivationError"
+                                    <Button x:Name="cmdNo" x:Uid="PhotoDetails_cmdNo" Content="No" Margin="6,6,0,0" RelativePanel.RightOf ="cmdYes" RelativePanel.Below="txtActivationError"
                                             Command="{Binding CancelDeletePhotoCommand}" />
                                 </RelativePanel>
                             </Grid>
@@ -218,10 +221,10 @@
                         <Flyout x:Name="ProfileFlyout">
                             <Grid>
                                 <RelativePanel Width="150">
-                                    <TextBlock x:Name="ProfileConfirmation" Text="Do you want to set this photo as your profile picture?" RelativePanel.AlignTopWithPanel="True" TextWrapping="Wrap" />
-                                    <Button x:Name="buttonYes" Content="Yes" Margin="0,6,0,0" RelativePanel.Below="ProfileConfirmation" 
+                                    <TextBlock x:Name="ProfileConfirmation" x:Uid="PhotoDetails_ProfileConfirmation" Text="Do you want to set this photo as your profile picture?" RelativePanel.AlignTopWithPanel="True" TextWrapping="Wrap" />
+                                    <Button x:Name="buttonYes" x:Uid="PhotoDetails_buttonYes" Content="Yes" Margin="0,6,0,0" RelativePanel.Below="ProfileConfirmation" 
                                             Command="{Binding SetProfilePhotoCommand}" />
-                                    <Button x:Name="buttonNo" Content="No" Margin="6,6,0,0" RelativePanel.RightOf="buttonYes" RelativePanel.Below="ProfileConfirmation" 
+                                    <Button x:Name="buttonNo" x:Uid="PhotoDetails_buttonNo" Content="No" Margin="6,6,0,0" RelativePanel.RightOf="buttonYes" RelativePanel.Below="ProfileConfirmation" 
                                             Command="{Binding CancelSetProfileCommand}" />
                                 </RelativePanel>
                             </Grid>
@@ -273,6 +276,7 @@
                                          Grid.Column="2" Content="{Binding Photo.GoldCount}"
                                          VerticalAlignment="Top" />
 
+                    <!--We also don't do anything about localizing captions, since that is also user input, and in a language the user chose already. -->
                     <TextBlock Grid.Row="1" Margin="0,12" Grid.ColumnSpan="3" Text="{Binding Photo.Caption}"
                                TextWrapping="WrapWholeWords" />
 
@@ -339,13 +343,13 @@
             </RelativePanel>
         </ScrollViewer>
         <CommandBar Opacity="1" Grid.Row="2" ClosedDisplayMode="Minimal">
-            <AppBarButton Icon="Delete" 
+            <AppBarButton Icon="Delete" x:Uid="PhotoDetails_DeleteButton"
                           Visibility="{Binding IsUserAbleToDeleteAnnotation, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                           Label="Delete" Command="{Binding DeleteAnnotationCommand}" />
-            <AppBarButton Icon="ReportHacked"
+            <AppBarButton Icon="ReportHacked" x:Uid="PhotoDetails_ReportAnnotation"
                           Visibility="{Binding IsUserAbleToReportAnnotation, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                           Label="Report Annotation" Command="{Binding ReportAnnotationCommand}" />
-            <AppBarButton Icon="ReportHacked"
+            <AppBarButton Icon="ReportHacked" x:Uid="PhotoDetails_ReportPhoto"
                           Visibility="{Binding IsUserAbleToReportPhoto, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                           Label="Report Photo" Command="{Binding ReportPhotoCommand}" >
                 <AppBarButton.Flyout>
@@ -371,7 +375,7 @@
                     </Flyout>
                 </AppBarButton.Flyout>
             </AppBarButton>
-            <AppBarButton Icon="Edit"
+            <AppBarButton Icon="Edit" x:Uid="PhotoDetails_EditPhoto"
                           Label="Edit Photo"
                           Command="{Binding EditPhotoCommand}"
                           Visibility="{Binding IsUserAbleToUpdatePhoto, Converter={StaticResource BooleanToVisibilityConverter}}"/>

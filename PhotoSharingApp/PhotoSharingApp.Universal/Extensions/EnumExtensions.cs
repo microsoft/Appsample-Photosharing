@@ -38,6 +38,8 @@ namespace PhotoSharingApp.Universal.Extensions
         /// </summary>
         /// <param name="en">The enum.</param>
         /// <returns>The display name attribute as a string</returns>
+        // Note that this is not a localization-friendly pattern. Use this for debug output or logging for developers, but not for 
+        // user-facing text. Enum names are designed for English speakers, and won't make sense to users in other languages. 
         public static string ToDisplayNameAttribute(this Enum en)
         {
             return en.GetType().GetMember(en.ToString()).First().GetCustomAttribute<DisplayAttribute>().GetName();

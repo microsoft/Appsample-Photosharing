@@ -71,11 +71,13 @@
                                                  FromVerticalOffset="100" />
                             </TransitionCollection>
                         </ItemsControl.ItemContainerTransitions>
-                        
-                        <TextBlock Text="There was no camera detected. You can still upload a photo from your library." 
+
+                        <!-- Text is here for design time only. Runtime loads text resource based on x:Uid. -->
+                        <TextBlock x:Uid="CameraPage_NoCameraMessage"  Text="There was no camera detected. You can still upload a photo from your library."
                                    TextWrapping="WrapWholeWords" TextAlignment="Center" FontWeight="Normal"
                                    Margin="12,0"/>
-                        <Button Content="Open from library" Command="{Binding OpenPictureCommand}" 
+                        <Button x:Uid="CameraPage_NoCameraButton" Content="Open from library" Command="{Binding OpenPictureCommand}" 
+                                
                                 HorizontalAlignment="Center" Margin="0,24" />
                     </ItemsControl>
                 </RelativePanel>
@@ -89,8 +91,9 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
+                <!-- Text is here for design time only. Runtime loads text resource based on x:Uid. -->
                 <CommandBar Grid.Row="2">
-                    <AppBarButton Icon="Pictures" Label="Open from library" Command="{Binding OpenPictureCommand}" />
+                    <AppBarButton x:Uid="CameraPage_OpenFromLibAbb" Icon="Pictures" Label="Open from library" Command="{Binding OpenPictureCommand}" />
                 </CommandBar>
 
                 <Border Grid.Row="0" Background="Transparent" x:Name="cameraPreviewContainer">

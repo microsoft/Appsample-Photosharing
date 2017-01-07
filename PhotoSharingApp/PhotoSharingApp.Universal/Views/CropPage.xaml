@@ -32,8 +32,8 @@
 
     <Page.BottomAppBar>
         <CommandBar IsOpen="True" IsSticky="True">
-            <AppBarButton Icon="Rotate" Label="Rotate clockwise" Command="{Binding RotateClockwiseCommand}" />
-            <AppBarButton Icon="Forward" Label="Next" x:Uid="CropView_AppBar_Next" Command="{Binding NextCommand}" />
+            <AppBarButton x:Uid="CropPage_AppBar_Rotate" Icon="Rotate" Label="Rotate clockwise" Command="{Binding RotateClockwiseCommand}" />
+            <AppBarButton x:Uid="CropPage_AppBar_Next" Icon="Forward" Label="Next" Command="{Binding NextCommand}" />
         </CommandBar>
     </Page.BottomAppBar>
 

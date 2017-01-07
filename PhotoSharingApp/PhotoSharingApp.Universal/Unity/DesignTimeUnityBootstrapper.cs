@@ -1,8 +1,8 @@
 ﻿//-----------------------------------------------------------------------------------
 //  Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
+//
 //  The MIT License (MIT)
-// 
+//
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
 //  in the Software without restriction, including without limitation the rights
@@ -22,41 +22,22 @@
 //  THE SOFTWARE.
 //  ---------------------------------------------------------------------------------
 
-using System;
-using Windows.UI.Xaml.Data;
+using Windows.ApplicationModel;
 
-namespace PhotoSharingApp.Universal.ValueConverters
+namespace PhotoSharingApp.Universal.Unity
 {
     /// <summary>
-    /// Converts a long rank (1-10) to an ordinal rank.
+    /// Initializes the Unity dependency container at design-time.
     /// </summary>
-    public class RankConverter : IValueConverter
+    class DesignTimeUnityBootstrapper
     {
-        public object Convert(object value, Type targetType, object parameter, string language)
+        public DesignTimeUnityBootstrapper()
         {
-            var num = (long) value;
-
-            if (num <= 0)
+            if (DesignMode.DesignModeEnabled && UnityBootstrapper.Container == null)
             {
-                return num.ToString();
+                UnityBootstrapper.Init();
+                UnityBootstrapper.ConfigureRegistries();
             }
-
-            switch (num%10)
-            {
-                case 1:
-                    return "st";
-                case 2:
-                    return "nd";
-                case 3:
-                    return "rd";
-                default:
-                    return "th";
-            }
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            throw new NotImplementedException();
         }
     }
 }

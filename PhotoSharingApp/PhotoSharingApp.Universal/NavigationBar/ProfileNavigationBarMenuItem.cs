@@ -74,7 +74,9 @@ namespace PhotoSharingApp.Universal.NavigationBar
         {
             get
             {
-                return AppEnvironment.Instance.CurrentUser == null ? "Sign in" : "My Profile";
+                var loader = new Windows.ApplicationModel.Resources.ResourceLoader();
+                return AppEnvironment.Instance.CurrentUser == null ? 
+                    loader.GetString("SignInNavigationBar_Label") : loader.GetString("MyProfileNavigationBar_Label");
             }
         }
 
