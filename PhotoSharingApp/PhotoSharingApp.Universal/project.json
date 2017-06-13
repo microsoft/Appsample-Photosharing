@@ -2,6 +2,7 @@
   "dependencies": {
     "Microsoft.Azure.Mobile.Client": "2.0.1",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
+    "Microsoft.Xaml.Behaviors.Uwp.Managed": "2.0.0",
     "Unity": "3.5.1404",
     "WindowsAzure.Messaging.Managed": "0.1.7.9",
     "WindowsAzure.Storage": "5.0.0"
