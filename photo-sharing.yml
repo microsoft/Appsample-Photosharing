@@ -1,0 +1,12 @@
+### YamlMime:Sample
+sample:
+- name: SnapGold UWP photo sharing sample
+  description: SnapGold is a UWP app sample that demonstrates real-world social media experiences around photo sharing.
+  image: Images/Category-Overview-Desktop-Mobile.jpg
+  generateZip: true
+  author: EricAtMSFT
+  languages:
+  - csharp
+  technologies:
+  - windows
+  vssolution: PhotoSharingApp.sln
